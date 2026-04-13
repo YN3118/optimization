@@ -23,14 +23,15 @@ public:
     double mutationrate;    
     vector<double> min_value;
     vector<double> max_value;
+    double learning_rate;
     
     // コンストラクタ
     Parameter() {
-        dimension=5;
-        pop_size=100;
+        dimension=10;
+        pop_size=120;
         max_gen=1;
         f_num=1;
-        mutationrate=0.05;
+        mutationrate=0.0;
         seed=-1;
         orconstraint=0;
         filename="result.csv";
@@ -99,9 +100,10 @@ public:
     // 次元数などに依存する変数を計算
     void calcDerived() {
         p_size=dimension+1;
-        c_size=96;
+        c_size=pop_size-p_size;
         min_value.resize(dimension);
         max_value.resize(dimension);
+        learning_rate=1.0/(10*dimension);
 
         //目的関数毎に定義域を決定
         //ZDT4
@@ -114,8 +116,8 @@ public:
             }
         }
 
-        //ZDT1
-        if(f_num==1){
+        //ZDT1, ZDT2, ZDT3, ZDT6
+        if(f_num==1||f_num==2||f_num==3||f_num==4){
             for(int i=0;i<dimension;i++){
                 min_value[i]=0.0;
                 max_value[i]=1.0;
@@ -150,7 +152,7 @@ public:
         printf("  -o <name>  Set output filename (default: result.csv)\n");
         printf("  -c <int>   Set constraint (0: off, 1: on)\n");
         printf("  -f <int>   Set function ID\n");
-        printf("             0:ZDT4, 1:ZDT1\n");
+        printf("             0:ZDT4, 1:ZDT1, 2:ZDT2, 3:ZDT3, 4:ZDT6\n");
         printf("  -h         Show this help message\n");
     }
 

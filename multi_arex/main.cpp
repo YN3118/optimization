@@ -34,6 +34,11 @@ int main(int argc,char* argv[]){
         }
     }
 
+        for(int i=0;i<param.pop_size;i++){
+        printf("pop_num:%d\t",i);
+        indiv[i].echo();
+    }
+
     //ファイル書き込み
     FILE *file;
     file=fopen(param.filename.c_str(),"w");
@@ -42,17 +47,12 @@ int main(int argc,char* argv[]){
         return -1;
     }
     
-    // fprintf(file,"母集団サイズ,%d,子個体生成数,%d\n",param.pop_size,param.c_size);
-
-    // fprintf(file,"世代数,最良個体,最悪個体,拡張率");
-    // fprintf(file,",");
-    // for(int i=0;i<param.dimension;i++){
-    //     fprintf(file,",var_x[%d]",i);
-    // }
-    // fprintf(file,",");
-    // for(int i=0;i<param.dimension;i++){
-    //     fprintf(file,",best_x[%d]",i);
-    // }
+    fprintf(file,"次元数,%d,母集団サイズ,%d,子個体生成数,%d\n",param.dimension,param.pop_size,param.c_size);
+    fprintf(file,"初期f1,初期f2\n");
+    for(int i=0;i<indiv.size();i++){
+        fprintf(file,"%f,%f\n",indiv[i].f[0],indiv[i].f[1]);
+    }
+    fprintf(file,"\nf1,f2\n");
 
 
     //AREX実行
@@ -69,7 +69,7 @@ int main(int argc,char* argv[]){
         fprintf(file,"%f,%f\n",arex.population[i].f[0],arex.population[i].f[1]);
     }
     printf("Number of evaluation: %d\n",count*param.c_size);
-    fprintf(file,"評価回数,%d\n",count*param.c_size);
+    fprintf(file,"\n\n評価回数,%d\n",count*param.c_size);
     fclose(file);
     return 0;
 }

@@ -27,8 +27,4 @@ vector<T> extract_if(vector<T>& vec,Predicate pred){
 // typename T: 「何かしらの型を T と呼ぶことにしますよ」という宣言です。ここに int や std::string が自動的に当てはまります。
 // typename Predicate: Predicate（プレディケート＝述語・条件式）の略で、「何かしらの条件判定をしてくれる関数（またはラムダ式）」を指します。
 
-//test
-//test2
-//test3
-
 #endif

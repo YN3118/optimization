@@ -70,8 +70,7 @@ class Indiv{
         }
         printf("\n");
         printf("f1(x):%6f\t",f[0]);
-        printf("f2(x):%6f\t",f[1]);
-        
+        printf("f2(x):%6f\t",f[1]);        
         printf("\n\n");
         
     }

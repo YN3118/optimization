@@ -30,7 +30,7 @@ class AREX{
     void execute(){
         selection();
         crossover();
-        mutation();
+        //mutation();
         evaluate();
     }
 
@@ -77,43 +77,25 @@ class AREX{
         }
 
         vector<double> child_temp(param.dimension,0.0);
-        vector<double> eps(param.p_size);
+        vector<double> eps(param.p_size,0.0);
 
         for(int i=0;i<param.c_size;i++){
-            // do{
-            //     vector<double> sum(param.dimension,0.0);
-            //     for(int j=0;j<param.p_size;j++){
-            //         double tmp=func::generateRandomNomal(0.0,sqrt(1.0/(param.dimension)));
-            //         eps[j]=tmp;
-            //         sum=func::cal_sum(sum,func::cal_constmul(tmp,v[j]));
-            //     }
-
-            //     child_temp=func::cal_sum(new_g,func::cal_constmul(alpha,sum));
-            // }while(!(constraint(child_temp)));
-
+            do{
                 vector<double> sum(param.dimension,0.0);
                 for(int j=0;j<param.p_size;j++){
-                    double tmp=func::generateRandomNomal(0.0,sqrt(1.0/param.dimension+6));
+                    double tmp=func::generateRandomNomal(0.0,sqrt(1.0/(param.dimension)));
                     eps[j]=tmp;
                     sum=func::cal_sum(sum,func::cal_constmul(tmp,v[j]));
                 }
 
                 child_temp=func::cal_sum(new_g,func::cal_constmul(alpha,sum));
+            }while(!(constraint(child_temp)));
 
-                //境界を越えた場合は丸める(丸めたときに分布が変わるので，epsも変化する．←この対応どうするの？)
-                for(int j=0;j<param.dimension;j++){
-                    if(child_temp[j]<param.min_value[j]){
-                        child_temp[j]=param.min_value[j];
-                    }
-                    else if(param.max_value[j]<child_temp[j]){
-                        child_temp[j]=param.max_value[j];
-                    }
-                }
-            
+
             Indiv c(child_temp,i);
             
             children[i]=move(c);
-            children[i].eps=move(eps);
+            children[i].eps=eps;
         }
 
         v.clear();
@@ -137,6 +119,7 @@ class AREX{
         vector<Indiv> P=population;
         P.insert(P.end(),children.begin(),children.end());
         NSGA2 nsga2(P);
+        // NSGA2 nsga2(children);
         nsga2.exe();
         vector<Indiv> next_gen=move(nsga2.next);
         sort(next_gen.begin(),next_gen.end());
@@ -157,56 +140,18 @@ class AREX{
         sum2=pow(sum2,2)/(param.dimension+1);        
         L_cdp=pow(alpha,2)*(param.dimension)*(sum1-sum2);
         L_avg=pow(alpha,2)*(param.dimension)/(param.dimension+1);
-        double c=1.0/(20*param.dimension);//学習率
+        double c=param.learning_rate;//学習率
         double next_alpha=alpha*sqrt((1.0-c)+(c*L_cdp/L_avg));
-        printf("next_alpha=%f\n",next_alpha);
         if(next_alpha<1.0) alpha=1.0;
         else alpha=next_alpha;
         printf("alpha=%f\n",alpha);
 
-        //母集団更新
+        //母集団更新(選択した親個体と同じ数を入れ替え)
         for(int i=0;i<param.pop_size;i++){
             population[i]=move(next_gen[i]);
         }
         sort(population.begin(),population.end());
 
-        // printf("best\n");
-        // population[0].echo();
-        // printf("worst\n");
-        // population[population.size()-1].echo();
-
-        // vector<double> avg(param.dimension,0.0);
-        // vector<double> avg2(param.dimension,0.0);
-        // vector<double> var(param.dimension,0.0);
-        // vector<double> pop_g(param.dimension,0.0);
-        // for(int i=0;i<param.dimension;i++){
-        //     double temp=0.0;
-        //     for(int j=0;j<population.size();j++){
-        //         temp+=population[j].x[i];
-        //     }
-        //     pop_g[i]=temp/population.size();
-        // }
-
-        // for(int i=0;i<param.dimension;i++){
-        //     for(int j=0;j<population.size();j++){
-        //         avg[i]+=population[j].x[i];
-        //         avg2[i]+=pow(population[j].x[i],2);
-        //     }
-        //     avg[i]=avg[i]/population.size();
-        //     avg2[i]=avg2[i]/population.size();
-        //     var[i]=avg2[i]-pow(avg[i],2);
-        // }
-
-
-        // fprintf(file,"%f,%f,%f,",population[0].f,population[population.size()-1].f,alpha);
-
-        // for(int i=0;i<param.dimension;i++){
-        //     fprintf(file,",%lf",var[i]);
-        // }
-        // fprintf(file,",");
-        // for(int i=0;i<param.dimension;i++){
-        //     fprintf(file,",%lf",population[0].x[i]);
-        // }
 
     }
 
