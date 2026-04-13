@@ -2,6 +2,7 @@
 #ifndef _HEBBIAN_H_
 #define _HEBBIAN_H_
 #include"indiv.h"
+#include"test.h"
 
 class Hebbian{
   public:
@@ -28,6 +29,7 @@ class Hebbian{
     temp=func::cal_sum(student.x,func::cal_constmul(f,x));
     student.x=move(temp);
     student.m+=1;
+
   }
 };
 

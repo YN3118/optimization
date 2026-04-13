@@ -23,6 +23,7 @@ int main(int argc,char* argv[]){
         printf("Cannot open file %s\n",param.filename.c_str());
         return -1;
     }
+    fprintf(file,"times,cosR,error\n");
 
     //初期個体生成
     Indiv t;
@@ -43,6 +44,11 @@ int main(int argc,char* argv[]){
     //学習実行(一定回数毎にテスト)
     for(int i=0;i<param.max_gen;i++){
       hb.execute();
+
+      if((hb.student.m+1)%param.test_times==0){
+        fprintf(file,"%f,",i/1000.0);
+        Test(hb.teacher.x,hb.student.x,file);
+      }
     }
 
     printf("------result-------\n");
