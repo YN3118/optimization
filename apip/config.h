@@ -12,6 +12,4 @@
 using namespace std;
 
 static mt19937 gen(random_device{}());
-#define pi 3.14
-
 #endif

@@ -1,6 +1,8 @@
 
 #include"parameter.h"
 #include"hebbian.h"
+#include"perceptron.h"
+#include"adatron.h"
 #include<ctime>
 
 Parameter param;
@@ -23,40 +25,49 @@ int main(int argc,char* argv[]){
         printf("Cannot open file %s\n",param.filename.c_str());
         return -1;
     }
+    fprintf(file,"dimension,%d,seed,%d\n",param.dimension,param.seed);
     fprintf(file,"times,cosR,error\n");
 
     //初期個体生成
     Indiv t;
     Indiv s;
-
+    double J0=func::cal_norm(s.x);
     double f_a=func::cal_norm(t.x);
     double f_b=func::cal_norm(s.x);
     printf("cosR=%f\n",(func::cal_mul(t.x,s.x)/(f_a*f_b)));
 
-    printf("------teacher-----\n");
-    t.echo();
-    printf("------------------\n");
-    printf("------student-----\n");
-    s.echo();
-    printf("------------------\n");
-
-    Hebbian hb(t,s);
-    //学習実行(一定回数毎にテスト)
-    for(int i=0;i<param.max_gen;i++){
-      hb.execute();
-
-      if((hb.student.m+1)%param.test_times==0){
-        fprintf(file,"%f,",i/1000.0);
-        Test(hb.teacher.x,hb.student.x,file);
+    //テストデータ生成
+    vector<vector<double>> test_data(param.test_count,vector<double>(param.dimension));
+    for(int i=0;i<test_data.size();i++){
+      for(int j=0;j<test_data[i].size();j++){
+        test_data[i][j]=func::generateRandomNomal(0.0,1.0/param.dimension);
       }
     }
 
-    printf("------result-------\n");
-    hb.student.echo();
+    double time=0.0;
+    fprintf(file,"%f,",time);
+    Test(t.x,s.x,file,test_data);
 
+    //Hebbian lm(t,s);
+    //Perceptron lm(t,s,J0);
+    Adatron lm(t,s,J0);
+    //学習実行(一定回数毎にテスト)
+    for(int i=0;i<param.max_gen;i++){
+      lm.execute();
+      if((lm.student.m)%param.test_times==0){
+        time+=0.1;
+        fprintf(file,"%f,",time);
+        Test(lm.teacher.x,lm.student.x,file,test_data);
+      }
+      printf("\r %d / %d ",i+1,param.max_gen);
+      fflush(stdout);
+    }
+
+    printf("\n------result-------\n");
     double a=func::cal_norm(t.x);
-    double b=func::cal_norm(hb.student.x);
-    printf("cosR=%f\n",(func::cal_mul(t.x,hb.student.x)/(a*b)));
+    double b=func::cal_norm(lm.student.x);
+    printf("cosR=%f\n",(func::cal_mul(t.x,lm.student.x)/(a*b)));
+    param.echo();
     fclose(file);
     return 0;
 }

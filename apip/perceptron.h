@@ -1,17 +1,18 @@
-//ヘブ学習
-#ifndef _HEBBIAN_H_
-#define _HEBBIAN_H_
+#ifndef _PERCEPTRON_H_
+#define _PERCEPTRON_H_
 #include"indiv.h"
 #include"test.h"
 
-class Hebbian{
+class Perceptron{
   public:
   Indiv teacher;
   Indiv student;
+  double J0;
 
-  Hebbian(Indiv &t,Indiv &s){
+  Perceptron(Indiv &t,Indiv &s,double first_norm){
     teacher=t;
     student=s;
+    J0=first_norm;
   }
 
   void execute(){
@@ -22,7 +23,9 @@ class Hebbian{
     }
 
     double v=func::cal_mul(teacher.x,x);
-    int f=func::sgn(v);
+    double l=func::cal_norm(student.x)/J0;
+    double u=func::cal_mul(student.x,x)/l;
+    int f=func::step(-u*v)*func::sgn(v);
 
     //生徒のベクトル更新
     vector<double> temp(param.dimension);
@@ -32,6 +35,4 @@ class Hebbian{
 
   }
 };
-
-
 #endif

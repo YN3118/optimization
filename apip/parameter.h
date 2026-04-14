@@ -68,8 +68,13 @@ public:
                 exit(0);
             }
         }
+        calcDerived();
     }
 
+    void calcDerived(){
+        max_gen=100*dimension;
+        test_times=max_gen/100;
+    }
 
     // 設定値の表示
     void echo() {

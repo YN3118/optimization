@@ -84,7 +84,6 @@ namespace Function{
     inline double generateRandomNomal(double mean,double stddev){
         random_device rd;
         normal_distribution<> dis(mean, stddev);
-
         return dis(gen);
     }
 
@@ -92,6 +91,11 @@ namespace Function{
     inline int sgn(double a){
       if(a>=0) return 1;
       else return -1;
+    }
+
+    inline int step(double a){
+        if(a<0) return 0;
+        else return 1;
     }
 
 };
