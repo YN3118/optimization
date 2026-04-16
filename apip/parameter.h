@@ -12,6 +12,7 @@ public:
     string filename;    //出力ファイル名
     int test_times;     //いつテストするか
     int test_count;     //テスト回数
+    int mode;           //学習法
 
 
     
@@ -22,7 +23,8 @@ public:
         seed=-1;
         filename="result.csv"; 
         test_times=100;
-        test_count=10000;     
+        test_count=10000;  
+        mode=0;   
     }
 
     // 引数を読み込んで値を更新する
@@ -63,6 +65,12 @@ public:
                     i++;
                 }
             }
+            else if(arg=="-m"){ //学習法
+                if(i+1<argc){
+                    mode=atoi(argv[i+1]);
+                    i++;
+                }
+            }
             else if(arg=="-h"||arg=="--help"){ //ヘルプ表示
                 showHelp();
                 exit(0);
@@ -85,6 +93,7 @@ public:
         printf("output filename: %s\n",filename.c_str());
         printf("test_times: %d\n",test_times);
         printf("test_count: %d\n",test_count);
+        printf("mode      : %d\n",mode);
         printf("--------------------------\n");
     }
 
@@ -95,8 +104,9 @@ public:
         printf("  -d <int>   Set dimension (default: 10)\n");
         printf("  -g <int>   Set max generation (default: 1)\n");
         printf("  -o <name>  Set output filename (default: result.csv)\n");
-        printf("  -tt<int>   Set test_times(default 100)\n");
-        printf("  -tc<int>   Set test_count(default 10000)\n");
+        printf("  -tt<int>   Set test_times (default 100)\n");
+        printf("  -tc<int>   Set test_count (default 10000)\n");
+        printf("  -m <int>   Select mode ( 0: Hebbian, 1: perceptron, 2: adatron)\n");
         printf("  -h         Show this help message\n");
     }
 

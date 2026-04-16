@@ -48,25 +48,63 @@ int main(int argc,char* argv[]){
     fprintf(file,"%f,",time);
     Test(t.x,s.x,file,test_data);
 
-    //Hebbian lm(t,s);
-    //Perceptron lm(t,s,J0);
-    Adatron lm(t,s,J0);
-    //学習実行(一定回数毎にテスト)
-    for(int i=0;i<param.max_gen;i++){
-      lm.execute();
-      if((lm.student.m)%param.test_times==0){
-        time+=0.1;
-        fprintf(file,"%f,",time);
-        Test(lm.teacher.x,lm.student.x,file,test_data);
+    //ヘブ学習
+    if(param.mode==0){
+      Hebbian lm(t,s);
+      for(int i=0;i<param.max_gen;i++){
+        lm.execute();
+        if((lm.student.m)%param.test_times==0){
+          time+=0.1;
+          (file,"%f,",time);
+          Test(lm.teacher.x,lm.student.x,file,test_data);
+        }
+        printf("\r %d / %d ",i+1,param.max_gen);
+        fflush(stdout);
       }
-      printf("\r %d / %d ",i+1,param.max_gen);
-      fflush(stdout);
+      double a=func::cal_norm(t.x);
+      double b=func::cal_norm(lm.student.x);
+      double cosR=(func::cal_mul(t.x,lm.student.x)/(a*b));
+      printf("\n------result-------\n");
+      printf("cosR=%f\n",cosR);
     }
-
-    printf("\n------result-------\n");
-    double a=func::cal_norm(t.x);
-    double b=func::cal_norm(lm.student.x);
-    printf("cosR=%f\n",(func::cal_mul(t.x,lm.student.x)/(a*b)));
+    //パーセプトロン 
+    else if(param.mode==1){
+      Perceptron lm(t,s,J0);
+      for(int i=0;i<param.max_gen;i++){
+        lm.execute();
+        if((lm.student.m)%param.test_times==0){
+          time+=0.1;
+          (file,"%f,",time);
+          Test(lm.teacher.x,lm.student.x,file,test_data);
+        }
+        printf("\r %d / %d ",i+1,param.max_gen);
+        fflush(stdout);
+      }
+      double a=func::cal_norm(t.x);
+      double b=func::cal_norm(lm.student.x);
+      double cosR=(func::cal_mul(t.x,lm.student.x)/(a*b));
+      printf("\n------result-------\n");
+      printf("cosR=%f\n",cosR);
+    }
+    //アダトロン学習
+    else if(param.mode==2){
+      Adatron lm(t,s,J0);
+      for(int i=0;i<param.max_gen;i++){
+        lm.execute();
+        if((lm.student.m)%param.test_times==0){
+          time+=0.1;
+          (file,"%f,",time);
+          Test(lm.teacher.x,lm.student.x,file,test_data);
+        }
+        printf("\r %d / %d ",i+1,param.max_gen);
+        fflush(stdout);
+      }
+      double a=func::cal_norm(t.x);
+      double b=func::cal_norm(lm.student.x);
+      double cosR=(func::cal_mul(t.x,lm.student.x)/(a*b));
+      printf("\n------result-------\n");
+      printf("cosR=%f\n",cosR);
+    } 
     param.echo();
     fclose(file);
     return 0;
