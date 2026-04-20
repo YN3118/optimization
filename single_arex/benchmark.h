@@ -2,10 +2,10 @@
 #define _BENCHMARK_H_
 
 #include"config.h"
-#include<vector>
-/*---g—p‚·‚éŠÖ”---*/
+#include"parameter.h"
+/*---ä½¿ç”¨ã™ã‚‹é–¢æ•°---*/
 
-//RosenbrockŠÖ”
+//Rosenbrocké–¢æ•°
 double Rosenbrock(vector<double> x){
         double sum=0.0;
         for(int i=1;i<x.size();i++){
@@ -14,7 +14,7 @@ double Rosenbrock(vector<double> x){
         return sum;
     }
 
-//RastriginŠÖ”
+//Rastriginé–¢æ•°
 double Rastrigin(vector<double> x){
         double sum=0.0;
         int count=0;
@@ -25,7 +25,7 @@ double Rastrigin(vector<double> x){
         return 10*count+sum;
     }
 
-//SphereŠÖ”
+//Sphereé–¢æ•°
 double Sphere(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
@@ -34,7 +34,7 @@ double Sphere(vector<double> x){
     return sum;
 }
 
-//AckleyŠÖ”
+//ã‚¢ãƒƒã‚¯ãƒªãƒ¼é–¢æ•°
 double Ackley(vector<double> x){
     double sum1=0.0;
     double sum2=0.0;
@@ -48,7 +48,7 @@ double Ackley(vector<double> x){
     return 20-(20*exp(-0.2*sum1))+exp(1)-exp(sum2);
 }
 
-//SchwefelŠÖ”
+//Schwefelé–¢æ•°
 double Schwefel(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
@@ -57,7 +57,7 @@ double Schwefel(vector<double> x){
     return 418.9828873*x.size()+sum;
 }
 
-//RosenborckŠÖ”(chainŒ^)
+//Rosenborcké–¢æ•°(chainå‹)
 double Rosenbrock_chain(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
@@ -66,7 +66,7 @@ double Rosenbrock_chain(vector<double> x){
     return sum;
 }
 
-//EllipsoidŠÖ”
+//Ellipsoidé–¢æ•°
 double Ellipsoid(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
@@ -75,7 +75,7 @@ double Ellipsoid(vector<double> x){
     return sum;
 }
 
-//BohaxhevskyŠÖ”
+//Bohaxhevskyé–¢æ•°
 double Bohaxhevsky(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
@@ -84,7 +84,7 @@ double Bohaxhevsky(vector<double> x){
     return sum;
 }
 
-//GriewankŠÖ”
+//Griewanké–¢æ•°
 double Griewank(vector<double> x){
     double sum1=0.0;
     double sum2=1.0;
@@ -95,6 +95,17 @@ double Griewank(vector<double> x){
     return 1+(sum1/4000)-sum2;
 }
 
+//new_Rastrigin
+double new_Rastrigin(vector<double> x){
+
+    double sum=0.0;
+    int count=0;
+    for(int i=0;i<x.size();i++){
+        sum=sum+(pow(x[i]-param.rast_shift[i],2))-10*cos(2*pi*(x[i]-param.rast_shift[i]));
+        count++;
+    }
+    return 10*count+sum;
+}
 
 double f_value(int i,vector<double> x){
     if(i==0) return Rosenbrock(x);
@@ -105,7 +116,8 @@ double f_value(int i,vector<double> x){
     if(i==5) return Rosenbrock_chain(x);
     if(i==6) return Ellipsoid(x);
     if(i==7) return Bohaxhevsky(x);
-    if(i==8) return Griewank(x); 
+    if(i==8) return Griewank(x);
+    if(i==9) return new_Rastrigin(x); 
     return -99.0;
 }
 

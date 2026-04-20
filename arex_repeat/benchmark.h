@@ -2,7 +2,7 @@
 #define _BENCHMARK_H_
 
 #include"config.h"
-#include<vector>
+#include"parameter.h"
 /*---g—p‚·‚éŠÖ”---*/
 
 //RosenbrockŠÖ”
@@ -95,6 +95,17 @@ double Griewank(vector<double> x){
     return 1+(sum1/4000)-sum2;
 }
 
+//new_Rastrigin
+double new_Rastrigin(vector<double> x){
+
+    double sum=0.0;
+    int count=0;
+    for(int i=0;i<x.size();i++){
+        sum=sum+(pow(x[i],2)-param.rast_shift[i])-10*cos(2*pi*(x[i]-param.rast_shift[i]));
+        count++;
+    }
+    return 10*count+sum;
+}
 
 double f_value(int i,vector<double> x){
     if(i==0) return Rosenbrock(x);
@@ -105,7 +116,8 @@ double f_value(int i,vector<double> x){
     if(i==5) return Rosenbrock_chain(x);
     if(i==6) return Ellipsoid(x);
     if(i==7) return Bohaxhevsky(x);
-    if(i==8) return Griewank(x); 
+    if(i==8) return Griewank(x);
+    if(i==9) return new_Rastrigin(x); 
     return -99.0;
 }
 

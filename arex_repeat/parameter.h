@@ -1,177 +1,247 @@
 #ifndef _PARAMETER_H_
 #define _PARAMETER_H_
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
+#include<cstdio>
+#include<vector>
+#include<random>
+#include<iostream>
+#include<cstdlib>
+#include<cstring>
 
 using namespace std;
 
-class Parameter {
+class Parameter
+{
 public:
-    int dimension;      //次元数
-    int pop_size;       //母集団サイズ
-    int max_gen;        //最大世代数
-    int f_num;          //関数番号
-    int p_size;         //親の数
-    int c_size;         //子の数
-    int seed;           //シード値
-    int orconstraint;   //制約条件
-    int trial;          //試行回数
-    string filename;    //出力ファイル名
+    int dimension;    // ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+    int pop_size;     // ?ｿｽ?ｿｽW?ｿｽc?ｿｽT?ｿｽC?ｿｽY
+    int max_gen;      // ?ｿｽﾅ大世?ｿｽ辮?
+    int f_num;        // ?ｿｽﾖ撰ｿｽ?ｿｽﾔ搾ｿｽ
+    int p_size;       // ?ｿｽe?ｿｽﾌ撰ｿｽ
+    int c_size;       // ?ｿｽq?ｿｽﾌ撰ｿｽ
+    int seed;         // ?ｿｽV?ｿｽ[?ｿｽh?ｿｽl
+    int orconstraint; // ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+    int trial;        // ?ｿｽ?ｿｽ?ｿｽs?ｿｽ?ｿｽ
+    string filename;  // ?ｿｽo?ｿｽﾍフ?ｿｽ@?ｿｽC?ｿｽ?ｿｽ?ｿｽ?ｿｽ
 
-    // 定数
+    // ?ｿｽ關?
     double mutationrate;
-    double min_value;   //設計変数の最小値
-    double max_value;   //設計変数の最大値
+    double min_value; // ?ｿｽﾝ計?ｿｽﾏ撰ｿｽ?ｿｽﾌ最擾ｿｽ?ｿｽl
+    double max_value; // ?ｿｽﾝ計?ｿｽﾏ撰ｿｽ?ｿｽﾌ最托ｿｽl
+    vector<int> rast_shift;
 
-    // コンストラクタ
-    Parameter() {
-        dimension=5;
-        pop_size=100;
-        max_gen=1;
-        f_num=1;
-        mutationrate=0.0;
-        max_value=5.12;
-        min_value=-5.12;
-        seed=-1;
-        orconstraint=1;
-        trial=1;
-        filename="result.csv";
-        calcDerived(); // 依存変数の計算
+    // ?ｿｽR?ｿｽ?ｿｽ?ｿｽX?ｿｽg?ｿｽ?ｿｽ?ｿｽN?ｿｽ^
+    Parameter()
+    {
+        dimension = 5;
+        pop_size = 100;
+        max_gen = 1;
+        f_num = 1;
+        mutationrate = 0.0;
+        max_value = 5.12;
+        min_value = -5.12;
+        seed = -1;
+        orconstraint = 1;
+        trial = 1;
+        filename = "result.csv";
+        calcDerived(); // ?ｿｽﾋ托ｿｽ?ｿｽﾏ撰ｿｽ?ｿｽﾌ計?ｿｽZ
     }
 
-    // 引数を読み込んで値を更新する
-    void load(int argc,char* argv[]) {
-        for (int i=1;i<argc;i++){
-            string arg=argv[i];
-            if(arg=="-d"){ //次元数
-                if(i+1<argc){
-                    dimension=atoi(argv[i+1]);
+    // ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾇみ搾ｿｽ?ｿｽ?ｿｽﾅ値?ｿｽ?ｿｽ?ｿｽX?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+    void load(int argc, char *argv[])
+    {
+        for (int i = 1; i < argc; i++)
+        {
+            string arg = argv[i];
+            if (arg == "-d")
+            { // ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+                if (i + 1 < argc)
+                {
+                    dimension = atoi(argv[i + 1]);
                     i++;
                 }
             }
-            else if(arg=="-p"){ //母集団サイズ
-                if(i+1<argc){
-                    pop_size=atoi(argv[i+1]);
-                    i++;
-                }
-            } 
-            else if(arg=="-g"){ //世代数
-                if(i+1<argc){
-                    max_gen=atoi(argv[i+1]);
+            else if (arg == "-p")
+            { // ?ｿｽ?ｿｽW?ｿｽc?ｿｽT?ｿｽC?ｿｽY
+                if (i + 1 < argc)
+                {
+                    pop_size = atoi(argv[i + 1]);
                     i++;
                 }
             }
-            else if(arg=="-f"){ //関数番号
-                if (i+1<argc) {
-                    f_num=atoi(argv[i+1]);
+            else if (arg == "-g")
+            { // ?ｿｽ?ｿｽ?ｿｽ辮?
+                if (i + 1 < argc)
+                {
+                    max_gen = atoi(argv[i + 1]);
                     i++;
                 }
             }
-            else if(arg=="-o"){ //ファイル名
-                filename=argv[i+1];
+            else if (arg == "-f")
+            { // ?ｿｽﾖ撰ｿｽ?ｿｽﾔ搾ｿｽ
+                if (i + 1 < argc)
+                {
+                    f_num = atoi(argv[i + 1]);
+                    i++;
+                }
+            }
+            else if (arg == "-o")
+            { // ?ｿｽt?ｿｽ@?ｿｽC?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+                filename = argv[i + 1];
                 i++;
             }
-            else if(arg=="-s"){ //シード値
-                if(i+1<argc){
-                    seed=atoi(argv[i+1]);
+            else if (arg == "-s")
+            { // ?ｿｽV?ｿｽ[?ｿｽh?ｿｽl
+                if (i + 1 < argc)
+                {
+                    seed = atoi(argv[i + 1]);
                     i++;
                 }
             }
-            else if(arg=="-c"){ //制約条件
-                if(i+1<argc){
-                    orconstraint=atoi(argv[i+1]);
+            else if (arg == "-c")
+            { // ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+                if (i + 1 < argc)
+                {
+                    orconstraint = atoi(argv[i + 1]);
                     i++;
                 }
             }
-            else if(arg=="-t"){ //試行回数
-                if(i+1<argc){
-                    trial=atoi(argv[i+1]);
+            else if (arg == "-t")
+            { // ?ｿｽ?ｿｽ?ｿｽs?ｿｽ?ｿｽ
+                if (i + 1 < argc)
+                {
+                    trial = atoi(argv[i + 1]);
                     i++;
                 }
             }
-            else if(arg=="-h"||arg=="--help"){ //ヘルプ表示
+            else if (arg == "-h" || arg == "--help")
+            { // ?ｿｽw?ｿｽ?ｿｽ?ｿｽv?ｿｽ\?ｿｽ?ｿｽ
                 showHelp();
                 exit(0);
             }
         }
-        // 値が変わったので再計算
+        // ?ｿｽl?ｿｽ?ｿｽ?ｿｽﾏゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌで再計?ｿｽZ
         calcDerived();
         // echo();
     }
 
-    // 次元数などに依存する変数を計算
-    void calcDerived() {
-        p_size=dimension+1;
-        c_size=4*dimension;
+    // ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈどに依托ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾏ撰ｿｽ?ｿｽ?ｿｽ?ｿｽv?ｿｽZ
+    void calcDerived()
+    {
+        p_size = dimension + 1;
+        c_size = 4 * dimension;
 
-        //関数毎に定義域を変更
-        //Rosenbrock
-        if(f_num==0){
-            min_value=-5.0;
-            max_value=5.0;
+        // ?ｿｽﾖ撰ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ抵ｿｽ`?ｿｽ?ｿｽ?ｿｽﾏ更
+        // Rosenbrock
+        if (f_num == 0)
+        {
+            min_value = -5.0;
+            max_value = 5.0;
         }
-        //Rastrigin
-        else if(f_num==1){
-            min_value=-5.12;
-            max_value=5.12;
+        // Rastrigin
+        else if (f_num == 1)
+        {
+            min_value = -5.12;
+            max_value = 5.12;
         }
-        //Sphere
-        else if(f_num==2){
-            min_value=-1.0e9;
-            max_value=1.0e9;
+        // Sphere
+        else if (f_num == 2)
+        {
+            min_value = -1.0e9;
+            max_value = 1.0e9;
         }
-        //Ackley
-        else if(f_num==3){
-            min_value=-32.768;
-            max_value=32.768;
+        // Ackley
+        else if (f_num == 3)
+        {
+            min_value = -32.768;
+            max_value = 32.768;
         }
-        //Schwefel
-        else if(f_num==4){
-            min_value=-500.0;
-            max_value=500.0;
+        // Schwefel
+        else if (f_num == 4)
+        {
+            min_value = -500.0;
+            max_value = 500.0;
         }
-        //Rosenbrock_chain
-        else if(f_num==5){
-            min_value=-5.0;
-            max_value=5.0;
+        // Rosenbrock_chain
+        else if (f_num == 5)
+        {
+            min_value = -5.0;
+            max_value = 5.0;
         }
-        //Ellipsoid
-        else if(f_num==6){
-            min_value=-5.12;
-            max_value=5.12;
+        // Ellipsoid
+        else if (f_num == 6)
+        {
+            min_value = -5.12;
+            max_value = 5.12;
         }
-        //Bohaxhevsky
-        else if(f_num==7){
-            min_value=-5.12;
-            max_value=5.12;
+        // Bohaxhevsky
+        else if (f_num == 7)
+        {
+            min_value = -5.12;
+            max_value = 5.12;
         }
-        //Griewank
-        else if(f_num==8){
-            min_value=-300.0;
-            max_value=300.0;
+        // Griewank
+        else if (f_num == 8)
+        {
+            min_value = -300.0;
+            max_value = 300.0;
+        }
+        // new_Rastrigin
+        else if (f_num == 9)
+        {
+            min_value = -5.12;
+            max_value = 5.12;
+            const char *filename = "rastrigin_shift.csv";
+            FILE *file = fopen(filename, "r");
+            int size = 0;
+            rast_shift.resize(dimension);
+
+            char line[1024]; // 1行を読み込むためのバッファ
+
+            // 行ごとに読み込む
+            while (fgets(line, sizeof(line), file) != NULL)
+            {
+                // 改行文字を削除
+                line[strcspn(line, "\r\n")] = '\0';
+
+                // 空行の場合はスキップ
+                if (strlen(line) == 0)
+                    continue;
+
+                // カンマ区切りで文字列を分割（1列のみの場合もこれで動作します）
+                char *token = strtok(line, ",");
+                while (token != NULL)
+                {
+                    // 文字列を整数に変換して配列に保存
+                    rast_shift[size] = atoi(token);
+                    size++;
+                    // 次のトークン（カンマ区切りの次の要素）を取得
+                    token = strtok(NULL, ",");
+                }
+            }
         }
     }
 
-    // 設定値の表示
-    void echo() {
+    // ?ｿｽﾝ抵ｿｽl?ｿｽﾌ表?ｿｽ?ｿｽ
+    void echo()
+    {
         printf("--- Parameter Settings ---\n");
-        printf("Dimension : %d\n",dimension);
-        printf("Pop Size  : %d\n",pop_size);
-        printf("Max Gen   : %d\n",max_gen);
-        printf("Function  : %d\n",f_num);
-        printf("p_size    : %d\n",p_size);
-        printf("c_size    : %d\n",c_size);
-        printf("seed      : %d\n",seed);
-        printf("constraint: %d\n",orconstraint);
-        printf("trial num : %d\n",trial);
-        printf("output filename: %s\n",filename.c_str());
+        printf("Dimension : %d\n", dimension);
+        printf("Pop Size  : %d\n", pop_size);
+        printf("Max Gen   : %d\n", max_gen);
+        printf("Function  : %d\n", f_num);
+        printf("p_size    : %d\n", p_size);
+        printf("c_size    : %d\n", c_size);
+        printf("seed      : %d\n", seed);
+        printf("constraint: %d\n", orconstraint);
+        printf("trial num : %d\n", trial);
+        printf("output filename: %s\n", filename.c_str());
         printf("--------------------------\n");
     }
 
-    // ヘルプ表示用
-    void showHelp() {
+    // ?ｿｽw?ｿｽ?ｿｽ?ｿｽv?ｿｽ\?ｿｽ?ｿｽ?ｿｽp
+    void showHelp()
+    {
         printf("Usage: ./main [options]\n");
         printf("Options:\n");
         printf("  -d <int>   Set dimension (default: 5)\n");
@@ -183,13 +253,12 @@ public:
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
         printf("             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky\n");
-        printf("             8:Griewank\n");
+        printf("             8:Griewank, 9:new_Rastrigin\n");
         printf("  -h         Show this help message\n");
     }
-
 };
 
-// グローバル変数として宣言（実体は main.cpp に置く）
+// ?ｿｽO?ｿｽ?ｿｽ?ｿｽ[?ｿｽo?ｿｽ?ｿｽ?ｿｽﾏ撰ｿｽ?ｿｽﾆゑｿｽ?ｿｽﾄ宣言?ｿｽi?ｿｽ?ｿｽ?ｿｽﾌゑｿｽ main.cpp ?ｿｽﾉ置?ｿｽ?ｿｽ?ｿｽj
 extern Parameter param;
 
 #endif
