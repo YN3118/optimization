@@ -13,21 +13,21 @@ using namespace std;
 class Parameter
 {
 public:
-    int dimension;    // �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-    int pop_size;     // �ｿｽ�ｿｽW�ｿｽc�ｿｽT�ｿｽC�ｿｽY
-    int max_gen;      // �ｿｽﾅ大世�ｿｽ辮�
-    int f_num;        // �ｿｽﾖ撰ｿｽ�ｿｽﾔ搾ｿｽ
-    int p_size;       // �ｿｽe�ｿｽﾌ撰ｿｽ
-    int c_size;       // �ｿｽq�ｿｽﾌ撰ｿｽ
-    int seed;         // �ｿｽV�ｿｽ[�ｿｽh�ｿｽl
-    int orconstraint; // �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-    int trial;        // �ｿｽ�ｿｽ�ｿｽs�ｿｽ�ｿｽ
-    string filename;  // �ｿｽo�ｿｽﾍフ�ｿｽ@�ｿｽC�ｿｽ�ｿｽ�ｿｽ�ｿｽ
+    int dimension;    // 次元数
+    int pop_size;     // 母集団
+    int max_gen;      // 終了世代
+    int f_num;        // 使用する関数
+    int p_size;       // 親の数
+    int c_size;       // 生成する子供の数
+    int seed;         // シード値
+    int orconstraint; // 制約の有無
+    int trial;        // 試行回数
+    string filename;  // 出力ファイル名
 
-    // �ｿｽ關�
+    // 定義域
     double mutationrate;
-    double min_value; // �ｿｽﾝ計�ｿｽﾏ撰ｿｽ�ｿｽﾌ最擾ｿｽ�ｿｽl
-    double max_value; // �ｿｽﾝ計�ｿｽﾏ撰ｿｽ�ｿｽﾌ最托ｿｽl
+    double min_value; // 最小値
+    double max_value; // 最大値
     vector<int> rast_shift;
 
     // �ｿｽR�ｿｽ�ｿｽ�ｿｽX�ｿｽg�ｿｽ�ｿｽ�ｿｽN�ｿｽ^
@@ -41,7 +41,7 @@ public:
         max_value = 5.12;
         min_value = -5.12;
         seed = -1;
-        orconstraint = 1;
+        orconstraint = 0;
         trial = 1;
         filename = "result.csv";
         calcDerived(); // �ｿｽﾋ托ｿｽ�ｿｽﾏ撰ｿｽ�ｿｽﾌ計�ｿｽZ
@@ -197,7 +197,7 @@ public:
             rast_shift.resize(dimension);
 
             char line[1024]; // 1行を読み込むためのバッファ
-
+            fgets(line, sizeof(line), file); ///ヘッダー削除
             // 行ごとに読み込む
             while (fgets(line, sizeof(line), file) != NULL)
             {
@@ -251,7 +251,7 @@ public:
         printf("  -p <int>   Set population size (default: 100)\n");
         printf("  -g <int>   Set max generation (default: 1)\n");
         printf("  -o <name>  Set output filename (default: result.csv)\n");
-        printf("  -c <int>   Set constraint (0: off, 1: on)\n");
+        printf("  -c <int>   Set constraint (0: off, 1: on, default: 1)\n");
         printf("  -t <int>   Set trial num\n");
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
