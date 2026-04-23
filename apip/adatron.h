@@ -18,8 +18,9 @@ class Adatron{
   void execute(){
     //入力ベクトルxを生成(平均0，分散1/Nの正規分布に従う)
     vector<double> x(param.dimension);
+    normal_distribution<> input(0.0,1.0/param.dimension);
     for(int i=0;i<x.size();i++){
-      x[i]=func::generateRandomNomal(0.0,1.0/param.dimension);
+      x[i]=input(gen);
     }
 
     double v=func::cal_mul(teacher.x,x);

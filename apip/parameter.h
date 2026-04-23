@@ -103,6 +103,7 @@ public:
         printf("Options:\n");
         printf("  -d <int>   Set dimension (default: 10)\n");
         printf("  -g <int>   Set max generation (default: 1)\n");
+        printf("  -s <int>   Set seed\n");
         printf("  -o <name>  Set output filename (default: result.csv)\n");
         printf("  -tt<int>   Set test_times (default 100)\n");
         printf("  -tc<int>   Set test_count (default 10000)\n");

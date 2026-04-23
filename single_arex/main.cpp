@@ -16,7 +16,7 @@ int main(int argc,char* argv[]){
     srand(seed);
     gen.seed(seed);
 
-    //������W�c����
+    //初期個体生成
     vector<Indiv> indiv;
     indiv.resize(param.pop_size);
     for(int i=0;i<param.pop_size;i++){
@@ -25,7 +25,7 @@ int main(int argc,char* argv[]){
         // indiv[i].echo();
     }
 
-    //�t�@�C����������
+    //ファイル生成
     FILE *file;
     file=fopen(param.filename.c_str(),"w");
     if(file==NULL){
@@ -46,14 +46,14 @@ int main(int argc,char* argv[]){
     fprintf(file,",,最適解との距離\n");
 
 
-    //AREX���s
+    //AREX実行
     AREX arex(indiv,file);
     int count=0;
     for(count=0;count<param.max_gen;count++){
-        printf("---%d�����---\n",count+1);
+        printf("---%d世代---\n",count+1);
         fprintf(file,"%d,",count+1);
         arex.execute();
-        //�֐��l���\���������Ȃ�����I��
+        //目的関数値が十分小さくなれば終了
         if(arex.population[0].f<1.0e-9) break;
     }
     param.echo();

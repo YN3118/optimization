@@ -38,9 +38,10 @@ int main(int argc,char* argv[]){
 
     //テストデータ生成
     vector<vector<double>> test_data(param.test_count,vector<double>(param.dimension));
+    normal_distribution<> test(0.0,1.0/param.dimension);
     for(int i=0;i<test_data.size();i++){
       for(int j=0;j<test_data[i].size();j++){
-        test_data[i][j]=func::generateRandomNomal(0.0,1.0/param.dimension);
+        test_data[i][j]=test(gen);
       }
     }
 
@@ -55,7 +56,7 @@ int main(int argc,char* argv[]){
         lm.execute();
         if((lm.student.m)%param.test_times==0){
           time+=0.1;
-          (file,"%f,",time);
+          fprintf(file,"%f,",time);
           Test(lm.teacher.x,lm.student.x,file,test_data);
         }
         printf("\r %d / %d ",i+1,param.max_gen);
@@ -74,7 +75,7 @@ int main(int argc,char* argv[]){
         lm.execute();
         if((lm.student.m)%param.test_times==0){
           time+=0.1;
-          (file,"%f,",time);
+          fprintf(file,"%f,",time);
           Test(lm.teacher.x,lm.student.x,file,test_data);
         }
         printf("\r %d / %d ",i+1,param.max_gen);
@@ -93,7 +94,7 @@ int main(int argc,char* argv[]){
         lm.execute();
         if((lm.student.m)%param.test_times==0){
           time+=0.1;
-          (file,"%f,",time);
+          fprintf(file,"%f,",time);
           Test(lm.teacher.x,lm.student.x,file,test_data);
         }
         printf("\r %d / %d ",i+1,param.max_gen);
