@@ -25,7 +25,7 @@ int main(int argc,char* argv[]){
         printf("Cannot open file %s\n",param.filename.c_str());
         return -1;
     }
-    fprintf(file,"dimension,%d,seed,%d\n",param.dimension,param.seed);
+    fprintf(file,"dimension,%d,seed,%d\n,mode,%d\n",param.dimension,param.seed,param.mode);
     fprintf(file,"times,cosR,error\n");
 
     //初期個体生成

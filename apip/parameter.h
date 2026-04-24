@@ -80,8 +80,8 @@ public:
     }
 
     void calcDerived(){
-        max_gen=100*dimension;
-        test_times=max_gen/100;
+        max_gen=10000*dimension;
+        test_times=max_gen/10000;
     }
 
     // 設定値の表示
