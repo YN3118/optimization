@@ -34,7 +34,7 @@ int main(int argc,char* argv[]){
     }
     
     fprintf(file,"min,%f,max,%f,populationsize,%d,children,%d\n",param.min_value,param.max_value,param.pop_size,param.c_size);
-    fprintf(file,"世代数,最良個体,最悪個体,拡張率");
+    fprintf(file,"gen,best,worst,alpha");
     fprintf(file,",");
     for(int i=0;i<param.dimension;i++){
         fprintf(file,",var_x[%d]",i);
@@ -43,7 +43,7 @@ int main(int argc,char* argv[]){
     for(int i=0;i<param.dimension;i++){
         fprintf(file,",best_x[%d]",i);
     }
-    fprintf(file,",,最適解との距離\n");
+    fprintf(file,",,distance\n");
 
 
     //AREX実行
@@ -58,7 +58,7 @@ int main(int argc,char* argv[]){
     }
     param.echo();
     printf("Number of evaluation: %d\n",count*param.c_size);
-    fprintf(file,"評価回数,%d\n",count*param.c_size);
+    fprintf(file,"number of eval,%d\n",count*param.c_size);
     fclose(file);
     return 0;
 }

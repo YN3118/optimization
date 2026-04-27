@@ -9,15 +9,15 @@
 class AREX{
     public:
     
-    vector<Indiv> population; //Œğ³‘O‚ÌW’c
-    vector<Indiv> parent;     //‘I‚Î‚ê‚½eŒÂ‘Ì
-    vector<Indiv> children;   //‚Å‚«‚½qŒÂ‘Ì
-    double alpha=1.0;         //Šg’£—¦(‰Šú’l‚Í1)
-    FILE *file;               //•Û‘¶—p
+    vector<Indiv> population; //æ¯é›†å›£
+    vector<Indiv> parent;     //è¦ªé›†å›£
+    vector<Indiv> children;   //å­é›†å›£
+    double alpha=1.0;         //æ‹¡å¼µç‡
+    FILE *file;               //ãƒ•ã‚¡ã‚¤ãƒ«
 
     vector<int> permutation;
 
-    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     AREX(vector<Indiv> a,FILE *f){
         population.resize(a.size());
         for(int i=0;i<a.size();i++){
@@ -47,7 +47,6 @@ class AREX{
         }
 
 
-        //eŒÂ‘Ì‚ÍŸŒ³”+1‚É‚·‚é
         parent.resize(param.p_size);
         for(int i=0;i<param.p_size;i++){
             parent[i]=population[permutation[i]];
@@ -55,7 +54,7 @@ class AREX{
     }
     
     void crossover(){
-        //dS‚ğŒvZ
+        //é‡å¿ƒãƒ™ã‚¯ãƒˆãƒ«
         vector<double> g(param.dimension);
         for(int i=0;i<param.dimension;i++){
             double sum=0.0;
@@ -67,7 +66,7 @@ class AREX{
         
 
 
-        //Œğ³’†S~‰º
+        //äº¤å‰ä¸­å¿ƒé™ä¸‹
         vector<Indiv> p_copy(param.p_size);
         p_copy=parent;
         sort(p_copy.begin(),p_copy.end());
@@ -78,13 +77,13 @@ class AREX{
         }
 
 
-        //dS‚Æ‚Ì·ƒxƒNƒgƒ‹
+        //é‡å¿ƒã¨ã®å·®
         vector<vector<double>> v; 
         for(int i=0;i<param.p_size;i++){
             v.push_back(func::cal_dis(g,parent[i].x,0));
         }
 
-        //qŒÂ‘Ì¶¬
+        //ï¿½qï¿½Â‘Ìï¿½ï¿½ï¿½
         vector<double> child_temp(param.dimension,0.0);
         vector<double> eps(param.p_size);
 
@@ -127,14 +126,12 @@ class AREX{
 
     void evaluate(){
 
-        //qŒÂ‘Ì•]‰¿
         sort(children.begin(),children.end());
 
-        //alphaXV
         double L_avg;
         double L_cdp=0.0;
-        double sum1=0.0;//“ñæ•½‹Ï
-        double sum2=0.0;//•½‹Ï‚Ì“ñæ
+        double sum1=0.0;
+        double sum2=0.0;
 
         for(int i=0;i<param.dimension+1;i++){
             double e=0.0;
@@ -152,7 +149,7 @@ class AREX{
         
         L_cdp=pow(alpha,2)*(param.dimension)*(sum1-sum2);
         L_avg=pow(alpha,2)*(param.dimension)/(param.dimension+1);
-        double c=1.0/(5*param.dimension);//ŠwK—¦
+        double c=1.0/(5*param.dimension);//ï¿½wï¿½Kï¿½ï¿½
         double next_alpha=alpha*sqrt((1.0-c)+(c*L_cdp/L_avg));
         //printf("next_alpha=%f\n",next_alpha);
         if(next_alpha<1.0) alpha=1.0;
@@ -160,16 +157,15 @@ class AREX{
         //printf("alpha=%f\n",alpha);
 
 
-        //¢‘ãŒğ‘ãƒ‚ƒfƒ‹‚ÍJGG(‘I‚ñ‚¾eŒÂ‘Ì‚Æ“¯‚¶”‚¾‚¯“ü‚ê‘Ö‚¦)
         sort(children.begin(),children.end());
         for(int i=0;i<param.p_size;i++){
             population[permutation[i]]=children[i];
         }
         sort(population.begin(),population.end());
 
-        printf("Å—ÇŒÂ‘Ì\n");
+        printf("best\n");
         population[0].echo();
-        printf("Åˆ«ŒÂ‘Ì\n");
+        printf("worst\n");
         population[population.size()-1].echo();
 
         vector<double> avg(param.dimension,0.0);

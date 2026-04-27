@@ -25,7 +25,7 @@ int main(){
     // ファイルを開く
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        fprintf(stderr, "エラー: ファイルを開けませんでした。\n");
+        fprintf(stderr, "error : file cannot open\n");
         return 1;
     }
 
