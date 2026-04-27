@@ -41,7 +41,7 @@ public:
         max_value = 5.12;
         min_value = -5.12;
         seed = -1;
-        orconstraint = 1;
+        orconstraint = 0;
         trial = 1;
         filename = "result.csv";
         calcDerived(); // 次元数に依存する変数を再計算
