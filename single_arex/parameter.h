@@ -1,12 +1,12 @@
 #ifndef _PARAMETER_H_
 #define _PARAMETER_H_
 
-#include<cstdio>
-#include<vector>
-#include<random>
-#include<iostream>
-#include<cstdlib>
-#include<cstring>
+#include <cstdio>
+#include <vector>
+#include <random>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
@@ -14,23 +14,22 @@ class Parameter
 {
 public:
     int dimension;    // 次元数
-    int pop_size;     // 母集団
+    int pop_size;     // 母集団サイズ
     int max_gen;      // 終了世代
-    int f_num;        // 使用する関数
+    int f_num;        // 関数
     int p_size;       // 親の数
-    int c_size;       // 生成する子供の数
+    int c_size;       // 子の数
     int seed;         // シード値
     int orconstraint; // 制約の有無
     int trial;        // 試行回数
-    string filename;  // 出力ファイル名
+    string filename;  // ファイル名
 
-    // 定義域
     double mutationrate;
     double min_value; // 最小値
     double max_value; // 最大値
     vector<int> rast_shift;
 
-    // �ｿｽR�ｿｽ�ｿｽ�ｿｽX�ｿｽg�ｿｽ�ｿｽ�ｿｽN�ｿｽ^
+    // コンストラクタ
     Parameter()
     {
         dimension = 5;
@@ -41,20 +40,20 @@ public:
         max_value = 5.12;
         min_value = -5.12;
         seed = -1;
-        orconstraint = 0;
+        orconstraint = 1;
         trial = 1;
         filename = "result.csv";
-        calcDerived(); // �ｿｽﾋ托ｿｽ�ｿｽﾏ撰ｿｽ�ｿｽﾌ計�ｿｽZ
+        calcDerived(); // 次元数に依存する変数を再計算
     }
 
-    // �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾇみ搾ｿｽ�ｿｽ�ｿｽﾅ値�ｿｽ�ｿｽ�ｿｽX�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ
+    // 変数読み込み
     void load(int argc, char *argv[])
     {
         for (int i = 1; i < argc; i++)
         {
             string arg = argv[i];
             if (arg == "-d")
-            { // �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ
+            { // 次元数
                 if (i + 1 < argc)
                 {
                     dimension = atoi(argv[i + 1]);
@@ -62,7 +61,7 @@ public:
                 }
             }
             else if (arg == "-p")
-            { // �ｿｽ�ｿｽW�ｿｽc�ｿｽT�ｿｽC�ｿｽY
+            { // 母集団サイズ
                 if (i + 1 < argc)
                 {
                     pop_size = atoi(argv[i + 1]);
@@ -70,7 +69,7 @@ public:
                 }
             }
             else if (arg == "-g")
-            { // �ｿｽ�ｿｽ�ｿｽ辮�
+            { // 終了世代
                 if (i + 1 < argc)
                 {
                     max_gen = atoi(argv[i + 1]);
@@ -78,7 +77,7 @@ public:
                 }
             }
             else if (arg == "-f")
-            { // �ｿｽﾖ撰ｿｽ�ｿｽﾔ搾ｿｽ
+            { // 使用する関数を指定
                 if (i + 1 < argc)
                 {
                     f_num = atoi(argv[i + 1]);
@@ -86,12 +85,12 @@ public:
                 }
             }
             else if (arg == "-o")
-            { // �ｿｽt�ｿｽ@�ｿｽC�ｿｽ�ｿｽ�ｿｽ�ｿｽ
+            { // 出力ファイル名
                 filename = argv[i + 1];
                 i++;
             }
             else if (arg == "-s")
-            { // �ｿｽV�ｿｽ[�ｿｽh�ｿｽl
+            { // シード値
                 if (i + 1 < argc)
                 {
                     seed = atoi(argv[i + 1]);
@@ -99,7 +98,7 @@ public:
                 }
             }
             else if (arg == "-c")
-            { // �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ
+            { // 制約条件
                 if (i + 1 < argc)
                 {
                     orconstraint = atoi(argv[i + 1]);
@@ -107,7 +106,7 @@ public:
                 }
             }
             else if (arg == "-t")
-            { // �ｿｽ�ｿｽ�ｿｽs�ｿｽ�ｿｽ
+            { // 試行回数
                 if (i + 1 < argc)
                 {
                     trial = atoi(argv[i + 1]);
@@ -115,23 +114,22 @@ public:
                 }
             }
             else if (arg == "-h" || arg == "--help")
-            { // �ｿｽw�ｿｽ�ｿｽ�ｿｽv�ｿｽ\�ｿｽ�ｿｽ
+            { // ヘルプ表示
                 showHelp();
                 exit(0);
             }
         }
-        // �ｿｽl�ｿｽ�ｿｽ�ｿｽﾏゑｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾌで再計�ｿｽZ
+        // 次元数
         calcDerived();
         // echo();
     }
 
-    // �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾈどに依托ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾏ撰ｿｽ�ｿｽ�ｿｽ�ｿｽv�ｿｽZ
+    // 次元数に依存する変数を再計算
     void calcDerived()
     {
         p_size = dimension + 1;
         c_size = 4 * dimension;
 
-        // �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ�ｿｽﾉ抵ｿｽ`�ｿｽ�ｿｽ�ｿｽﾏ更
         // Rosenbrock
         if (f_num == 0)
         {
@@ -187,6 +185,7 @@ public:
             max_value = 300.0;
         }
         // new_Rastrigin
+        // new_Rastrigin
         else if (f_num == 9)
         {
             min_value = -5.12;
@@ -196,8 +195,8 @@ public:
             int size = 0;
             rast_shift.resize(dimension);
 
-            char line[1024]; // 1行を読み込むためのバッファ
-            fgets(line, sizeof(line), file); ///ヘッダー削除
+            char line[1024];                 // 1行を読み込むためのバッファ
+            fgets(line, sizeof(line), file); /// ヘッダー削除
             // 行ごとに読み込む
             while (fgets(line, sizeof(line), file) != NULL)
             {
@@ -222,7 +221,7 @@ public:
         }
     }
 
-    // �ｿｽﾝ抵ｿｽl�ｿｽﾌ表�ｿｽ�ｿｽ
+    // パラメータ表示
     void echo()
     {
         printf("--- Parameter Settings ---\n");
@@ -237,12 +236,9 @@ public:
         printf("trial num : %d\n", trial);
         printf("output filename: %s\n", filename.c_str());
         printf("--------------------------\n");
-        for(int i=0;i<rast_shift.size();i++){
-            cout<<rast_shift[i]<<endl;
-        }
     }
 
-    // �ｿｽw�ｿｽ�ｿｽ�ｿｽv�ｿｽ\�ｿｽ�ｿｽ�ｿｽp
+    // ヘルプ表示
     void showHelp()
     {
         printf("Usage: ./main [options]\n");
@@ -251,7 +247,7 @@ public:
         printf("  -p <int>   Set population size (default: 100)\n");
         printf("  -g <int>   Set max generation (default: 1)\n");
         printf("  -o <name>  Set output filename (default: result.csv)\n");
-        printf("  -c <int>   Set constraint (0: off, 1: on, default: 1)\n");
+        printf("  -c <int>   Set constraint (0: off, 1: on)\n");
         printf("  -t <int>   Set trial num\n");
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
@@ -261,7 +257,7 @@ public:
     }
 };
 
-// �ｿｽO�ｿｽ�ｿｽ�ｿｽ[�ｿｽo�ｿｽ�ｿｽ�ｿｽﾏ撰ｿｽ�ｿｽﾆゑｿｽ�ｿｽﾄ宣言�ｿｽi�ｿｽ�ｿｽ�ｿｽﾌゑｿｽ main.cpp �ｿｽﾉ置�ｿｽ�ｿｽ�ｿｽj
+
 extern Parameter param;
 
 #endif

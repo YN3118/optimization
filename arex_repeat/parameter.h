@@ -1,36 +1,36 @@
 #ifndef _PARAMETER_H_
 #define _PARAMETER_H_
 
-#include<cstdio>
-#include<vector>
-#include<random>
-#include<iostream>
-#include<cstdlib>
-#include<cstring>
+#include <cstdio>
+#include <vector>
+#include <random>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
 class Parameter
 {
 public:
-    int dimension;    // ?��?��?��?��?��?��
-    int pop_size;     // ?��?��W?��c?��T?��C?��Y
-    int max_gen;      // ?��ő吢?���?
-    int f_num;        // ?��֐�?��ԍ�
-    int p_size;       // ?��e?��̐�
-    int c_size;       // ?��q?��̐�
-    int seed;         // ?��V?��[?��h?��l
-    int orconstraint; // ?��?��?��?��?��?��?��
-    int trial;        // ?��?��?��s?��?��
-    string filename;  // ?��o?��̓t?��@?��C?��?��?��?��
+    int dimension;    // 次元数
+    int pop_size;     // 母集団サイズ
+    int max_gen;      // 終了世代
+    int f_num;        // 関数
+    int p_size;       // 親の数
+    int c_size;       // 子の数
+    int seed;         // シード値
+    int orconstraint; // 制約の有無
+    int trial;        // 試行回数
+    string filename;  // ファイル名
 
     // ?���?
     double mutationrate;
-    double min_value; // ?��݌v?��ϐ�?��̍ŏ�?��l
-    double max_value; // ?��݌v?��ϐ�?��̍ő�l
+    double min_value; // 最小値
+    double max_value; // 最大値
     vector<int> rast_shift;
 
-    // ?��R?��?��?��X?��g?��?��?��N?��^
+    // コンストラクタ
     Parameter()
     {
         dimension = 5;
@@ -44,17 +44,17 @@ public:
         orconstraint = 1;
         trial = 1;
         filename = "result.csv";
-        calcDerived(); // ?��ˑ�?��ϐ�?��̌v?��Z
+        calcDerived(); // 次元数に依存する変数を再計算
     }
 
-    // ?��?��?��?��?��?��ǂݍ�?��?��Œl?��?��?��X?��V?��?��?��?��
+    // 変数読み込み
     void load(int argc, char *argv[])
     {
         for (int i = 1; i < argc; i++)
         {
             string arg = argv[i];
             if (arg == "-d")
-            { // ?��?��?��?��?��?��
+            { // 次元数
                 if (i + 1 < argc)
                 {
                     dimension = atoi(argv[i + 1]);
@@ -62,7 +62,7 @@ public:
                 }
             }
             else if (arg == "-p")
-            { // ?��?��W?��c?��T?��C?��Y
+            { // 母集団サイズ
                 if (i + 1 < argc)
                 {
                     pop_size = atoi(argv[i + 1]);
@@ -70,7 +70,7 @@ public:
                 }
             }
             else if (arg == "-g")
-            { // ?��?��?���?
+            { // 終了世代
                 if (i + 1 < argc)
                 {
                     max_gen = atoi(argv[i + 1]);
@@ -78,7 +78,7 @@ public:
                 }
             }
             else if (arg == "-f")
-            { // ?��֐�?��ԍ�
+            { // 使用する関数を指定
                 if (i + 1 < argc)
                 {
                     f_num = atoi(argv[i + 1]);
@@ -86,12 +86,12 @@ public:
                 }
             }
             else if (arg == "-o")
-            { // ?��t?��@?��C?��?��?��?��
+            { // 出力ファイル名
                 filename = argv[i + 1];
                 i++;
             }
             else if (arg == "-s")
-            { // ?��V?��[?��h?��l
+            { // シード値
                 if (i + 1 < argc)
                 {
                     seed = atoi(argv[i + 1]);
@@ -99,7 +99,7 @@ public:
                 }
             }
             else if (arg == "-c")
-            { // ?��?��?��?��?��?��?��
+            { // 制約条件
                 if (i + 1 < argc)
                 {
                     orconstraint = atoi(argv[i + 1]);
@@ -107,7 +107,7 @@ public:
                 }
             }
             else if (arg == "-t")
-            { // ?��?��?��s?��?��
+            { // 試行回数
                 if (i + 1 < argc)
                 {
                     trial = atoi(argv[i + 1]);
@@ -115,23 +115,22 @@ public:
                 }
             }
             else if (arg == "-h" || arg == "--help")
-            { // ?��w?��?��?��v?��\?��?��
+            { // ヘルプ表示
                 showHelp();
                 exit(0);
             }
         }
-        // ?��l?��?��?��ς�?��?��?��?��̂ōČv?��Z
+        // 次元数
         calcDerived();
         // echo();
     }
 
-    // ?��?��?��?��?��?��?��ȂǂɈˑ�?��?��?��?��ϐ�?��?��?��v?��Z
+    // 次元数に依存する変数を再計算
     void calcDerived()
     {
         p_size = dimension + 1;
         c_size = 4 * dimension;
 
-        // ?��֐�?��?��?��ɒ�`?��?��?��ύX
         // Rosenbrock
         if (f_num == 0)
         {
@@ -187,6 +186,7 @@ public:
             max_value = 300.0;
         }
         // new_Rastrigin
+        // new_Rastrigin
         else if (f_num == 9)
         {
             min_value = -5.12;
@@ -196,34 +196,33 @@ public:
             int size = 0;
             rast_shift.resize(dimension);
 
-            char line[1024]; // 1行を読み込むためのバッファ
-            fgets(line, sizeof(line), file); ///ヘッダー削除
-
-            // �s���Ƃɓǂݍ���
+            char line[1024];                 // 1行を読み込むためのバッファ
+            fgets(line, sizeof(line), file); /// ヘッダー削除
+            // 行ごとに読み込む
             while (fgets(line, sizeof(line), file) != NULL)
             {
-                // ���s�������폜
+                // 改行文字を削除
                 line[strcspn(line, "\r\n")] = '\0';
 
-                // ��s�̏ꍇ�̓X�L�b�v
+                // 空行の場合はスキップ
                 if (strlen(line) == 0)
                     continue;
 
-                // �J���}��؂�ŕ�����𕪊��i1��݂̂̏ꍇ������œ��삵�܂��j
+                // カンマ区切りで文字列を分割（1列のみの場合もこれで動作します）
                 char *token = strtok(line, ",");
                 while (token != NULL)
                 {
-                    // ������𐮐��ɕϊ����Ĕz��ɕۑ�
+                    // 文字列を整数に変換して配列に保存
                     rast_shift[size] = atoi(token);
                     size++;
-                    // ���̃g�[�N���i�J���}��؂�̎��̗v�f�j���擾
+                    // 次のトークン（カンマ区切りの次の要素）を取得
                     token = strtok(NULL, ",");
                 }
             }
         }
     }
 
-    // ?��ݒ�l?��̕\?��?��
+    // パラメータ表示
     void echo()
     {
         printf("--- Parameter Settings ---\n");
@@ -240,7 +239,7 @@ public:
         printf("--------------------------\n");
     }
 
-    // ?��w?��?��?��v?��\?��?��?��p
+    // ヘルプ表示
     void showHelp()
     {
         printf("Usage: ./main [options]\n");
@@ -259,7 +258,6 @@ public:
     }
 };
 
-// ?��O?��?��?��[?��o?��?��?��ϐ�?��Ƃ�?��Đ錾?��i?��?��?��̂� main.cpp ?��ɒu?��?��?��j
 extern Parameter param;
 
 #endif

@@ -3,9 +3,9 @@
 
 #include"config.h"
 #include"parameter.h"
-/*---g—p‚·‚éŠÖ”---*/
+/*---ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½Öï¿½---*/
 
-//RosenbrockŠÖ”
+//Rosenbrockï¿½Öï¿½
 double Rosenbrock(vector<double> x){
         double sum=0.0;
         for(int i=1;i<x.size();i++){
@@ -14,7 +14,7 @@ double Rosenbrock(vector<double> x){
         return sum;
     }
 
-//RastriginŠÖ”
+//Rastriginï¿½Öï¿½
 double Rastrigin(vector<double> x){
         double sum=0.0;
         int count=0;
@@ -25,7 +25,7 @@ double Rastrigin(vector<double> x){
         return 10*count+sum;
     }
 
-//SphereŠÖ”
+//Sphereï¿½Öï¿½
 double Sphere(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
@@ -34,7 +34,7 @@ double Sphere(vector<double> x){
     return sum;
 }
 
-//ƒAƒbƒNƒŠ[ŠÖ”
+//ï¿½Aï¿½bï¿½Nï¿½ï¿½ï¿½[ï¿½Öï¿½
 double Ackley(vector<double> x){
     double sum1=0.0;
     double sum2=0.0;
@@ -48,7 +48,7 @@ double Ackley(vector<double> x){
     return 20-(20*exp(-0.2*sum1))+exp(1)-exp(sum2);
 }
 
-//SchwefelŠÖ”
+//Schwefelï¿½Öï¿½
 double Schwefel(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
@@ -57,7 +57,7 @@ double Schwefel(vector<double> x){
     return 418.9828873*x.size()+sum;
 }
 
-//RosenborckŠÖ”(chainŒ^)
+//Rosenborckï¿½Öï¿½(chainï¿½^)
 double Rosenbrock_chain(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
@@ -66,7 +66,7 @@ double Rosenbrock_chain(vector<double> x){
     return sum;
 }
 
-//EllipsoidŠÖ”
+//Ellipsoidï¿½Öï¿½
 double Ellipsoid(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
@@ -75,7 +75,7 @@ double Ellipsoid(vector<double> x){
     return sum;
 }
 
-//BohaxhevskyŠÖ”
+//Bohaxhevskyï¿½Öï¿½
 double Bohaxhevsky(vector<double> x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
@@ -84,7 +84,7 @@ double Bohaxhevsky(vector<double> x){
     return sum;
 }
 
-//GriewankŠÖ”
+//Griewankï¿½Öï¿½
 double Griewank(vector<double> x){
     double sum1=0.0;
     double sum2=1.0;
@@ -101,7 +101,7 @@ double new_Rastrigin(vector<double> x){
     double sum=0.0;
     int count=0;
     for(int i=0;i<x.size();i++){
-        sum=sum+(pow(x[i],2)-param.rast_shift[i])-10*cos(2*pi*(x[i]-param.rast_shift[i]));
+        sum=sum+(pow(x[i]-param.rast_shift[i],2))-10*cos(2*pi*(x[i]-param.rast_shift[i]));
         count++;
     }
     return 10*count+sum;
