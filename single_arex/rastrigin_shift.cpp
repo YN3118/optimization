@@ -9,8 +9,8 @@ int main(){
   mt19937 gen(1);
   FILE *file1;
   file1=fopen("rastrigin_shift.csv","w");
-  int max=3;
-  int min=-3;
+  int max=5;
+  int min=-5;
   uniform_int_distribution<> dist(min,max);
   fprintf(file1,"min,%d,max,%d\n",min,max);
   for(int i=0;i<500;i++){
