@@ -26,7 +26,8 @@ class Adatron{
     double v=func::cal_mul(teacher.x,x);
     double l=func::cal_norm(student.x)/J0;
     double u=func::cal_mul(student.x,x)/l;
-    double f=-u*func::step(-u*func::sgn(v));
+    // double f=-u*func::step(-u*func::sgn(v));
+    double f=fabs(u)*func::step(-u*v)*func::sgn(v);
 
     //生徒のベクトル更新
     vector<double> temp(param.dimension);
