@@ -13,25 +13,26 @@ namespace func=Function;
 
 class Indiv{
     public:
-    vector<double> x;          //õF‘Ì
-    double f;                  //ŠÖ”’l
-    int indiv_num;             //AREX—p‚ÌŒÂ‘Ì¯•Ê”Ô†
+    vector<double> x;          //ï¿½ï¿½ï¿½Fï¿½ï¿½
+    double f;                  //ï¿½Öï¿½ï¿½l
+    int indiv_num;             //AREXï¿½pï¿½ÌŒÂ‘Ìï¿½ï¿½Ê”Ôï¿½
 
-    vector<double> eps;        //AREX—p‚ÌƒxƒNƒgƒ‹
+    vector<double> eps;        //AREXï¿½pï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½
 
 
-    //ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    //ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
     Indiv(){
         x.resize(param.dimension);
         double sum=0.0;
         for(int i=0;i<x.size();i++){
-            x[i]=func::generateRandomDouble(param.min_value,param.max_value);
+            // x[i]=func::generateRandomDouble(param.min_value,param.max_value);
+            x[i]=func::generateRandomDouble(1.0,5.0);
             //if(i==2) x[i]=0.0;
             sum+=x[i];
         }
 
 
-        // //İŒv•Ï”‚ğ5ŒÂ‘I‚ñ‚Å0‚É‚·‚é
+        // //ï¿½İŒvï¿½Ïï¿½ï¿½ï¿½5ï¿½Â‘Iï¿½ï¿½ï¿½0ï¿½É‚ï¿½ï¿½ï¿½
         // if(param.dimension>5){
         //     sum=0.0;
         //     for(int i=0;i<5;i++){
@@ -41,14 +42,14 @@ class Indiv{
         //         sum+=x[i];
         //     }
         //     if(param.orconstraint==1){
-        //     //Rosenbrockg—p‚Í(˜a=ŸŒ³”)‚É‚È‚é‚æ‚¤‚É
+        //     //Rosenbrockï¿½gï¿½pï¿½ï¿½ï¿½ï¿½(ï¿½a=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½É‚È‚ï¿½æ‚¤ï¿½ï¿½
         //     if(param.f_num==0||param.f_num==5){
         //         for(int i=5;i<x.size();i++){
         //             x[i]=x[i]+((param.dimension-sum)/(x.size()-5));
         //         }
         //     }
         //     else{
-        //         //İŒv•Ï”‚Ì˜a‚ª0‚É‚È‚é‚æ‚¤‚É’²®(•s—v‚È‚Æ‚«‚ÍÁ‚·)
+        //         //ï¿½İŒvï¿½Ïï¿½ï¿½Ì˜aï¿½ï¿½0ï¿½É‚È‚ï¿½æ‚¤ï¿½É’ï¿½ï¿½ï¿½(ï¿½sï¿½vï¿½È‚Æ‚ï¿½ï¿½Íï¿½ï¿½ï¿½)
         //         for(int i=5;i<x.size();i++){
         //             x[i]=x[i]-(sum/(x.size()-5));
         //         }
@@ -57,14 +58,14 @@ class Indiv{
         // }
 
         if(param.orconstraint==1){
-            //Rosenbrockg—p‚Í(˜a=ŸŒ³”)‚É‚È‚é‚æ‚¤‚É
+            //Rosenbrockï¿½gï¿½pï¿½ï¿½ï¿½ï¿½(ï¿½a=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½É‚È‚ï¿½æ‚¤ï¿½ï¿½
             if(param.f_num==0||param.f_num==5){
                 for(int i=0;i<x.size();i++){
                     x[i]=x[i]+((param.dimension-sum)/x.size());
                 }
             }
             else{
-                //İŒv•Ï”‚Ì˜a‚ª0‚É‚È‚é‚æ‚¤‚É’²®(•s—v‚È‚Æ‚«‚ÍÁ‚·)
+                //ï¿½İŒvï¿½Ïï¿½ï¿½Ì˜aï¿½ï¿½0ï¿½É‚È‚ï¿½æ‚¤ï¿½É’ï¿½ï¿½ï¿½(ï¿½sï¿½vï¿½È‚Æ‚ï¿½ï¿½Íï¿½ï¿½ï¿½)
                 for(int i=0;i<x.size();i++){
                     x[i]=x[i]-(sum/x.size());
                 }
@@ -90,7 +91,7 @@ class Indiv{
             printf("x[%d]:%f\t",i,x[i]);
         }
         printf("f(x):%6f\t",f);
-        //Šm”F—p
+        //ï¿½mï¿½Fï¿½p
         double sum=0.0;
         for(int i=0;i<param.dimension;i++){
             sum+=x[i];
@@ -105,7 +106,7 @@ class Indiv{
         
     }
 
-    //ŠeíƒIƒyƒŒ[ƒ^
+    //ï¿½eï¿½ï¿½Iï¿½yï¿½ï¿½ï¿½[ï¿½^
     Indiv& operator=(const Indiv& s){
         x=s.x;
         f=s.f;

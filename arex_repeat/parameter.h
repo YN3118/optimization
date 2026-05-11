@@ -232,7 +232,7 @@ public:
         printf("Function  : %d\n", f_num);
         printf("p_size    : %d\n", p_size);
         printf("c_size    : %d\n", c_size);
-        printf("seed      : %d\n", seed);
+        printf("first seed: %d\n", seed);
         printf("constraint: %d\n", orconstraint);
         printf("trial num : %d\n", trial);
         printf("output filename: %s\n", filename.c_str());

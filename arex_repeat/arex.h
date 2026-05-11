@@ -9,16 +9,16 @@
 class AREX{
     public:
     
-    vector<Indiv> population; //Œğ³‘O‚ÌW’c
-    vector<Indiv> parent;     //‘I‚Î‚ê‚½eŒÂ‘Ì
-    vector<Indiv> children;   //‚Å‚«‚½qŒÂ‘Ì
-    double alpha=1.0;         //Šg’£—¦(‰Šú’l‚Í1)
-    FILE *file;               //•Û‘¶—p
+    vector<Indiv> population; //ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ÌWï¿½c
+    vector<Indiv> parent;     //ï¿½Iï¿½Î‚ê‚½ï¿½eï¿½Â‘ï¿½
+    vector<Indiv> children;   //ï¿½Å‚ï¿½ï¿½ï¿½ï¿½qï¿½Â‘ï¿½
+    double alpha=1.0;         //ï¿½gï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½1)
+    FILE *file;               //ï¿½Û‘ï¿½ï¿½p
 
     vector<int> permutation;
     Function func;
 
-    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    //ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
     AREX(vector<Indiv> a,FILE *f){
         population.resize(a.size());
         for(int i=0;i<a.size();i++){
@@ -48,7 +48,7 @@ class AREX{
         }
 
 
-        //eŒÂ‘Ì‚ÍŸŒ³”+1‚É‚·‚é
+        //ï¿½eï¿½Â‘Ì‚Íï¿½ï¿½ï¿½ï¿½ï¿½+1ï¿½É‚ï¿½ï¿½ï¿½
         parent.resize(param.p_size);
         for(int i=0;i<param.p_size;i++){
             parent[i]=population[permutation[i]];
@@ -56,7 +56,7 @@ class AREX{
     }
     
     void crossover(){
-        //dS‚ğŒvZ
+        //ï¿½dï¿½Sï¿½ï¿½ï¿½vï¿½Z
         vector<double> g(param.dimension);
         for(int i=0;i<param.dimension;i++){
             double sum=0.0;
@@ -68,7 +68,7 @@ class AREX{
         
 
 
-        //Œğ³’†S~‰º
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½~ï¿½ï¿½
         vector<Indiv> p_copy(param.p_size);
         p_copy=parent;
         sort(p_copy.begin(),p_copy.end());
@@ -79,13 +79,13 @@ class AREX{
         }
 
 
-        //dS‚Æ‚Ì·ƒxƒNƒgƒ‹
+        //ï¿½dï¿½Sï¿½Æ‚Ìï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
         vector<vector<double>> v; 
         for(int i=0;i<param.p_size;i++){
             v.push_back(func.cal_dis(g,parent[i].x,0));
         }
 
-        //qŒÂ‘Ì¶¬
+        //ï¿½qï¿½Â‘Ìï¿½ï¿½ï¿½
         vector<double> child_temp(param.dimension,0.0);
         vector<double> eps(param.p_size);
 
@@ -126,14 +126,14 @@ class AREX{
 
     void evaluate(){
 
-        //qŒÂ‘Ì•]‰¿
+        //ï¿½qï¿½Â‘Ì•]ï¿½ï¿½
         sort(children.begin(),children.end());
 
-        //alphaXV
+        //alphaæ›´æ–°
         double L_avg;
         double L_cdp=0.0;
-        double sum1=0.0;//“ñæ•½‹Ï
-        double sum2=0.0;//•½‹Ï‚Ì“ñæ
+        double sum1=0.0;//ï¿½ï¿½æ•½ï¿½ï¿½
+        double sum2=0.0;//ï¿½ï¿½ï¿½Ï‚Ì“ï¿½ï¿½
 
         for(int i=0;i<param.dimension+1;i++){
             double e=0.0;
@@ -151,7 +151,7 @@ class AREX{
         
         L_cdp=pow(alpha,2)*(param.dimension)*(sum1-sum2);
         L_avg=pow(alpha,2)*(param.dimension)/(param.dimension+1);
-        double c=1.0/(5*param.dimension);//ŠwK—¦
+        double c=1.0/(5*param.dimension);//ï¿½wï¿½Kï¿½ï¿½
         double next_alpha=alpha*sqrt((1.0-c)+(c*L_cdp/L_avg));
         //printf("next_alpha=%f\n",next_alpha);
         if(next_alpha<1.0) alpha=1.0;
@@ -159,63 +159,14 @@ class AREX{
         //printf("alpha=%f\n",alpha);
 
 
-        //¢‘ãŒğ‘ãƒ‚ƒfƒ‹‚ÍJGG(‘I‚ñ‚¾eŒÂ‘Ì‚Æ“¯‚¶”‚¾‚¯“ü‚ê‘Ö‚¦)
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ãƒ‚ï¿½fï¿½ï¿½ï¿½ï¿½JGG(ï¿½Iï¿½ñ‚¾eï¿½Â‘Ì‚Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö‚ï¿½)
         sort(children.begin(),children.end());
         for(int i=0;i<param.p_size;i++){
             population[permutation[i]]=children[i];
         }
         sort(population.begin(),population.end());
 
-        // printf("Å—ÇŒÂ‘Ì\n");
-        // population[0].echo();
-        // printf("Åˆ«ŒÂ‘Ì\n");
-        // population[population.size()-1].echo();
 
-        // vector<double> avg(param.dimension,0.0);
-        // vector<double> avg2(param.dimension,0.0);
-        // vector<double> dev(param.dimension,0.0);
-        // vector<double> pop_g(param.dimension,0.0);
-        // for(int i=0;i<param.dimension;i++){
-        //     double temp=0.0;
-        //     for(int j=0;j<population.size();j++){
-        //         temp+=population[j].x[i];
-        //     }
-        //     pop_g[i]=temp/population.size();
-        // }
-
-        // for(int i=0;i<param.dimension;i++){
-        //     for(int j=0;j<population.size();j++){
-        //         avg[i]+=population[j].x[i];
-        //         avg2[i]+=pow(population[j].x[i],2);
-        //     }
-        //     avg[i]=avg[i]/population.size();
-        //     avg2[i]=avg2[i]/population.size();
-        //     dev[i]=avg2[i]-pow(avg[i],2);
-        // }
-
-
-        // fprintf(file,"%f,%f,%f,",population[0].f,population[population.size()-1].f,alpha);
-
-        // for(int i=0;i<param.dimension;i++){
-        //     fprintf(file,",%lf",dev[i]);
-        // }
-        // fprintf(file,",");
-        // for(int i=0;i<param.dimension;i++){
-        //     fprintf(file,",%lf",pop_g[i]);
-        // }
-        // double dist=0.0;
-        // if(param.f_num==0||param.f_num==5){
-        //     for(int i=0;i<param.dimension;i++){
-        //         dist+=pow(pop_g[i]-1.0,2);
-        //     }
-        // }
-        // else{
-        //     for(int i=0;i<param.dimension;i++){
-        //         dist+=pow(pop_g[i],2);
-        //     }
-        // }
-
-        // fprintf(file,",,%lf\n",sqrt(dist));
 
     }
 };
