@@ -133,9 +133,9 @@ class AREX{
         double sum1=0.0;
         double sum2=0.0;
 
-        for(int i=0;i<param.dimension+1;i++){
+        for(int j=0;j<param.p_size;j++){
             double e=0.0;
-            for(int j=0;j<param.dimension+1;j++){
+            for(int i=0;i<param.p_size;i++){
                 e+=children[i].eps[j]/(param.dimension+1);
             }
             sum1+=pow(e,2);
