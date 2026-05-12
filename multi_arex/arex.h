@@ -9,15 +9,15 @@
 class AREX{
     public:
     
-    vector<Indiv> population; //•êW’c
-    vector<Indiv> parent;     //eW’c
-    vector<Indiv> children;   //qW’c
-    double alpha=1.0;         //Šg’£—¦
-    FILE *file;               //ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^
+    vector<Indiv> population; //ï¿½ï¿½Wï¿½c
+    vector<Indiv> parent;     //ï¿½eï¿½Wï¿½c
+    vector<Indiv> children;   //ï¿½qï¿½Wï¿½c
+    double alpha=1.0;         //ï¿½gï¿½ï¿½ï¿½ï¿½
+    FILE *file;               //ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½^
 
     vector<int> permutation;
 
-    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    //ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
     AREX(vector<Indiv> a,FILE *f){
         population.resize(a.size());
         for(int i=0;i<a.size();i++){
@@ -115,7 +115,7 @@ class AREX{
     }
 
     void evaluate(){
-        //‚à‚Æ‚Ì•êW’c‚Æq‚ğ¬‚º‚Ä•]‰¿
+        //ï¿½ï¿½ï¿½Æ‚Ì•ï¿½Wï¿½cï¿½Æqï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä•]ï¿½ï¿½
         vector<Indiv> P=population;
         P.insert(P.end(),children.begin(),children.end());
         NSGA2 nsga2(P);
@@ -124,14 +124,14 @@ class AREX{
         vector<Indiv> next_gen=move(nsga2.next);
         sort(next_gen.begin(),next_gen.end());
 
-        //alphaXV
+        //alphaï¿½Xï¿½V
         double L_avg;
         double L_cdp=0.0;
         double sum1=0.0;
         double sum2=0.0;
-        for(int i=0;i<param.dimension+1;i++){
+        for(int j=0;j<param.p_size;j++){
             double e=0.0;
-            for(int j=0;j<param.dimension+1;j++){
+            for(int i=0;i<param.p_size;i++){
                 e+=children[i].eps[j]/(param.dimension+1);
             }
             sum1+=pow(e,2);
@@ -140,13 +140,13 @@ class AREX{
         sum2=pow(sum2,2)/(param.dimension+1);        
         L_cdp=pow(alpha,2)*(param.dimension)*(sum1-sum2);
         L_avg=pow(alpha,2)*(param.dimension)/(param.dimension+1);
-        double c=param.learning_rate;//ŠwK—¦
+        double c=param.learning_rate;//ï¿½wï¿½Kï¿½ï¿½
         double next_alpha=alpha*sqrt((1.0-c)+(c*L_cdp/L_avg));
         if(next_alpha<1.0) alpha=1.0;
         else alpha=next_alpha;
         printf("alpha=%f\n",alpha);
 
-        //•êW’cXV(‘I‘ğ‚µ‚½eŒÂ‘Ì‚Æ“¯‚¶”‚ğ“ü‚ê‘Ö‚¦)
+        //ï¿½ï¿½Wï¿½cï¿½Xï¿½V(ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½Â‘Ì‚Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö‚ï¿½)
         for(int i=0;i<param.pop_size;i++){
             population[i]=move(next_gen[i]);
         }

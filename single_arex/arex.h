@@ -149,7 +149,7 @@ class AREX{
         
         L_cdp=pow(alpha,2)*(param.dimension)*(sum1-sum2);
         L_avg=pow(alpha,2)*(param.dimension)/(param.dimension+1);
-        double c=1.0/(5*param.dimension);//�w�K��
+        double c=1.0/(5*param.dimension);//学習率
         double next_alpha=alpha*sqrt((1.0-c)+(c*L_cdp/L_avg));
         //printf("next_alpha=%f\n",next_alpha);
         if(next_alpha<1.0) alpha=1.0;

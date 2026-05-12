@@ -167,7 +167,6 @@ class AREX{
         sort(population.begin(),population.end());
 
 
-
     }
 };
 
