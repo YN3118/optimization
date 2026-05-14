@@ -1,145 +1,117 @@
 #ifndef _INDIV_H_
 #define _INDIV_H_
 
-#include<vector>
-#include"config.h"
-#include"function.h"
-#include"benchmark.h"
-#include"constraint.h"
-#include"parameter.h"
+#include <vector>
+#include "config.h"
+#include "function.h"
+#include "benchmark.h"
+#include "constraint.h"
+#include "parameter.h"
 
 using namespace std;
-namespace func=Function;
+namespace func = Function;
 
-class Indiv{
-    public:
-    vector<double> x;          //���F��
-    double f;                  //�֐��l
-    int indiv_num;             //AREX�p�̌̎��ʔԍ�
+class Indiv
+{
+public:
+    vector<double> x; // 設計変数
+    double f;         // 関数値
 
-    vector<double> eps;        //AREX�p�̃x�N�g��
+    vector<double> eps; // AREXの拡張率計算用
 
-
-    //�f�t�H���g�R���X�g���N�^
-    Indiv(){
+    // コンストラクタ
+    Indiv()
+    {
         x.resize(param.dimension);
-        double sum=0.0;
-        for(int i=0;i<x.size();i++){
+        double sum = 0.0;
+        for (int i = 0; i < x.size(); i++)
+        {
             // x[i]=func::generateRandomDouble(param.min_value,param.max_value);
-            x[i]=func::generateRandomDouble(1.0,5.0);
-            //if(i==2) x[i]=0.0;
-            sum+=x[i];
+            x[i] = func::generateRandomDouble(1.0, 5.0); //<----初期集団に偏りを持たせる
+            sum += x[i];
         }
 
-
-        // //�݌v�ϐ���5�I���0�ɂ���
-        // if(param.dimension>5){
-        //     sum=0.0;
-        //     for(int i=0;i<5;i++){
-        //         x[i]=0.0;
-        //     }
-        //     for(int i=5;i<param.dimension;i++){
-        //         sum+=x[i];
-        //     }
-        //     if(param.orconstraint==1){
-        //     //Rosenbrock�g�p����(�a=������)�ɂȂ�悤��
-        //     if(param.f_num==0||param.f_num==5){
-        //         for(int i=5;i<x.size();i++){
-        //             x[i]=x[i]+((param.dimension-sum)/(x.size()-5));
-        //         }
-        //     }
-        //     else{
-        //         //�݌v�ϐ��̘a��0�ɂȂ�悤�ɒ���(�s�v�ȂƂ��͏���)
-        //         for(int i=5;i<x.size();i++){
-        //             x[i]=x[i]-(sum/(x.size()-5));
-        //         }
-        //     }
-        // }
-        // }
-
-        if(param.orconstraint==1){
-            //Rosenbrock�g�p����(�a=������)�ɂȂ�悤��
-            if(param.f_num==0||param.f_num==5){
-                for(int i=0;i<x.size();i++){
-                    x[i]=x[i]+((param.dimension-sum)/x.size());
+        // 制約あるときの処理
+        if (param.orconstraint == 1)
+        {
+            // Rosenbrockのとき
+            if (param.f_num == 0 || param.f_num == 5)
+            {
+                for (int i = 0; i < x.size(); i++)
+                {
+                    x[i] = x[i] + ((param.dimension - sum) / x.size());
                 }
             }
-            else{
-                //�݌v�ϐ��̘a��0�ɂȂ�悤�ɒ���(�s�v�ȂƂ��͏���)
-                for(int i=0;i<x.size();i++){
-                    x[i]=x[i]-(sum/x.size());
+            else
+            {
+                for (int i = 0; i < x.size(); i++)
+                {
+                    x[i] = x[i] - (sum / x.size());
                 }
             }
         }
-
-        f=f_value(param.f_num,x);
-        indiv_num=0;
-
-        eps.resize(param.p_size,0.0);
+        f = f_value(param.f_num, x);
+        eps.resize(param.p_size, 0.0);
     }
 
-    Indiv(vector<double> a,int i){
+    Indiv(vector<double> a, int i)
+    {
         x.resize(a.size());
-        x=a;
-        f=f_value(param.f_num,x);
-        indiv_num=i;
-        eps.resize(param.p_size,0.0);
+        x = a;
+        f = f_value(param.f_num, x);
+        eps.resize(param.p_size, 0.0);
     }
 
-    void echo(){
-        for(int i=0;i<param.dimension;i++){
-            printf("x[%d]:%f\t",i,x[i]);
+    void echo()
+    {
+        for (int i = 0; i < param.dimension; i++)
+        {
+            printf("x[%d]:%f\t", i, x[i]);
         }
-        printf("f(x):%6f\t",f);
-        //�m�F�p
-        double sum=0.0;
-        for(int i=0;i<param.dimension;i++){
-            sum+=x[i];
-        }
-        // printf("sum:%6f\t",sum);
-        // printf("indiv_num:%d\t",indiv_num);
-        // printf("\n");
-        // for(int i=0;i<eps.size();i++){
-        //     printf("eps[%d]:%f\t",i,eps[i]);
-        // }
+        printf("f(x):%6f\t", f);
         printf("\n");
-        
     }
 
-    //�e��I�y���[�^
-    Indiv& operator=(const Indiv& s){
-        x=s.x;
-        f=s.f;
-        indiv_num=s.indiv_num;
-        eps=s.eps;
+    // オペレータ
+    Indiv &operator=(const Indiv &s)
+    {
+        x = s.x;
+        f = s.f;
+        eps = s.eps;
         return *this;
     }
 
-    bool operator==(const Indiv& s)const{
-        if(f!=s.f) return false;
-        for(int i=0;i<param.dimension;i++){
-            if(x[i]!=s.x[i]) return false;
+    bool operator==(const Indiv &s) const
+    {
+        if (f != s.f)
+            return false;
+        for (int i = 0; i < param.dimension; i++)
+        {
+            if (x[i] != s.x[i])
+                return false;
         }
         return true;
     }
 
-    bool operator!=(const Indiv& s)const{
+    bool operator!=(const Indiv &s) const
+    {
         return (!operator==(s));
     }
 
-    bool operator>(const Indiv& s)const{
-        if(f>s.f) return true;
+    bool operator>(const Indiv &s) const
+    {
+        if (f > s.f)
+            return true;
         return false;
     }
 
-    bool operator<(const Indiv& s)const{
-        //return (!operator>(s));
-        if(f<s.f) return true;
+    bool operator<(const Indiv &s) const
+    {
+        // return (!operator>(s));
+        if (f < s.f)
+            return true;
         return false;
     }
-
 };
-
-
 
 #endif

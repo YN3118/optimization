@@ -1,43 +1,51 @@
-//§–ñğŒ‚ğİ’è
 #ifndef _CONSTRAINT_H_
 #define _CONSTRAINT_H_
 
-#include<cstdio>
-#include<cstdlib>
-#include<vector>
-#include<iostream>
-#include<algorithm>
-#include<string>
-#include"function.h"
-#include"parameter.h"
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include "function.h"
+#include "parameter.h"
 
+// åˆ¶ç´„æ¡ä»¶
+// è¨­è¨ˆå¤‰æ•°ã®å’ŒãŒ0
+// å®šç¾©åŸŸã‚’è¶…ãˆãªã„ã‚ˆã†ã«
 
-//ˆÈ‰ºCİ’è’†‚Ì§–ñ
-
-//’è‹`ˆæ“à(min,max)‚É‘¶İ
-//İŒv•Ï”‚Ì˜a‚ª0‚É‚È‚é‚æ‚¤‚É‚·‚é(10‚Ì-9æˆÈ‰º‚Å‹ß—)
-
-bool constraint(vector<double> x){
-    if(param.orconstraint==1){
-        double sum=0.0;
-        for(int i=0;i<x.size();i++){
-            if(x[i]<param.min_value||param.max_value<x[i]) return false;
-            sum+=x[i]; 
+bool constraint(vector<double> x)
+{
+    if (param.orconstraint == 1)
+    {
+        double sum = 0.0;
+        for (int i = 0; i < x.size(); i++)
+        {
+            if (x[i] < param.min_value || param.max_value < x[i])
+                return false;
+            sum += x[i];
         }
-        //Rosenbrock‚Ì‚Æ‚«‚Í§–ñ•ÏX(Å“K‰ğ‚ª[1,1,...,1]‚Ì‚½‚ß)
-        if(param.f_num==0||param.f_num==5){
-            if(abs(sum)<param.dimension-1.0e-9||param.dimension+1.0e-9<abs(sum)) return false;
+        // Rosenbrockã®ã¨ãã¯å’ŒãŒnã«ãªã‚‹ã‚ˆã†ã«(æœ€é©è§£ãŒ[1,1,...,1]ã®ãŸã‚)
+        if (param.f_num == 0 || param.f_num == 5)
+        {
+            if (abs(sum) < param.dimension - 1.0e-9 || param.dimension + 1.0e-9 < abs(sum))
+                return false;
         }
-        else{
-            if(abs(sum)>1.0e-9) return false;
+        else
+        {
+            if (abs(sum) > 1.0e-9)
+                return false;
         }
         return true;
     }
 
-    //§–ñ‚È‚µ
-    else{
-        for(int i=0;i<x.size();i++){
-            if(x[i]<param.min_value||param.max_value<x[i]) return false;
+    // åˆ¶ç´„ãªã—
+    else
+    {
+        for (int i = 0; i < x.size(); i++)
+        {
+            if (x[i] < param.min_value || param.max_value < x[i])
+                return false;
         }
         return true;
     };

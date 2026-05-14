@@ -50,11 +50,11 @@ int main(){
         // 空行の場合はスキップ
         if (strlen(line) == 0) continue;
 
-        // カンマ区切りで文字列を分割（1列のみの場合もこれで動作します）
+        // カンマ区切りで文字列を分割（1列のみの場合もこれで動作）
         char *token = strtok(line, ",");
         while (token != NULL) {
             
-            // 配列の容量が足りなくなったら、サイズを2倍に拡張 (vectorの内部動作と同様)
+            // 配列の容量が足りなくなったら，サイズを2倍に拡張 (vectorの内部動作と同様)
             if (size >= capacity) {
                 capacity *= 2;
                 int *temp = (int *)realloc(data, capacity * sizeof(int));

@@ -112,6 +112,9 @@ public:
         // 次元数
         calcDerived();
         // echo();
+
+        random_device rd;
+
     }
 
     // 次元数に依存する変数を再計算
