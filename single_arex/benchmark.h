@@ -6,7 +6,7 @@
 /*---使用する関数---*/
 
 //Rosenbrock関数
-double Rosenbrock(vector<double> x){
+double Rosenbrock(vector<double> &x){
         double sum=0.0;
         for(int i=1;i<x.size();i++){
             sum+=100*(x[0]-pow(x[i],2))*(x[0]-pow(x[i],2))+(x[i]-1)*(x[i]-1);
@@ -15,7 +15,7 @@ double Rosenbrock(vector<double> x){
     }
 
 //Rastrigin関数
-double Rastrigin(vector<double> x){
+double Rastrigin(vector<double> &x){
         double sum=0.0;
         int count=0;
         for(int i=0;i<x.size();i++){
@@ -26,7 +26,7 @@ double Rastrigin(vector<double> x){
     }
 
 //Sphere関数
-double Sphere(vector<double> x){
+double Sphere(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
         sum+=x[i]*x[i];
@@ -35,7 +35,7 @@ double Sphere(vector<double> x){
 }
 
 //アックリー関数
-double Ackley(vector<double> x){
+double Ackley(vector<double> &x){
     double sum1=0.0;
     double sum2=0.0;
     for(int i=0;i<x.size();i++){
@@ -49,7 +49,7 @@ double Ackley(vector<double> x){
 }
 
 //Schwefel関数
-double Schwefel(vector<double> x){
+double Schwefel(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
         sum+=x[i]*sin(sqrt(fabs(x[i])));
@@ -58,7 +58,7 @@ double Schwefel(vector<double> x){
 }
 
 //Rosenborck関数(chain型)
-double Rosenbrock_chain(vector<double> x){
+double Rosenbrock_chain(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
         sum+=100*(x[i+1]-pow(x[i],2))*(x[i+1]-pow(x[i],2))+(x[i]-1)*(x[i]-1);
@@ -67,7 +67,7 @@ double Rosenbrock_chain(vector<double> x){
 }
 
 //Ellipsoid関数
-double Ellipsoid(vector<double> x){
+double Ellipsoid(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
         sum+=((pow(1000,i/param.dimension-1))*x[i])*((pow(1000,i/param.dimension-1))*x[i]);
@@ -76,7 +76,7 @@ double Ellipsoid(vector<double> x){
 }
 
 //Bohaxhevsky関数
-double Bohaxhevsky(vector<double> x){
+double Bohaxhevsky(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
         sum+=x[i]*x[i]+2*x[i+1]*x[i+1]-0.3*cos(3*pi*x[i])-0.4*cos(4*pi*x[i+1])+0.7;
@@ -85,7 +85,7 @@ double Bohaxhevsky(vector<double> x){
 }
 
 //Griewank関数
-double Griewank(vector<double> x){
+double Griewank(vector<double> &x){
     double sum1=0.0;
     double sum2=1.0;
     for(int i=0;i<x.size();i++){
@@ -96,7 +96,7 @@ double Griewank(vector<double> x){
 }
 
 //new_Rastrigin
-double new_Rastrigin(vector<double> x){
+double new_Rastrigin(vector<double> &x){
 
     double sum=0.0;
     int count=0;
@@ -107,7 +107,7 @@ double new_Rastrigin(vector<double> x){
     return 10*count+sum;
 }
 
-double f_value(int i,vector<double> x){
+double f_value(int i,vector<double> &x){
     if(i==0) return Rosenbrock(x);
     if(i==1) return Rastrigin(x);
     if(i==2) return Sphere(x);

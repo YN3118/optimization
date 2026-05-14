@@ -33,7 +33,6 @@ public:
     Parameter()
     {
         dimension = 5;
-        pop_size = 100;
         max_gen = 1;
         f_num = 1;
         mutationrate = 0.0;
@@ -41,7 +40,6 @@ public:
         min_value = -5.12;
         seed = -1;
         orconstraint = 0;
-        trial = 1;
         filename = "result.csv";
         calcDerived(); // 次元数に依存する変数を再計算
     }
@@ -105,14 +103,6 @@ public:
                     i++;
                 }
             }
-            else if (arg == "-t")
-            { // 試行回数
-                if (i + 1 < argc)
-                {
-                    trial = atoi(argv[i + 1]);
-                    i++;
-                }
-            }
             else if (arg == "-h" || arg == "--help")
             { // ヘルプ表示
                 showHelp();
@@ -129,6 +119,7 @@ public:
     {
         p_size = dimension + 1;
         c_size = 4 * dimension;
+        pop_size = 25 * dimension;
 
         // Rosenbrock
         if (f_num == 0)
@@ -232,8 +223,11 @@ public:
         printf("p_size    : %d\n", p_size);
         printf("c_size    : %d\n", c_size);
         printf("seed      : %d\n", seed);
-        printf("constraint: %d\n", orconstraint);
-        printf("trial num : %d\n", trial);
+        printf("constraint: ");
+        if (orconstraint == 0)
+            printf("off\n");
+        if (orconstraint == 1)
+            printf("on\n");
         printf("output filename: %s\n", filename.c_str());
         printf("--------------------------\n");
     }
@@ -244,11 +238,10 @@ public:
         printf("Usage: ./main [options]\n");
         printf("Options:\n");
         printf("  -d <int>   Set dimension (default: 5)\n");
-        printf("  -p <int>   Set population size (default: 100)\n");
+        printf("  -p <int>   Set population size (default: 25*dimension)\n");
         printf("  -g <int>   Set max generation (default: 1)\n");
         printf("  -o <name>  Set output filename (default: result.csv)\n");
         printf("  -c <int>   Set constraint (0: off, 1: on)\n");
-        printf("  -t <int>   Set trial num\n");
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
         printf("             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky\n");
@@ -256,7 +249,6 @@ public:
         printf("  -h         Show this help message\n");
     }
 };
-
 
 extern Parameter param;
 
