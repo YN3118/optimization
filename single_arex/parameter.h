@@ -27,7 +27,7 @@ public:
     double mutationrate;
     double min_value; // 最小値
     double max_value; // 最大値
-    vector<int> rast_shift;
+    vector<int> shift;
 
     // コンストラクタ
     Parameter()
@@ -178,16 +178,24 @@ public:
             min_value = -300.0;
             max_value = 300.0;
         }
-        // new_Rastrigin
-        // new_Rastrigin
-        else if (f_num == 9)
+        // shift
+        else if (f_num == 9||f_num==10)
         {
-            min_value = -5.12;
-            max_value = 5.12;
-            const char *filename = "rastrigin_shift.csv";
+            //定義域
+            if(f_num==9){
+                //Rastrigin
+                min_value=-5.12;
+                max_value=5.12;
+            }
+            else if(f_num==10){
+                //Rosenbrock
+                min_value=-5.0;
+                max_value=5.0;
+            }
+            const char *filename = "shift.csv";
             FILE *file = fopen(filename, "r");
             int size = 0;
-            rast_shift.resize(dimension);
+            shift.resize(dimension);
 
             char line[1024];                 // 1行を読み込むためのバッファ
             fgets(line, sizeof(line), file); /// ヘッダー削除
@@ -206,7 +214,7 @@ public:
                 while (token != NULL)
                 {
                     // 文字列を整数に変換して配列に保存
-                    rast_shift[size] = atoi(token);
+                    shift[size] = atoi(token);
                     size++;
                     // 次のトークン（カンマ区切りの次の要素）を取得
                     token = strtok(NULL, ",");
@@ -248,7 +256,7 @@ public:
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
         printf("             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky\n");
-        printf("             8:Griewank, 9:new_Rastrigin\n");
+        printf("             8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift\n");
         printf("  -h         Show this help message\n");
     }
 };

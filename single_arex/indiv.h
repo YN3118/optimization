@@ -26,8 +26,8 @@ public:
         double sum = 0.0;
         for (int i = 0; i < x.size(); i++)
         {
-            // x[i]=func::generateRandomDouble(param.min_value,param.max_value);
-            x[i] = func::generateRandomDouble(1.0, 5.0); //<----初期集団に偏りを持たせる
+            x[i]=func::generateRandomDouble(param.min_value,param.max_value);
+            // x[i] = func::generateRandomDouble(1.0, 5.0); //<----初期集団に偏りを持たせる
             sum += x[i];
         }
 

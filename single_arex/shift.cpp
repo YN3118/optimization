@@ -8,7 +8,7 @@ using namespace std;
 int main(){
   mt19937 gen(1);
   FILE *file1;
-  file1=fopen("rastrigin_shift.csv","w");
+  file1=fopen("shift.csv","w");
   int max=3;
   int min=-3;
   uniform_int_distribution<> dist(min,max);
@@ -20,7 +20,7 @@ int main(){
   vector<int> tmp(3);
 
   // 読み込むファイル名
-    const char *filename = "rastrigin_shift.csv";
+    const char *filename = "shift.csv";
     
     // ファイルを開く
     FILE *file = fopen(filename, "r");

@@ -95,16 +95,25 @@ double Griewank(vector<double> &x){
     return 1+(sum1/4000)-sum2;
 }
 
-//new_Rastrigin
-double new_Rastrigin(vector<double> &x){
+//Rastrigin_shift
+double Rastrigin_shift(vector<double> &x){
 
     double sum=0.0;
     int count=0;
     for(int i=0;i<x.size();i++){
-        sum=sum+(pow(x[i]-param.rast_shift[i],2))-10*cos(2*pi*(x[i]-param.rast_shift[i]));
+        sum=sum+(pow(x[i]-param.shift[i],2))-10*cos(2*pi*(x[i]-param.shift[i]));
         count++;
     }
     return 10*count+sum;
+}
+
+//Rosenbrock_shift
+double Rosenbrock_shift(vector<double> &x){
+    double sum=0.0;
+    for(int i=1;i<x.size();i++){
+        sum+=100*((x[0]-param.shift[0])-pow(x[i]-param.shift[i],2))*((x[0]-param.shift[0])-pow(x[i]-param.shift[i],2))+(x[i]-param.shift[i]-1)*(x[i]-param.shift[i]-1);
+    }
+    return sum;    
 }
 
 double f_value(int i,vector<double> &x){
@@ -117,7 +126,8 @@ double f_value(int i,vector<double> &x){
     if(i==6) return Ellipsoid(x);
     if(i==7) return Bohaxhevsky(x);
     if(i==8) return Griewank(x);
-    if(i==9) return new_Rastrigin(x); 
+    if(i==9) return Rastrigin_shift(x);
+    if(i==10) return Rosenbrock_shift(x);
     return -99.0;
 }
 
