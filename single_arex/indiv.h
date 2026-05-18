@@ -26,7 +26,7 @@ public:
         double sum = 0.0;
         for (int i = 0; i < x.size(); i++)
         {
-            x[i]=func::generateRandomDouble(param.min_value,param.max_value);
+            x[i] = func::generateRandomDouble(param.min_value, param.max_value);
             // x[i] = func::generateRandomDouble(1.0, 5.0); //<----初期集団に偏りを持たせる
             sum += x[i];
         }
@@ -40,6 +40,19 @@ public:
                 for (int i = 0; i < x.size(); i++)
                 {
                     x[i] = x[i] + ((param.dimension - sum) / x.size());
+                }
+            }
+            // shift時
+            else if (param.f_num == 9 || param.f_num == 10)
+            {
+                double shift_sum = 0.0;
+                for (int i = 0; i < param.dimension; i++)
+                {
+                    shift_sum += param.shift[i];
+                }
+                for (int i = 0; i < x.size(); i++)
+                {
+                    x[i] = x[i] + ((shift_sum - sum) / param.dimension);
                 }
             }
             else

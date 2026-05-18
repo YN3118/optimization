@@ -14,7 +14,7 @@
 // 設計変数の和が0
 // 定義域を超えないように
 
-bool constraint(vector<double> x)
+bool constraint(vector<double> &x)
 {
     if (param.orconstraint == 1)
     {
@@ -31,11 +31,26 @@ bool constraint(vector<double> x)
             if (abs(sum) < param.dimension - 1.0e-9 || param.dimension + 1.0e-9 < abs(sum))
                 return false;
         }
+
+        // shift時の制約
+        else if (param.f_num == 9 || param.f_num == 10)
+        {
+            double shift_sum = 0.0;
+            for (int i = 0; i < param.dimension; i++)
+            {
+                shift_sum += param.shift[i];
+            }
+            if (abs(sum) < shift_sum - 1.0e-9 || shift_sum + 1.0e-9 < abs(sum))
+                return false;
+        }
+
+        // その他
         else
         {
             if (abs(sum) > 1.0e-9)
                 return false;
         }
+
         return true;
     }
 
