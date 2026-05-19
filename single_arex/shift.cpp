@@ -6,7 +6,7 @@
 #include<cstring>
 using namespace std;
 int main(){
-  mt19937 gen(1);
+  mt19937 gen(17);
   FILE *file1;
   file1=fopen("shift.csv","w");
   int max=3;

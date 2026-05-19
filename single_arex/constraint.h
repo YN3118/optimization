@@ -40,7 +40,7 @@ bool constraint(vector<double> &x)
             {
                 shift_sum += param.shift[i];
             }
-            if (abs(sum) < shift_sum - 1.0e-9 || shift_sum + 1.0e-9 < abs(sum))
+            if (sum < shift_sum - 1.0e-9 || shift_sum + 1.0e-9 < sum)
                 return false;
         }
 
@@ -54,7 +54,7 @@ bool constraint(vector<double> &x)
         return true;
     }
 
-    // 制約なし
+    // 制約なし(関数の定義域は超えないようにする)
     else
     {
         for (int i = 0; i < x.size(); i++)
