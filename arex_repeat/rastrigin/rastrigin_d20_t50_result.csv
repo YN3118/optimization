@@ -1,4 +1,4 @@
 pop_size,dimension,not constraint
-125,5
+500,20
 trial time,success,eval_time when successing
-2,1,35340.000000
+50,50,188952.000000

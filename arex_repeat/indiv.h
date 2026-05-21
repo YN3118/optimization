@@ -10,6 +10,8 @@
 
 using namespace std;
 
+namespace func = Function;
+
 class Indiv{
     public:
     vector<double> x;          //���F��
@@ -18,14 +20,13 @@ class Indiv{
 
     vector<double> eps;        //AREX�p�̃x�N�g��
 
-    Function func;
 
-    //�f�t�H���g�R���X�g���N�^
+    //コンストラクタ
     Indiv(){
         x.resize(param.dimension);
         double sum=0.0;
         for(int i=0;i<x.size();i++){
-            x[i]=func.generateRandomDouble(param.min_value,param.max_value);
+            x[i]=func::generateRandomDouble(param.min_value,param.max_value);
             //x[i]=func.generateRandomDouble(1.0,5.0);
             //if(i==2) x[i]=0.0;
             sum+=x[i];

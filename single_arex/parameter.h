@@ -21,7 +21,6 @@ public:
     int c_size;       // 子の数
     int seed;         // シード値
     int orconstraint; // 制約の有無
-    int trial;        // 試行回数
     string filename;  // ファイル名
 
     double mutationrate;

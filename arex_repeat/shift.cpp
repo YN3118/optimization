@@ -6,10 +6,13 @@
 #include<cstring>
 using namespace std;
 int main(){
-  mt19937 gen(1);
+  mt19937 gen(17);
   FILE *file1;
-  file1=fopen("rastrigin_shift.csv","w");
-  uniform_int_distribution<> dist(-5,5);
+  file1=fopen("shift.csv","w");
+  int max=3;
+  int min=-3;
+  uniform_int_distribution<> dist(min,max);
+  fprintf(file1,"min,%d,max,%d\n",min,max);
   for(int i=0;i<500;i++){
     fprintf(file1,"%d\n",dist(gen));
   }
@@ -17,12 +20,12 @@ int main(){
   vector<int> tmp(3);
 
   // 読み込むファイル名
-    const char *filename = "rastrigin_shift.csv";
+    const char *filename = "shift.csv";
     
     // ファイルを開く
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        fprintf(stderr, "エラー: ファイルを開けませんでした。\n");
+        fprintf(stderr, "error : file cannot open\n");
         return 1;
     }
 
@@ -37,6 +40,7 @@ int main(){
     }
 
     char line[1024]; // 1行を読み込むためのバッファ
+    fgets(line, sizeof(line),file);
 
     // 行ごとに読み込む
     while (fgets(line, sizeof(line), file) != NULL) {
@@ -46,11 +50,11 @@ int main(){
         // 空行の場合はスキップ
         if (strlen(line) == 0) continue;
 
-        // カンマ区切りで文字列を分割（1列のみの場合もこれで動作します）
+        // カンマ区切りで文字列を分割（1列のみの場合もこれで動作）
         char *token = strtok(line, ",");
         while (token != NULL) {
             
-            // 配列の容量が足りなくなったら、サイズを2倍に拡張 (vectorの内部動作と同様)
+            // 配列の容量が足りなくなったら，サイズを2倍に拡張 (vectorの内部動作と同様)
             if (size >= capacity) {
                 capacity *= 2;
                 int *temp = (int *)realloc(data, capacity * sizeof(int));

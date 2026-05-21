@@ -24,17 +24,15 @@ public:
     int trial;        // 試行回数
     string filename;  // ファイル名
 
-    // ?���?
     double mutationrate;
     double min_value; // 最小値
     double max_value; // 最大値
-    vector<int> rast_shift;
+    vector<int> shift;
 
     // コンストラクタ
     Parameter()
     {
         dimension = 5;
-        pop_size = 100;
         max_gen = 1;
         f_num = 1;
         mutationrate = 0.0;
@@ -123,6 +121,8 @@ public:
         // 次元数
         calcDerived();
         // echo();
+
+        random_device rd;
     }
 
     // 次元数に依存する変数を再計算
@@ -130,6 +130,7 @@ public:
     {
         p_size = dimension + 1;
         c_size = 4 * dimension;
+        pop_size = 25 * dimension;
 
         // Rosenbrock
         if (f_num == 0)
@@ -185,16 +186,26 @@ public:
             min_value = -300.0;
             max_value = 300.0;
         }
-        // new_Rastrigin
-        // new_Rastrigin
-        else if (f_num == 9)
+        // shift
+        else if (f_num == 9 || f_num == 10)
         {
-            min_value = -5.12;
-            max_value = 5.12;
-            const char *filename = "rastrigin_shift.csv";
+            // 定義域
+            if (f_num == 9)
+            {
+                // Rastrigin
+                min_value = -5.12;
+                max_value = 5.12;
+            }
+            else if (f_num == 10)
+            {
+                // Rosenbrock
+                min_value = -5.0;
+                max_value = 5.0;
+            }
+            const char *filename = "shift.csv";
             FILE *file = fopen(filename, "r");
             int size = 0;
-            rast_shift.resize(dimension);
+            shift.resize(dimension);
 
             char line[1024];                 // 1行を読み込むためのバッファ
             fgets(line, sizeof(line), file); /// ヘッダー削除
@@ -213,7 +224,7 @@ public:
                 while (token != NULL)
                 {
                     // 文字列を整数に変換して配列に保存
-                    rast_shift[size] = atoi(token);
+                    shift[size] = atoi(token);
                     size++;
                     // 次のトークン（カンマ区切りの次の要素）を取得
                     token = strtok(NULL, ",");
@@ -232,9 +243,12 @@ public:
         printf("Function  : %d\n", f_num);
         printf("p_size    : %d\n", p_size);
         printf("c_size    : %d\n", c_size);
-        printf("first seed: %d\n", seed);
-        printf("constraint: %d\n", orconstraint);
-        printf("trial num : %d\n", trial);
+        printf("seed      : %d\n", seed);
+        printf("constraint: ");
+        if (orconstraint == 0)
+            printf("off\n");
+        if (orconstraint == 1)
+            printf("on\n");
         printf("output filename: %s\n", filename.c_str());
         printf("--------------------------\n");
     }
@@ -245,15 +259,14 @@ public:
         printf("Usage: ./main [options]\n");
         printf("Options:\n");
         printf("  -d <int>   Set dimension (default: 5)\n");
-        printf("  -p <int>   Set population size (default: 100)\n");
+        printf("  -p <int>   Set population size (default: 25*dimension)\n");
         printf("  -g <int>   Set max generation (default: 1)\n");
         printf("  -o <name>  Set output filename (default: result.csv)\n");
         printf("  -c <int>   Set constraint (0: off, 1: on)\n");
-        printf("  -t <int>   Set trial num\n");
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
         printf("             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky\n");
-        printf("             8:Griewank, 9:new_Rastrigin\n");
+        printf("             8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift\n");
         printf("  -h         Show this help message\n");
     }
 };

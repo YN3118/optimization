@@ -3,10 +3,10 @@
 
 #include"config.h"
 #include"parameter.h"
-/*---�g�p����֐�---*/
+/*---使用する関数---*/
 
-//Rosenbrock�֐�
-double Rosenbrock(vector<double> x){
+//Rosenbrock関数
+double Rosenbrock(vector<double> &x){
         double sum=0.0;
         for(int i=1;i<x.size();i++){
             sum+=100*(x[0]-pow(x[i],2))*(x[0]-pow(x[i],2))+(x[i]-1)*(x[i]-1);
@@ -14,8 +14,8 @@ double Rosenbrock(vector<double> x){
         return sum;
     }
 
-//Rastrigin�֐�
-double Rastrigin(vector<double> x){
+//Rastrigin関数
+double Rastrigin(vector<double> &x){
         double sum=0.0;
         int count=0;
         for(int i=0;i<x.size();i++){
@@ -25,8 +25,8 @@ double Rastrigin(vector<double> x){
         return 10*count+sum;
     }
 
-//Sphere�֐�
-double Sphere(vector<double> x){
+//Sphere関数
+double Sphere(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
         sum+=x[i]*x[i];
@@ -34,8 +34,8 @@ double Sphere(vector<double> x){
     return sum;
 }
 
-//�A�b�N���[�֐�
-double Ackley(vector<double> x){
+//アックリー関数
+double Ackley(vector<double> &x){
     double sum1=0.0;
     double sum2=0.0;
     for(int i=0;i<x.size();i++){
@@ -48,8 +48,8 @@ double Ackley(vector<double> x){
     return 20-(20*exp(-0.2*sum1))+exp(1)-exp(sum2);
 }
 
-//Schwefel�֐�
-double Schwefel(vector<double> x){
+//Schwefel関数
+double Schwefel(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
         sum+=x[i]*sin(sqrt(fabs(x[i])));
@@ -57,8 +57,8 @@ double Schwefel(vector<double> x){
     return 418.9828873*x.size()+sum;
 }
 
-//Rosenborck�֐�(chain�^)
-double Rosenbrock_chain(vector<double> x){
+//Rosenborck関数(chain型)
+double Rosenbrock_chain(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
         sum+=100*(x[i+1]-pow(x[i],2))*(x[i+1]-pow(x[i],2))+(x[i]-1)*(x[i]-1);
@@ -66,8 +66,8 @@ double Rosenbrock_chain(vector<double> x){
     return sum;
 }
 
-//Ellipsoid�֐�
-double Ellipsoid(vector<double> x){
+//Ellipsoid関数
+double Ellipsoid(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size();i++){
         sum+=((pow(1000,i/param.dimension-1))*x[i])*((pow(1000,i/param.dimension-1))*x[i]);
@@ -75,8 +75,8 @@ double Ellipsoid(vector<double> x){
     return sum;
 }
 
-//Bohaxhevsky�֐�
-double Bohaxhevsky(vector<double> x){
+//Bohaxhevsky関数
+double Bohaxhevsky(vector<double> &x){
     double sum=0.0;
     for(int i=0;i<x.size()-1;i++){
         sum+=x[i]*x[i]+2*x[i+1]*x[i+1]-0.3*cos(3*pi*x[i])-0.4*cos(4*pi*x[i+1])+0.7;
@@ -84,8 +84,8 @@ double Bohaxhevsky(vector<double> x){
     return sum;
 }
 
-//Griewank�֐�
-double Griewank(vector<double> x){
+//Griewank関数
+double Griewank(vector<double> &x){
     double sum1=0.0;
     double sum2=1.0;
     for(int i=0;i<x.size();i++){
@@ -95,19 +95,28 @@ double Griewank(vector<double> x){
     return 1+(sum1/4000)-sum2;
 }
 
-//new_Rastrigin
-double new_Rastrigin(vector<double> x){
+//Rastrigin_shift
+double Rastrigin_shift(vector<double> &x){
 
     double sum=0.0;
     int count=0;
     for(int i=0;i<x.size();i++){
-        sum=sum+(pow(x[i]-param.rast_shift[i],2))-10*cos(2*pi*(x[i]-param.rast_shift[i]));
+        sum=sum+(pow(x[i]-param.shift[i],2))-10*cos(2*pi*(x[i]-param.shift[i]));
         count++;
     }
     return 10*count+sum;
 }
 
-double f_value(int i,vector<double> x){
+//Rosenbrock_shift
+double Rosenbrock_shift(vector<double> &x){
+    double sum=0.0;
+    for(int i=1;i<x.size();i++){
+        sum+=100*((x[0]-param.shift[0])-pow(x[i]-param.shift[i],2))*((x[0]-param.shift[0])-pow(x[i]-param.shift[i],2))+(x[i]-param.shift[i]-1)*(x[i]-param.shift[i]-1);
+    }
+    return sum;    
+}
+
+double f_value(int i,vector<double> &x){
     if(i==0) return Rosenbrock(x);
     if(i==1) return Rastrigin(x);
     if(i==2) return Sphere(x);
@@ -117,7 +126,8 @@ double f_value(int i,vector<double> x){
     if(i==6) return Ellipsoid(x);
     if(i==7) return Bohaxhevsky(x);
     if(i==8) return Griewank(x);
-    if(i==9) return new_Rastrigin(x); 
+    if(i==9) return Rastrigin_shift(x);
+    if(i==10) return Rosenbrock_shift(x);
     return -99.0;
 }
 

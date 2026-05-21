@@ -1,154 +1,162 @@
 #ifndef _FUNCTION_H_
 #define _FUNCTION_H_
 
-#include<cstdio>
-#include<cstdlib>
-#include<vector>
-#include<iostream>
-#include<algorithm>
-#include<string>
-#include<random>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <random>
 
-#include"config.h"
+#include "config.h"
 
 using namespace std;
 
+namespace Function
+{
 
-class Function{
-    public:
-
-    //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚Ì’†“_ŒvZ
-    vector<double> cal_centor(vector<double> a,vector<double> b){
+    // ä¸­ç‚¹è¨ˆç®—
+    inline vector<double> cal_centor(vector<double> a, vector<double> b)
+    {
         vector<double> result_centor;
-        for(int i=0;i<a.size();i++){
-            result_centor.push_back((a[i]+b[i])/2);
+        for (int i = 0; i < a.size(); i++)
+        {
+            result_centor.push_back((a[i] + b[i]) / 2);
         }
         return result_centor;
     }
 
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚Ì·‚ğŒvZ
-    //ŠÖ”‚Ìˆø”‚É1‚ğ“ü‚ê‚é‚Æâ‘Î’lŒvZƒ‚[ƒh
-    vector<double> cal_dis(vector<double> a,vector<double> b,int n){
+    // ãƒ™ã‚¯ãƒˆãƒ«ã®å·®ã‚’è¨ˆç®—
+    // å¼•æ•°ã«1ã‚’å…¥ã‚Œã‚‹ã¨çµ¶å¯¾å€¤è¨ˆç®—
+    inline vector<double> cal_dis(vector<double> a, vector<double> b, int n)
+    {
         vector<double> result_dis;
-        for(int i=0;i<a.size();i++){
-            result_dis.push_back(a[i]-b[i]);
-            if(n==1&&result_dis[i]<0) result_dis[i]=fabs(result_dis[i]);
+        for (int i = 0; i < a.size(); i++)
+        {
+            result_dis.push_back(a[i] - b[i]);
+            if (n == 1 && result_dis[i] < 0)
+                result_dis[i] = fabs(result_dis[i]);
         }
 
         return result_dis;
     }
 
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚ÌÏ‚ğŒvZ
-    //ˆê‚Â–Ú‚Ìˆø”‚Ì‰E‚©‚ç“ñ‚Â–Ú‚ÌƒxƒNƒgƒ‹‚ğ‚©‚¯‚é
-    //¡‰ñ‚Í(dim_num~1)~(1~dim_num)‚¾‚©‚ç’è”‚ğ•Ô‚·
-    double cal_mul(vector<double> a,vector<double> b){
-        double result=0;
-        for(int i=0;i<a.size();i++){
-            result+=a[i]*b[i];
+    // ãƒ™ã‚¯ãƒˆãƒ«ã®ç©ã‚’è¨ˆç®—
+    inline double cal_mul(vector<double> a, vector<double> b)
+    {
+        double result = 0;
+        for (int i = 0; i < a.size(); i++)
+        {
+            result += a[i] * b[i];
         }
         return result;
     }
 
-    //’è”~ƒxƒNƒgƒ‹
-    vector<double> cal_constmul(double a,vector<double> b){
+    // å®šæ•°Ã—ãƒ™ã‚¯ãƒˆãƒ«
+    inline vector<double> cal_constmul(double a, vector<double> b)
+    {
         vector<double> result;
-        for(int i=0;i<b.size();i++){
-            result.push_back(a*b[i]);
+        for (int i = 0; i < b.size(); i++)
+        {
+            result.push_back(a * b[i]);
         }
         return result;
     }
 
-    //ƒxƒNƒgƒ‹‚Ìƒmƒ‹ƒ€‚ğŒvZ
-    double cal_norm(vector<double> a){
-        double result=0;
-        for(int i=0;i<a.size();i++){
-            result+=a[i]*a[i];
+    // ãƒ™ã‚¯ãƒˆãƒ«ã®ãƒãƒ«ãƒ ã‚’è¨ˆç®—
+    inline double cal_norm(vector<double> a)
+    {
+        double result = 0;
+        for (int i = 0; i < a.size(); i++)
+        {
+            result += a[i] * a[i];
         }
         return sqrt(result);
     }
-    
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚Ì˜a‚ğŒvZ
-    vector<double> cal_sum(vector<double> a,vector<double> b){
+
+    // ãƒ™ã‚¯ãƒˆãƒ«ã®å’Œã‚’è¨ˆç®—
+    inline vector<double> cal_sum(vector<double> a, vector<double> b)
+    {
         vector<double> result_sum;
-        for(int i=0;i<a.size();i++){
-            result_sum.push_back(a[i]+b[i]);
+        for (int i = 0; i < a.size(); i++)
+        {
+            result_sum.push_back(a[i] + b[i]);
         }
         return result_sum;
     }
 
-    //ƒxƒNƒgƒ‹‚Ì˜ai“ñŸŒ³‘Î‰j
-    vector<double> cal_sumex(vector<vector<double>> b){
+    inline vector<double> cal_sumex(vector<vector<double>> b)
+    {
         vector<double> result;
-        for(int i=0;i<b[0].size();i++){
-            double sum=0.0;
-            for(int j=0;j<b.size();j++){
-                sum+=b[j][i];
+        for (int i = 0; i < b[0].size(); i++)
+        {
+            double sum = 0.0;
+            for (int j = 0; j < b.size(); j++)
+            {
+                sum += b[j][i];
             }
             result.push_back(sum);
         }
         return result;
     }
 
-    //ƒxƒNƒgƒ‹‚Ì“àÏŒvZ
-    double cal_naiseki(vector<double> a,vector<double> b){
-        double result=0.0;
-        for(int i=0;i<a.size();i++){
-            result+=a[i]*b[i];
-        }
-        return result;
-    }
-
-    //double‚Ì—”‚ğ¶¬
-    double generateRandomDouble(double a,double b) {
-        random_device rd; // ƒn[ƒhƒEƒFƒA—”¶¬Ší
-        //mt19937 gen(rd()); // ƒƒ‹ƒZƒ“ƒkEƒcƒCƒXƒ^
-        //mt19937 gen(seed);
-        uniform_real_distribution<> dis(a,b); // ˆê—l•ª•z
+    // doubleã®ä¹±æ•°ã‚’ç”Ÿæˆ
+    inline double generateRandomDouble(double a, double b)
+    {
+        random_device rd; // ï¿½nï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // mt19937 gen(rd()); // ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½kï¿½Eï¿½cï¿½Cï¿½Xï¿½^
+        // mt19937 gen(seed);
+        uniform_real_distribution<> dis(a, b); // ï¿½ï¿½lï¿½ï¿½ï¿½z
 
         return dis(gen);
     }
 
-    //int‚Ì—”‚ğ¶¬
-    int generateRandomInt(int a,int b) {
-        random_device rd; // ƒn[ƒhƒEƒFƒA—”¶¬Ší
-        //mt19937 gen(rd()); // ƒƒ‹ƒZƒ“ƒkEƒcƒCƒXƒ^
-        //mt19937 gen(seed);
-        uniform_real_distribution<> dis(a,b); // ˆê—l•ª•z
+    // intï¿½Ì—ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
+    inline int generateRandomInt(int a, int b)
+    {
+        random_device rd; // ï¿½nï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // mt19937 gen(rd()); // ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½kï¿½Eï¿½cï¿½Cï¿½Xï¿½^
+        // mt19937 gen(seed);
+        uniform_real_distribution<> dis(a, b); // ï¿½ï¿½lï¿½ï¿½ï¿½z
 
         return dis(gen);
     }
 
-    //•½‹Ïmean •W€•Î·stddev‚Ì³‹K—”‚ğ¶¬
-    double generateRandomNomal(double mean,double stddev){
+    // ï¿½ï¿½ï¿½ï¿½mean ï¿½Wï¿½ï¿½ï¿½Îï¿½stddevï¿½Ìï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
+    inline double generateRandomNomal(double mean, double stddev)
+    {
         random_device rd;
-        //mt19937 gen(rd());
-        //mt19937 gen(seed);
-        normal_distribution<> dis(mean, stddev);//³‹K•ª•z
+        // mt19937 gen(rd());
+        // mt19937 gen(seed);
+        normal_distribution<> dis(mean, stddev); // ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½z
 
         return dis(gen);
     }
 
-    //ˆê—l•ª•z‚Ì—”‚ğ¶¬
-    double generateRandomDist(double a,double b){
+    // ï¿½ï¿½lï¿½ï¿½ï¿½zï¿½Ì—ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
+    inline double generateRandomDist(double a, double b)
+    {
         random_device rd;
-        uniform_real_distribution<> dist(a,b);
+        uniform_real_distribution<> dist(a, b);
         return dist(gen);
     }
 
-    //“]’us—ñ‚ğŒvZ
-    vector<vector<double>> transpose(vector<vector<double>> a){
-        vector<vector<double>> result(a[0].size(),vector<double>(a.size()));
-        for(int i=0;i<a[0].size();i++){
-            for(int j=0;j<a.size();j++){
-                result[i][j]=a[j][i];
+    // è»¢ç½®è¡Œåˆ—ã‚’ç”Ÿæˆ
+    inline vector<vector<double>> transpose(vector<vector<double>> a)
+    {
+        vector<vector<double>> result(a[0].size(), vector<double>(a.size()));
+        for (int i = 0; i < a[0].size(); i++)
+        {
+            for (int j = 0; j < a.size(); j++)
+            {
+                result[i][j] = a[j][i];
             }
         }
         return result;
     }
-    
-    //‹ts—ñ‚ğŒvZ
+
+    // ï¿½tï¿½sï¿½ï¿½ï¿½ï¿½vï¿½Z
 
 };
 

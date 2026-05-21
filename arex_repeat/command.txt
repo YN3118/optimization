@@ -1,0 +1,17 @@
+ラストリジン関数 試行回数50
+./a.out -s 1 -t 50 -g 20000 -d 20 -f 1 -o ./rastrigin/rastrigin_d20_t50_result.csv
+
+
+
+
+Options:
+  -d <int>   Set dimension (default: 5)
+  -p <int>   Set population size (default: 25*dimension)
+  -g <int>   Set max generation (default: 1)
+  -o <name>  Set output filename (default: result.csv)
+  -c <int>   Set constraint (0: off, 1: on)
+  -f <int>   Set function ID
+             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley
+             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky
+             8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift
+  -h         Show this help message
