@@ -45,10 +45,6 @@ int main(int argc, char *argv[])
         // make population
         vector<Indiv> indiv;
         indiv.resize(param.pop_size);
-        for (int i = 0; i < param.pop_size; i++)
-        {
-            indiv[i].indiv_num = i;
-        }
 
         // AREX
         AREX arex(indiv, file);
