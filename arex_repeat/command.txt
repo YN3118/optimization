@@ -1,6 +1,9 @@
 ラストリジン関数 試行回数50
 ./a.out -s 1 -t 50 -g 20000 -d 20 -f 1 -o ./rastrigin/rastrigin_d20_t50_result.csv
 
+ローゼンブロック関数 試行回数50
+./a.out -s 1 -t 50 -g 20000 -d 20 -f 0 -o ./rosenbrock/rosenbrock_d20_t50_result.csv
+
 
 
 

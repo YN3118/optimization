@@ -1,0 +1,4 @@
+pop_size,dimension,not constraint
+500,20
+trial time,success,eval_time when successing
+50,50,151476.800000
