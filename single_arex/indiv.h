@@ -43,7 +43,7 @@ public:
                 }
             }
             // shift時
-            else if (param.f_num == 9 || param.f_num == 10)
+            else if (param.f_num == 9)
             {
                 double shift_sum = 0.0;
                 for (int i = 0; i < param.dimension; i++)
@@ -54,6 +54,11 @@ public:
                 {
                     x[i] = x[i] + ((shift_sum - sum) / param.dimension);
                 }
+            }
+            // Rosenbrock_shiftのとき
+            else if(param.f_num == 10)
+            {
+
             }
             else
             {

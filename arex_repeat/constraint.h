@@ -32,8 +32,8 @@ bool constraint(vector<double> &x)
                 return false;
         }
 
-        // shift時の制約
-        else if (param.f_num == 9 || param.f_num == 10)
+        // shift時の制約(Rosenbrock以外)
+        else if (param.f_num == 9)
         {
             double shift_sum = 0.0;
             for (int i = 0; i < param.dimension; i++)
@@ -43,6 +43,21 @@ bool constraint(vector<double> &x)
             if (sum < shift_sum - 1.0e-9 || shift_sum + 1.0e-9 < sum)
                 return false;
         }
+
+        //Rosenbrock_shiftの制約
+        else if(param.f_num == 10)
+        {
+            double shift_sum = 0.0;
+            for (int i = 0; i < param.dimension; i++)
+            {
+                shift_sum += (param.shift[i]+1);
+            }
+            if (sum < shift_sum - 1.0e-9 || shift_sum + 1.0e-9 < sum)
+                return false;
+        }
+    
+        
+
 
         // その他
         else
