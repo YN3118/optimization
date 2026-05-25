@@ -45,7 +45,7 @@ bool constraint(vector<double> &x)
         }
 
         // Rosenbrock_shiftの制約
-        else if(param.f_num == 10)
+        else if (param.f_num == 10)
         {
             double shift_sum = 0.0;
             for (int i = 0; i < param.dimension; i++)

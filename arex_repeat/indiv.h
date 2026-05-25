@@ -39,11 +39,11 @@ public:
             {
                 for (int i = 0; i < x.size(); i++)
                 {
-                    x[i] = x[i] + ((param.dimension - sum) / x.size());
+                    x[i] = x[i] + ((param.dimension - sum) / param.dimension);
                 }
             }
             // shift時
-            else if (param.f_num == 9 || param.f_num == 10)
+            else if (param.f_num == 9)
             {
                 double shift_sum = 0.0;
                 for (int i = 0; i < param.dimension; i++)
@@ -53,6 +53,19 @@ public:
                 for (int i = 0; i < x.size(); i++)
                 {
                     x[i] = x[i] + ((shift_sum - sum) / param.dimension);
+                }
+            }
+            // Rosenbrock_shiftのとき
+            else if (param.f_num == 10)
+            {
+                double shift_sum = 0.0;
+                for (int i = 0; i < param.dimension; i++)
+                {
+                    shift_sum += param.shift[i];
+                }
+                for (int i = 0; i < x.size(); i++)
+                {
+                    x[i] = x[i] + ((param.dimension + shift_sum - sum) / param.dimension);
                 }
             }
             else
