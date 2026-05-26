@@ -1,9 +1,11 @@
 #include "config.h"
 #define step 0.001
 
-// ヘブ学習(厳密解の式に書き換える！！！)
+// ヘブ学習
 double Hb_theory(double t)
 {
+  if (t == 0)
+    return 0.5;
   double R1 = sqrt(2.0 / M_PI) * t;
   double R2 = R1 * sqrt(1.0 + (M_PI / (2.0 * t)) + (M_PI / (2.0 * pow(t, 2))));
   return acos(R1 / R2) / M_PI;
@@ -123,8 +125,8 @@ int main(int argc, char *argv[])
       fprintf(file, "%f,%f,%f,%f\n", t, l, R, (acos(R)) / M_PI);
       l = next_l;
       R = next_R;
-      t = t + step;
       printf("\rProgress: [%f/%f] ", t, max_t);
+      t = t + step;
       fflush(stdout);
     }
   }
@@ -140,8 +142,8 @@ int main(int argc, char *argv[])
       fprintf(file, "%f,%f,%f,%f\n", t, l, R, (acos(R)) / M_PI);
       l = next_l;
       R = next_R;
-      t = t + step;
       printf("\rProgress: [%f/%f] ", t, max_t);
+      t = t + step;
       fflush(stdout);
     }
   }
