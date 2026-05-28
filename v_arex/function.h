@@ -156,7 +156,22 @@ namespace Function
         return result;
     }
 
-    // �t�s����v�Z
+    inline double generateRandomVshape(double min, double max)
+    {
+
+        uniform_real_distribution<double> uniform01(0.0, 1.0);
+        bernoulli_distribution sign_dist(0.5);
+
+        double center = (min + max) / 2.0;
+        double half_width = (max - min) / 2.0;
+
+        double u = uniform01(gen);
+        double r = std::sqrt(u);
+
+        double sign = sign_dist(gen) ? 1.0 : -1.0;
+
+        return center + sign * half_width * r;
+    }
 
 };
 

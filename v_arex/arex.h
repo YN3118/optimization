@@ -106,8 +106,10 @@ public:
                 vector<double> sum(param.dimension, 0.0);
                 for (int j = 0; j < param.p_size; j++)
                 {
-                    double tmp = func::generateRandomNomal(0.0, sqrt(1.0 / param.dimension));
+                    // double tmp = func::generateRandomNomal(0.0, sqrt(1.0 / param.dimension));
                     // double tmp = nomal(gen);
+                    // 生成をv字型分布に変更
+                    double tmp=func::generateRandomVshape(-sqrt(2.0/(param.p_size)),sqrt(2.0/param.p_size));
                     eps[j] = tmp;
                     sum = func::cal_sum(sum, func::cal_constmul(tmp, v[j]));
                 }
