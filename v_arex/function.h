@@ -156,21 +156,25 @@ namespace Function
         return result;
     }
 
-    inline double generateRandomVshape(double min, double max)
+    inline double v_shape_random(std::mt19937 &gen, double a)
     {
+        if (a <= 0.0)
+        {
+            throw std::invalid_argument("a must be positive");
+        }
 
-        uniform_real_distribution<double> uniform01(0.0, 1.0);
-        bernoulli_distribution sign_dist(0.5);
-
-        double center = (min + max) / 2.0;
-        double half_width = (max - min) / 2.0;
+        std::uniform_real_distribution<double> uniform01(0.0, 1.0);
+        std::bernoulli_distribution sign_dist(0.5);
 
         double u = uniform01(gen);
-        double r = std::sqrt(u);
 
+        // |x| = a * sqrt(u)
+        double r = a * std::sqrt(u);
+
+        // 符号を ±1 から等確率で選ぶ
         double sign = sign_dist(gen) ? 1.0 : -1.0;
 
-        return center + sign * half_width * r;
+        return sign * r;
     }
 
 };

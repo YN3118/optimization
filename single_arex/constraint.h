@@ -33,7 +33,7 @@ bool constraint(vector<double> &x)
         }
 
         // shift時の制約
-        else if (param.f_num == 9)
+        else if (param.f_num == 9 || param.f_num == 11)
         {
             double shift_sum = 0.0;
             for (int i = 0; i < param.dimension; i++)

@@ -109,7 +109,7 @@ public:
                     // double tmp = func::generateRandomNomal(0.0, sqrt(1.0 / param.dimension));
                     // double tmp = nomal(gen);
                     // 生成をv字型分布に変更
-                    double tmp=func::generateRandomVshape(-sqrt(2.0/(param.p_size)),sqrt(2.0/param.p_size));
+                    double tmp=func::v_shape_random(gen,sqrt(3.0/(param.p_size)));
                     eps[j] = tmp;
                     sum = func::cal_sum(sum, func::cal_constmul(tmp, v[j]));
                 }

@@ -5,6 +5,7 @@
 #include<cstdio>
 #include<cmath>
 #include<iostream>
+#include<stdexcept>
 #include"parameter.h"
 
 using namespace std;
