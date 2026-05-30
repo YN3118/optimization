@@ -187,7 +187,7 @@ public:
             max_value = 300.0;
         }
         // shift
-        else if (f_num == 9 || f_num == 10)
+        else if (f_num == 9 || f_num == 10 || f_num == 11)
         {
             // 定義域
             if (f_num == 9)
@@ -201,6 +201,12 @@ public:
                 // Rosenbrock
                 min_value = -5.0;
                 max_value = 5.0;
+            }
+            else if (f_num == 11)
+            {
+                // Griewank
+                min_value = -300.0;
+                max_value = 300.0;
             }
             const char *filename = "shift.csv";
             FILE *file = fopen(filename, "r");

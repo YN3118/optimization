@@ -17,4 +17,5 @@ Options:
              0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley
              4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky
              8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift
+             11:Griewank_shift
   -h         Show this help message

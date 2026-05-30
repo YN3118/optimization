@@ -263,6 +263,7 @@ public:
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
         printf("             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky\n");
         printf("             8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift\n");
+        printf("             11:Griewank_shift, \n");
         printf("  -h         Show this help message\n");
     }
 };
