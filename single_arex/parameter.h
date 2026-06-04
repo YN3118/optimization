@@ -129,7 +129,7 @@ public:
             max_value = 5.0;
         }
         // Rastrigin
-        else if (f_num == 1)
+        else if (f_num == 1 || f_num == 12)
         {
             min_value = -5.12;
             max_value = 5.12;
