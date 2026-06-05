@@ -43,7 +43,7 @@ public:
                 }
             }
             // shift時
-            else if (param.f_num == 9 || param.f_num == 11)
+            else if (param.f_num == 9 || param.f_num == 11 || param.f_num == 13)
             {
                 double shift_sum = 0.0;
                 for (int i = 0; i < param.dimension; i++)

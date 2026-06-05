@@ -151,6 +151,46 @@ double Griewank_shift(vector<double> &x)
     return 1.0 + (sum1 / 4000) - sum2;
 }
 
+// xが正の範囲で関数値を2倍にする
+double Rastrigin_shaped(vector<double> &x)
+{
+    double sum = 0.0;
+    int count = 0;
+    for (int i = 0; i < x.size(); i++)
+    {
+        if (x[i] > 0.0)
+        {
+            sum = sum + pow(2 * x[i], 2) - 10 * cos(2 * pi * 2 * x[i]);
+        }
+        else
+        {
+            sum = sum + pow(x[i], 2) - 10 * cos(2 * pi * x[i]);
+        }
+        count++;
+    }
+    return 10 * count + sum;
+}
+
+// xが正の範囲で関数値を2倍にし，shiftする
+double Rastrigin_shaped_shift(vector<double> &x)
+{
+    double sum = 0.0;
+    int count = 0;
+    for (int i = 0; i < x.size(); i++)
+    {
+        if (x[i] > 0.0)
+        {
+            sum = sum + pow(2 * (x[i] - param.shift[i]), 2) - 10 * cos(2 * pi * 2 * (x[i] - param.shift[i]));
+        }
+        else
+        {
+            sum = sum + pow(param.shift[i] - x[i], 2) - 10 * cos(2 * pi * (x[i] - param.shift[i]));
+        }
+        count++;
+    }
+    return 10 * count + sum;
+}
+
 double f_value(int i, vector<double> &x)
 {
     if (i == 0)
@@ -177,6 +217,10 @@ double f_value(int i, vector<double> &x)
         return Rosenbrock_shift(x);
     if (i == 11)
         return Griewank_shift(x);
+    if (i == 12)
+        return Rastrigin_shaped(x);
+    if (i == 13)
+        return Rastrigin_shaped_shift(x);
     return -99.0;
 }
 

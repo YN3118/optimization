@@ -177,10 +177,10 @@ public:
             max_value = 300.0;
         }
         // shift
-        else if (f_num == 9 || f_num == 10 || f_num == 11)
+        else if (f_num == 9 || f_num == 10 || f_num == 11 || f_num == 13)
         {
             // 定義域
-            if (f_num == 9)
+            if (f_num == 9 || f_num == 13)
             {
                 // Rastrigin
                 min_value = -5.12;
@@ -262,8 +262,8 @@ public:
         printf("  -f <int>   Set function ID\n");
         printf("             0:Rosenbrock, 1:Rastrigin, 2:Sphere, 3:Ackley\n");
         printf("             4:Schwefel, 5:Rosenbrock_chain, 6:Ellipsoid, 7:Bohaxhevsky\n");
-        printf("             8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift\n");
-        printf("             11:Griewank_shift, \n");
+        printf("             8:Griewank, 9:Rastrigin_shift, 10:Rosenbrock_shift, 11:Griewank_shift\n");
+        printf("             12:Rastrigin_shaped, 13:Rastrigin_shaped_shift\n");
         printf("  -h         Show this help message\n");
     }
 };
