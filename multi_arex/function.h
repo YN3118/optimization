@@ -16,7 +16,7 @@ using namespace std;
 
 namespace Function{
 
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚Ì’†“_ŒvZ
+    //ï¿½ï¿½Â‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½vï¿½Z
     inline vector<double> cal_centor(vector<double> a,vector<double> b){
         vector<double> result_centor;
         for(int i=0;i<a.size();i++){
@@ -25,8 +25,8 @@ namespace Function{
         return result_centor;
     }
 
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚Ì·‚ğŒvZ
-    //ŠÖ”‚Ìˆø”‚É1‚ğ“ü‚ê‚é‚Æâ‘Î’lŒvZƒ‚[ƒh
+    //ï¿½ï¿½Â‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½vï¿½Z
+    //ï¿½Öï¿½ï¿½Ìˆï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æï¿½Î’lï¿½vï¿½Zï¿½ï¿½ï¿½[ï¿½h
     inline vector<double> cal_dis(const vector<double> &a,const vector<double> &b,int n){
         vector<double> result_dis;
         for(int i=0;i<a.size();i++){
@@ -37,9 +37,9 @@ namespace Function{
         return result_dis;
     }
 
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚ÌÏ‚ğŒvZ
-    //ˆê‚Â–Ú‚Ìˆø”‚Ì‰E‚©‚ç“ñ‚Â–Ú‚ÌƒxƒNƒgƒ‹‚ğ‚©‚¯‚é
-    //¡‰ñ‚Í(dim_num~1)~(1~dim_num)‚¾‚©‚ç’è”‚ğ•Ô‚·
+    //ï¿½ï¿½Â‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½ÌÏ‚ï¿½ï¿½vï¿½Z
+    //ï¿½ï¿½Â–Ú‚Ìˆï¿½ï¿½ï¿½ï¿½Ì‰Eï¿½ï¿½ï¿½ï¿½ï¿½Â–Ú‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //ï¿½ï¿½ï¿½ï¿½ï¿½(dim_numï¿½~1)ï¿½~(1ï¿½~dim_num)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è”ï¿½ï¿½Ô‚ï¿½
     inline double cal_mul(const vector<double> &a,const vector<double> &b){
         double result=0;
         for(int i=0;i<a.size();i++){
@@ -48,7 +48,7 @@ namespace Function{
         return result;
     }
 
-    //’è”~ƒxƒNƒgƒ‹
+    //ï¿½è”ï¿½~ï¿½xï¿½Nï¿½gï¿½ï¿½
     inline vector<double> cal_constmul(double a,const vector<double> &b){
         vector<double> result;
         for(int i=0;i<b.size();i++){
@@ -57,7 +57,7 @@ namespace Function{
         return result;
     }
 
-    //ƒxƒNƒgƒ‹‚Ìƒmƒ‹ƒ€‚ğŒvZ
+    //ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ìƒmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
     inline double cal_norm(const vector<double> &a){
         double result=0;
         for(int i=0;i<a.size();i++){
@@ -66,7 +66,7 @@ namespace Function{
         return sqrt(result);
     }
     
-    //“ñ‚Â‚ÌƒxƒNƒgƒ‹‚Ì˜a‚ğŒvZ
+    //ï¿½ï¿½Â‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ì˜aï¿½ï¿½ï¿½vï¿½Z
     inline vector<double> cal_sum(const vector<double> &a,const vector<double> &b){
         vector<double> result_sum;
         for(int i=0;i<a.size();i++){
@@ -75,7 +75,7 @@ namespace Function{
         return result_sum;
     }
 
-    //ƒxƒNƒgƒ‹‚Ì˜ai“ñŸŒ³‘Î‰j
+    //ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì˜aï¿½iï¿½ñŸŒï¿½ï¿½Î‰ï¿½ï¿½j
     inline vector<double> cal_sumex(vector<vector<double>> b){
         vector<double> result;
         for(int i=0;i<b[0].size();i++){
@@ -88,7 +88,7 @@ namespace Function{
         return result;
     }
 
-    //ƒxƒNƒgƒ‹‚Ì“àÏŒvZ
+    //ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì“ï¿½ï¿½ÏŒvï¿½Z
     inline double cal_naiseki(vector<double> a,vector<double> b){
         double result=0.0;
         for(int i=0;i<a.size();i++){
@@ -97,44 +97,44 @@ namespace Function{
         return result;
     }
 
-    //double‚Ì—”‚ğ¶¬
+    //doubleï¿½Ì—ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
     inline double generateRandomDouble(double a,double b) {
-        random_device rd; // ƒn[ƒhƒEƒFƒA—”¶¬Ší
-        //mt19937 gen(rd()); // ƒƒ‹ƒZƒ“ƒkEƒcƒCƒXƒ^
+        random_device rd; // ï¿½nï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //mt19937 gen(rd()); // ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½kï¿½Eï¿½cï¿½Cï¿½Xï¿½^
         //mt19937 gen(seed);
-        uniform_real_distribution<> dis(a,b); // ˆê—l•ª•z
+        uniform_real_distribution<> dis(a,b); // ï¿½ï¿½lï¿½ï¿½ï¿½z
 
         return dis(gen);
     }
 
-    //int‚Ì—”‚ğ¶¬
+    //intï¿½Ì—ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
     inline int generateRandomInt(int a,int b) {
-        random_device rd; // ƒn[ƒhƒEƒFƒA—”¶¬Ší
-        //mt19937 gen(rd()); // ƒƒ‹ƒZƒ“ƒkEƒcƒCƒXƒ^
+        random_device rd; // ï¿½nï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //mt19937 gen(rd()); // ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½kï¿½Eï¿½cï¿½Cï¿½Xï¿½^
         //mt19937 gen(seed);
-        uniform_real_distribution<> dis(a,b); // ˆê—l•ª•z
+        uniform_real_distribution<> dis(a,b); // ï¿½ï¿½lï¿½ï¿½ï¿½z
 
         return dis(gen);
     }
 
-    //•½‹Ïmean •W€•Î·stddev‚Ì³‹K—”‚ğ¶¬
+    //ï¿½ï¿½ï¿½ï¿½mean ï¿½Wï¿½ï¿½ï¿½Îï¿½stddevï¿½Ìï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
     inline double generateRandomNomal(double mean,double stddev){
         random_device rd;
         //mt19937 gen(rd());
         //mt19937 gen(seed);
-        normal_distribution<> dis(mean, stddev);//³‹K•ª•z
+        normal_distribution<> dis(mean, stddev);//ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½z
 
         return dis(gen);
     }
 
-    //ˆê—l•ª•z‚Ì—”‚ğ¶¬
+    //ï¿½ï¿½lï¿½ï¿½ï¿½zï¿½Ì—ï¿½ï¿½ï¿½ï¿½ğ¶ï¿½
     inline double generateRandomDist(double a,double b){
         random_device rd;
         uniform_real_distribution<> dist(a,b);
         return dist(gen);
     }
 
-    //“]’us—ñ‚ğŒvZ
+    //ï¿½]ï¿½uï¿½sï¿½ï¿½ï¿½ï¿½vï¿½Z
     inline vector<vector<double>> transpose(vector<vector<double>> a){
         vector<vector<double>> result(a[0].size(),vector<double>(a.size()));
         for(int i=0;i<a[0].size();i++){
@@ -145,7 +145,7 @@ namespace Function{
         return result;
     }
     
-    //‹ts—ñ‚ğŒvZ
+    //ï¿½tï¿½sï¿½ï¿½ï¿½ï¿½vï¿½
 
 };
 
