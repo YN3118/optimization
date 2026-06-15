@@ -106,7 +106,7 @@ public:
                 child_temp = func::cal_sum(new_g, func::cal_constmul(alpha, sum));
             } while (!(constraint(child_temp)));
 
-            Indiv c(child_temp, i);
+            Indiv c(child_temp);
 
             children[i] = move(c);
             children[i].eps = eps;
@@ -124,7 +124,7 @@ public:
             vector<double> mut = children[temp].x;
             int mut_num = rand() % param.dimension;
             mut[mut_num] = func::generateRandomDouble(param.min_value[mut_num], param.max_value[mut_num]);
-            Indiv c(mut, 0);
+            Indiv c(mut);
             children[temp] = move(c);
         }
     }

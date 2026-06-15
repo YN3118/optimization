@@ -3,6 +3,7 @@
 #include <ctime>
 
 Parameter param;
+mt19937 gen;
 
 int main(int argc, char *argv[])
 {
@@ -58,7 +59,11 @@ int main(int argc, char *argv[])
     fprintf(file, "����f1,����f2\n");
     for (int i = 0; i < indiv.size(); i++)
     {
-        fprintf(file, "%f,%f\n", indiv[i].f[0], indiv[i].f[1]);
+        for (int j = 0; j < param.M; j++)
+        {
+            fprintf(file, "%f,", indiv[i].fitness[j]);
+        }
+        fprintf(file, "\n");
     }
     fprintf(file, "\nf1,f2\n");
 
@@ -67,7 +72,7 @@ int main(int argc, char *argv[])
     int count = 0;
     for (count = 0; count < param.max_gen; count++)
     {
-        printf("---%d�����---\n", count + 1);
+        printf("---gen%d---\n", count + 1);
         arex.execute();
         // �����N�����ׂ�1�Ȃ�I��
         if (rank_ck(arex.population))
@@ -76,7 +81,11 @@ int main(int argc, char *argv[])
     param.echo();
     for (int i = 0; i < arex.population.size(); i++)
     {
-        fprintf(file, "%f,%f\n", arex.population[i].f[0], arex.population[i].f[1]);
+        for (int j = 0; j < param.M; j++)
+        {
+            fprintf(file, "%f,", arex.population[i].fitness[j]);
+        }
+        fprintf(file, "\n");
     }
     printf("Number of evaluation: %d\n", count * param.c_size);
     fprintf(file, "\n\n�]����,%d\n", count * param.c_size);

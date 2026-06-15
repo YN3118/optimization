@@ -27,9 +27,8 @@ namespace
 
 double next_double( const double bound = 1.0 )
 {
-  random_device rd;
-  uniform_real_distribution <> dis(0.0,1.0);
   assert( bound > 0.0 );
+  uniform_real_distribution<double> dis(0.0,bound);
 
   return bound * dis(gen) / static_cast< double >( RAND_MAX );
 }

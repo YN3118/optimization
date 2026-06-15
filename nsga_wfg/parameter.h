@@ -130,7 +130,7 @@ public:
                 }
             }
             else if (arg == "-l")
-            { // WFGの目的関数の数
+            { // WFGのl
                 if (i + 1 < argc)
                 {
                     l = atoi(argv[i + 1]);
@@ -154,13 +154,13 @@ public:
 
     void calcDerived()
     {
+        dimension = k + l;
         p_size = dimension + 1;
         c_size = pop_size - p_size;
         min_value.resize(dimension);
         max_value.resize(dimension);
         learning_rate = 1.0 / (10 * dimension);
 
-        // �ړI�֐����ɒ�`�������
         // ZDT4
         if (f_num == 0)
         {

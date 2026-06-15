@@ -9,7 +9,7 @@
 
 using namespace std;
 
-static mt19937 gen(random_device{}());
+extern mt19937 gen;
 #define pi 3.14
 
 #endif

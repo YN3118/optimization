@@ -7,17 +7,17 @@
 
 //aがbに優越していればtrueを返す
 bool superiority(Indiv a,Indiv b){
-  if(a.f[0]==b.f[0]&&a.f[1]==b.f[1]) return false;
-  if(a.f[0]<=b.f[0]&&a.f[1]<=b.f[1]) return true;
+  if(a.fitness[0]==b.fitness[0]&&a.fitness[1]==b.fitness[1]) return false;
+  if(a.fitness[0]<=b.fitness[0]&&a.fitness[1]<=b.fitness[1]) return true;
   return false;
 }
 
 bool cmp_f1(const Indiv &a,const Indiv &b){
-        return a.f[0]<b.f[0]; //昇順
+        return a.fitness[0]<b.fitness[0]; //昇順
 }
 
 bool cmp_f2(const Indiv &a,const Indiv &b){
-        return a.f[1]<b.f[1]; //昇順
+        return a.fitness[1]<b.fitness[1]; //昇順
 }
 
 bool cmp_cd(const Indiv &a,const Indiv &b){
@@ -40,11 +40,11 @@ vector<Indiv> cal_cd(vector<Indiv> &a){
         
     //f1についての混雑距離計算
     sort(a.begin(),a.end(),cmp_f1);
-    double f_max=a[a.size()-1].f[0];
-    double f_min=a[0].f[0];
+    double f_max=a[a.size()-1].fitness[0];
+    double f_min=a[0].fitness[0];
     for(int i=1;i<a.size()-1;i++){
       if(f_max!=f_min){
-        a[i].crowding_distance+=(a[i+1].f[0]-a[i-1].f[0])/(f_max-f_min);
+        a[i].crowding_distance+=(a[i+1].fitness[0]-a[i-1].fitness[0])/(f_max-f_min);
       }
     }
 
@@ -54,11 +54,11 @@ vector<Indiv> cal_cd(vector<Indiv> &a){
 
     //f2についての混雑距離計算
     sort(a.begin(),a.end(),cmp_f2);
-    f_max=a[a.size()-1].f[1];
-    f_min=a[0].f[1];
+    f_max=a[a.size()-1].fitness[1];
+    f_min=a[0].fitness[1];
     for(int i=1;i<a.size()-1;i++){
       if(f_max!=f_min){
-        a[i].crowding_distance+=(a[i+1].f[1]-a[i-1].f[1])/(f_max-f_min);
+        a[i].crowding_distance+=(a[i+1].fitness[1]-a[i-1].fitness[1])/(f_max-f_min);
       }
     }
     //境界個体の距離を無限大にする
