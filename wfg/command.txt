@@ -1,0 +1,2 @@
+demo.cpp コンパイル demo.cpp以外もコンパイル対象なので，ワイルドカードを使ってコンパイル
+g++ -std=c++11 demo.cpp WFG_Toolkit/*.cpp -o demo.out
