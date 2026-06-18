@@ -7,6 +7,8 @@
 #include <iostream>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
+#include <stdexcept>
 
 using namespace std;
 
