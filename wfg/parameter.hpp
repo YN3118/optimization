@@ -30,11 +30,14 @@ public:
     int k; // 位置決定のパラメータ
     int l; // 距離決定パラメータ
 
+    // コンストラクタ
+    Parameter();
+
     // 関数のプロトタイプ
     void load(int argc, char **argv); // 変数読み込み
     void calcDerived();               // 次元数依存の変数等を計算
     void setBounds();                 // 定義域設定
-    int objectiveCount();             // 目的関数の数を返す
+    int objectiveCount() const;       // 目的関数の数を返す
     void echo();                      // パラメータ表示
     void showHelp();                  // ヘルプ表示
 };

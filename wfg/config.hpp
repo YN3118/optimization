@@ -16,12 +16,12 @@ extern mt19937 gen;
 #define pi 3.14
 
 // 文字列発見器
-bool contain(const string &s, const string &key)
+inline bool contain(const string &s, const string &key)
 {
   return s.find(key);
 }
 
-void toUpper(string &s) // 小文字を大文字に変換
+inline void toUpper(string &s) // 小文字を大文字に変換
 {
   transform(
       s.begin(),

@@ -82,7 +82,7 @@ public:
     template <class T>
     void shuffle(vector<T> &values)
     {
-        shuffle(values.begin(), values.end(), engine_);
+        std::shuffle(values.begin(), values.end(), engine_);
     }
 
     mt19937 &engine()

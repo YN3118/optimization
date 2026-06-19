@@ -18,7 +18,7 @@ Parameter::Parameter()
       min_value(dimension, 0.0),
       max_value(dimension, 0.0)
 {
-  calcDerived();
+  // calcDerived();
 }
 
 // 変数読み込み
@@ -162,13 +162,13 @@ void Parameter::setBounds()
   }
   else
   {
-    cout << "This function is not definded" << endl;
+    cout << "This function is not defined: " << fn << endl;
     exit(1);
   }
 }
 
 // 目的関数の数を返す
-int Parameter::objectiveCount()
+int Parameter::objectiveCount() const
 {
   if (contain(fn, "WFG"))
   {
@@ -191,7 +191,7 @@ void Parameter::echo()
   printf("Dimension : %d\n", dimension);
   printf("Pop Size  : %d\n", pop_size);
   printf("Max Gen   : %d\n", max_gen);
-  printf("Function  : %s\n", fn);
+  printf("Function  : %s\n", fn.c_str());
   printf("p_size    : %d\n", p_size);
   printf("c_size    : %d\n", c_size);
   printf("mut_rate  : %f\n", mutationrate);

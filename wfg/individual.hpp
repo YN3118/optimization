@@ -10,6 +10,9 @@ public:
   vector<double> f;            // 目的関数値ベクトル
   double constraint_violation; // 制約違反量
 
+  // AREX用の変数
+  vector<double> eps;
+
   // NSGA2用の変数
   int rank;                 // ランク
   double crowding_distance; // 混雑距離
@@ -121,6 +124,26 @@ public:
     os << " | violation: " << constraint_violation;
     os << " | evaluated: " << evaluated;
     os << "\n";
+  }
+
+  bool operator<(const Individual &other) const
+  {
+    if (rank != other.rank)
+    {
+      return rank < other.rank;
+    }
+
+    if (crowding_distance != other.crowding_distance)
+    {
+      return crowding_distance > other.crowding_distance;
+    }
+
+    if (!f.empty() && !other.f.empty())
+    {
+      return f[0] < other.f[0];
+    }
+
+    return false;
   }
 };
 
