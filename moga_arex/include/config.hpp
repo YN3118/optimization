@@ -18,7 +18,7 @@ extern mt19937 gen;
 // 文字列発見器
 inline bool contain(const string &s, const string &key)
 {
-  return s.find(key) != std::string::npos;
+  return s.find(key) != string::npos;
 }
 
 inline void toUpper(string &s) // 小文字を大文字に変換
@@ -32,5 +32,21 @@ inline void toUpper(string &s) // 小文字を大文字に変換
         return toupper(c);
       });
 }
+
+
+inline string makeAlphaFilename(const string& filename)
+{
+    const string ext = ".csv";
+
+    if (filename.size() >= ext.size() &&
+        filename.substr(filename.size() - ext.size()) == ext)
+    {
+        return filename.substr(0, filename.size() - ext.size())
+             + "_alpha.csv";
+    }
+
+    return filename + "_alpha.csv";
+}
+
 
 #endif

@@ -12,7 +12,9 @@ SRC := \
     src/population.cpp \
     src/evaluator.cpp \
     src/arex.cpp \
-    src/nsga2.cpp
+    src/nsga2.cpp \
+    src/csv_writer.cpp
+
 
 WFG_SRC := $(wildcard third_party/WFG_Toolkit/*.cpp)
 

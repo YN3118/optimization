@@ -9,7 +9,7 @@
 void Evaluator::evaluate(Individual &individual, const Parameter &param)
 {
   // 評価処理
-  eval_count_++;
+  evaluation_count_++;
 
   if (contain(param.fn, "WFG") || contain(param.fn, "I"))
   {
@@ -168,5 +168,5 @@ void Evaluator::evaluateZDT6(Individual &individual)
 // 評価回数表示
 int Evaluator::evaluation_Count() const
 {
-  return eval_count_;
+  return evaluation_count_;
 }

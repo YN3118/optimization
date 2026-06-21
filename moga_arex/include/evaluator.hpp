@@ -7,11 +7,11 @@
 class Evaluator
 {
 private:
-  int eval_count_; //評価回数
+  int evaluation_count_; //評価回数
 
 public:
   // デフォルトコンストラクタ
-  Evaluator():eval_count_(0){}
+  Evaluator():evaluation_count_(0){}
 
   // 評価関数
   void evaluate(Individual &individual, const Parameter &param);
