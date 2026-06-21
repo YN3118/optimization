@@ -1,10 +1,17 @@
-main.o: main.cpp parameter.hpp config.hpp random.hpp population.hpp \
- individual.hpp evaluator.hpp arex.hpp nsga2.hpp
-parameter.hpp:
-config.hpp:
-random.hpp:
-population.hpp:
-individual.hpp:
-evaluator.hpp:
-arex.hpp:
-nsga2.hpp:
+main.o: main.cpp include/parameter.hpp include/config.hpp \
+ include/random.hpp include/population.hpp include/individual.hpp \
+ include/parameter.hpp include/random.hpp include/evaluator.hpp \
+ include/arex.hpp include/population.hpp include/evaluator.hpp \
+ include/nsga2.hpp
+include/parameter.hpp:
+include/config.hpp:
+include/random.hpp:
+include/population.hpp:
+include/individual.hpp:
+include/parameter.hpp:
+include/random.hpp:
+include/evaluator.hpp:
+include/arex.hpp:
+include/population.hpp:
+include/evaluator.hpp:
+include/nsga2.hpp:

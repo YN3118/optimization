@@ -4,17 +4,17 @@ CXX := g++
 TARGET := main
 
 CXXFLAGS := -std=c++17 -O2 -Wall -Wextra -pedantic -MMD -MP
-INCLUDES := -I. -IWFG_Toolkit
+INCLUDES := -Iinclude -Ithird_party -Ithird_party/WFG_Toolkit
 
 SRC := \
     main.cpp \
-    parameter.cpp \
-    population.cpp \
-    evaluator.cpp \
-    arex.cpp \
-    nsga2.cpp
+    src/parameter.cpp \
+    src/population.cpp \
+    src/evaluator.cpp \
+    src/arex.cpp \
+    src/nsga2.cpp
 
-WFG_SRC := $(wildcard WFG_Toolkit/*.cpp)
+WFG_SRC := $(wildcard third_party/WFG_Toolkit/*.cpp)
 
 SRCS := $(SRC) $(WFG_SRC)
 OBJS := $(SRCS:.cpp=.o)
@@ -31,7 +31,7 @@ $(TARGET): $(OBJS)
 >$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 run: $(TARGET)
->./$(TARGET) -fn WFG1 -M 2 -k 4 -l 20 -p 120 -g 1 -s 1 -o result.csv
+>./$(TARGET) -fn WFG1 -M 2 -k 4 -l 20 -p 120 -g 1 -s 1 -o results/test.csv
 
 debug: CXXFLAGS := -std=c++17 -g -O0 -Wall -Wextra -pedantic -MMD -MP
 debug: clean $(TARGET)

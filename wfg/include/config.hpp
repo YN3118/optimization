@@ -18,7 +18,7 @@ extern mt19937 gen;
 // 文字列発見器
 inline bool contain(const string &s, const string &key)
 {
-  return s.find(key);
+  return s.find(key) != std::string::npos;
 }
 
 inline void toUpper(string &s) // 小文字を大文字に変換
