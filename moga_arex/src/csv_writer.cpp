@@ -5,18 +5,18 @@
 #include <stdexcept>
 #include <iomanip>
 
-CsvWriter::CsvWriter(const std::string& filename)
+CsvWriter::CsvWriter(const string& filename)
 {
     file_.open(filename);
 
     if (!file_)
     {
-        throw std::runtime_error(
+        throw runtime_error(
             "CsvWriter: cannot open file: " + filename
         );
     }
 
-    file_ << std::setprecision(17);
+    file_ << setprecision(17);
 }
 
 CsvWriter::~CsvWriter()
@@ -61,7 +61,7 @@ void CsvWriter::writeParameter(
 }
 
 void CsvWriter::writePopulation(
-    const std::string& section_name,
+    const string& section_name,
     const Population& population
 )
 {

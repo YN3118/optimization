@@ -12,49 +12,28 @@
 class CsvWriter
 {
 private:
-    std::ofstream file_;
+    ofstream file_;
 
 public:
-    explicit CsvWriter(const std::string& filename);
+    explicit CsvWriter(const string &filename);
     ~CsvWriter();
 
     bool isOpen() const;
 
-    void writeParameter(
-        const Parameter& param,
-        unsigned int seed
-    );
+    void writeParameter(const Parameter &param, unsigned int seed);
 
-    void writePopulation(
-        const std::string& section_name,
-        const Population& population
-    );
+    void writePopulation(const string &section_name, const Population &population);
 
-    void writeSummary(
-        const Parameter& param,
-        const Evaluator& evaluator,
-        const AREX& arex,
-        int generation_count
-    );
+    void writeSummary(const Parameter &param, const Evaluator &evaluator, const AREX &arex, int generation_count);
 
     void writeGenerationLogHeader();
 
-    void writeGenerationLog(
-        int generation,
-        const AREX& arex,
-        const Evaluator& evaluator,
-        const Population& population
-    );
+    void writeGenerationLog(int generation, const AREX &arex, const Evaluator &evaluator, const Population &population);
 
 private:
-    void writeIndividualHeader(
-        const Population& population
-    );
+    void writeIndividualHeader(const Population &population);
 
-    void writeIndividual(
-        int index,
-        const Individual& individual
-    );
+    void writeIndividual(int index, const Individual &individual);
 };
 
 #endif

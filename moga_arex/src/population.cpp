@@ -62,7 +62,7 @@ Individual &Population::at(int index)
 {
   if (index < 0 || index >= size())
   {
-    throw std::out_of_range("Population::at: index out of range.");
+    throw out_of_range("Population::at: index out of range.");
   }
 
   return individuals_[index];
@@ -72,7 +72,7 @@ const Individual &Population::at(int index) const
 {
   if (index < 0 || index >= size())
   {
-    throw std::out_of_range("Population::at: index out of range.");
+    throw out_of_range("Population::at: index out of range.");
   }
 
   return individuals_[index];
@@ -118,10 +118,10 @@ void Population::push_Back(const Individual &individual)
 
 void Population::push_Back(Individual &&individual)
 {
-  individuals_.push_back(std::move(individual));
+  individuals_.push_back(move(individual));
 }
 
-void Population::print(std::ostream &os) const
+void Population::print(ostream &os) const
 {
   for (int i = 0; i < size(); ++i)
   {
