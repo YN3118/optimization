@@ -201,7 +201,7 @@ void AREX::updateAlpha(const Population &offspring, const Parameter &param)
 
   double L_cdp = pow(alpha_, 2.0) * static_cast<double>(param.dimension) * (sum1 - sum2);
   double L_avg = pow(alpha_, 2.0) * static_cast<double>(param.dimension) / static_cast<double>(param.dimension + 1);
-  double c = 1.0 / static_cast<double>(5 * param.dimension);
+  double c = param.learning_rate;
   double next_alpha = alpha_ * sqrt((1.0 - c) + c * L_cdp / L_avg);
   if (next_alpha < 1.0)
   {

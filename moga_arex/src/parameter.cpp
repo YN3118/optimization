@@ -123,7 +123,7 @@ void Parameter::calcDerived()
   c_size = pop_size - p_size;
   min_value.resize(dimension);
   max_value.resize(dimension);
-  learning_rate = 1.0 / (10 * dimension);
+  learning_rate = 1.0 / (20 * dimension);
   setBounds();
 }
 
