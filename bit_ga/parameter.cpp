@@ -16,7 +16,9 @@ Parameter::Parameter()
       l(20),
       fn("WFG1"),
       min_value(dimension, 0.0),
-      max_value(dimension, 0.0)
+      max_value(dimension, 0.0),
+      bits_per_variable(16),
+      crossover_rate(1.0)
 {
   // calcDerived();
 }
@@ -125,6 +127,13 @@ void Parameter::calcDerived()
   max_value.resize(dimension);
   learning_rate = 1.0 / (20 * dimension);
   setBounds();
+
+  total_bits = dimension * bits_per_variable;
+
+  if (mutation_rate < 0.0)
+  {
+    mutation_rate = 1.0 / static_cast<double>(total_bits);
+  }
 }
 
 // 定義域決定

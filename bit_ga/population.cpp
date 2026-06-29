@@ -24,7 +24,7 @@ void Population::initialize(int population_size, const Parameter &param, Random 
 
   for (int i = 0; i < population_size; i++)
   {
-    Individual individual(param.dimension, param.objectiveCount());
+    Individual individual(param.dimension, param.objectiveCount(), param.total_bits);
 
     for (int j = 0; j < param.dimension; j++)
     {

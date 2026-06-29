@@ -1,150 +1,125 @@
-#ifndef _INDIVIDUAL_HPP_
-#define _INDIVIDUAL_HPP_
+#ifndef INDIVIDUAL_HPP
+#define INDIVIDUAL_HPP
 
-#include "config.hpp"
+#include <vector>
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 
 class Individual
 {
 public:
-  vector<double> x;            // 設計変数ベクトル
-  vector<double> f;            // 目的関数値ベクトル
-  double constraint_violation; // 制約違反量
+    // bitstring 表現
+    std::vector<int> bits;
 
-  // AREX用の変数
-  vector<double> eps;
+    // デコード後の実数ベクトル
+    std::vector<double> x;
 
-  // NSGA2用の変数
-  int rank;                 // ランク
-  double crowding_distance; // 混雑距離
+    // 目的関数値
+    std::vector<double> f;
 
-  bool evaluated; // 評価済みフラグ
+    // NSGA-II 用
+    int rank;
+    double crowding_distance;
 
-  // デフォルトコンストラクタ
-  Individual()
-      : constraint_violation(0.0),
-        rank(-1),
-        crowding_distance(0.0),
-        evaluated(false)
-  {
-  }
+    // 制約・評価情報
+    double constraint_violation;
+    bool evaluated;
 
-  // コンストラクタ（次元数と目的関数の数を引数にする）
-  Individual(int dimension, int objective_count)
-      : x(dimension, 0.0),
-        f(objective_count, 0.0),
-        constraint_violation(0.0),
-        rank(-1),
-        crowding_distance(0.0),
-        evaluated(false)
-  {
-    if (dimension <= 0)
+public:
+    Individual()
+        : rank(-1),
+          crowding_distance(0.0),
+          constraint_violation(0.0),
+          evaluated(false)
     {
-      throw invalid_argument("Individual: dimension must be positive.");
     }
 
-    if (objective_count <= 0)
+    Individual(
+        int dimension,
+        int objective_count,
+        int total_bits
+    )
+        : bits(total_bits, 0),
+          x(dimension, 0.0),
+          f(objective_count, 0.0),
+          rank(-1),
+          crowding_distance(0.0),
+          constraint_violation(0.0),
+          evaluated(false)
     {
-      throw invalid_argument("Individual: objective_count must be positive.");
-    }
-  }
-
-  // 次元数を返す
-  int dimension() const
-  {
-    return static_cast<int>(x.size());
-  }
-
-  // 目的関数の数を返す
-  int objectiveCount() const
-  {
-    return static_cast<int>(f.size());
-  }
-
-  // 制約を満たしているかどうか
-  bool isFeasible() const
-  {
-    return constraint_violation <= 0.0;
-  }
-
-  // 評価情報を初期化
-  void resetEvaluationInfo()
-  {
-    fill(f.begin(), f.end(), 0.0);
-    constraint_violation = 0.0;
-    rank = -1;
-    crowding_distance = 0.0;
-    evaluated = false;
-  }
-
-  // xだけを出力
-  void printVariables(ostream &os = cout) const
-  {
-    os << setprecision(10);
-
-    os << "x: ";
-    for (double value : x)
-    {
-      os << value << " ";
-    }
-    os << "\n";
-  }
-
-  // 目的関数の値を出力
-  void printObjectives(ostream &os = cout) const
-  {
-    os << setprecision(10);
-
-    os << "f: ";
-    for (double value : f)
-    {
-      os << value << " ";
-    }
-    os << "\n";
-  }
-
-  // 個体情報を出力
-  void print(ostream &os = cout) const
-  {
-    os << setprecision(10);
-
-    os << "x: ";
-    for (double value : x)
-    {
-      os << value << " ";
     }
 
-    os << " | f: ";
-    for (double value : f)
+    int dimension() const
     {
-      os << value << " ";
+        return static_cast<int>(x.size());
     }
 
-    os << " | rank: " << rank;
-    os << " | crowding: " << crowding_distance;
-    os << " | violation: " << constraint_violation;
-    os << " | evaluated: " << evaluated;
-    os << "\n";
-  }
-
-  bool operator<(const Individual &other) const
-  {
-    if (rank != other.rank)
+    int objectiveCount() const
     {
-      return rank < other.rank;
+        return static_cast<int>(f.size());
     }
 
-    if (crowding_distance != other.crowding_distance)
+    int bitLength() const
     {
-      return crowding_distance > other.crowding_distance;
+        return static_cast<int>(bits.size());
     }
 
-    if (!f.empty() && !other.f.empty())
+    void resetEvaluationInfo()
     {
-      return f[0] < other.f[0];
+        std::fill(f.begin(), f.end(), 0.0);
+        rank = -1;
+        crowding_distance = 0.0;
+        constraint_violation = 0.0;
+        evaluated = false;
     }
 
-    return false;
-  }
+    void print(std::ostream& os = std::cout) const
+    {
+        os << std::setprecision(10);
+
+        os << "bits: ";
+        for (int b : bits)
+        {
+            os << b;
+        }
+
+        os << " | x: ";
+        for (double value : x)
+        {
+            os << value << " ";
+        }
+
+        os << " | f: ";
+        for (double value : f)
+        {
+            os << value << " ";
+        }
+
+        os << " | rank: " << rank;
+        os << " | crowding: " << crowding_distance;
+        os << "\n";
+    }
+
+    bool operator<(const Individual& other) const
+    {
+        if (rank != other.rank)
+        {
+            return rank < other.rank;
+        }
+
+        if (crowding_distance != other.crowding_distance)
+        {
+            return crowding_distance > other.crowding_distance;
+        }
+
+        if (!f.empty() && !other.f.empty())
+        {
+            return f[0] < other.f[0];
+        }
+
+        return false;
+    }
 };
 
 #endif

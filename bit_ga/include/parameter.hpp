@@ -25,6 +25,10 @@ public:
     vector<double> max_value;
     double learning_rate; // 学習率
 
+    int bits_per_variable;
+    int total_bits;
+    double crossover_rate;
+
     // WFGに関するパラメータ
     int M; // WFGの目的関数の数
     int k; // 位置決定のパラメータ
