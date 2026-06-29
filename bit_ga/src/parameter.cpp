@@ -7,7 +7,7 @@ Parameter::Parameter()
     : dimension(10),
       pop_size(120),
       max_gen(1),
-      mutationrate(0),
+      mutationrate(0.01),
       seed(-1),
       orconstraint(0),
       filename("result.csv"),
@@ -109,6 +109,22 @@ void Parameter::load(int argc, char **argv)
       showHelp();
       exit(0);
     }
+    else if (arg == "-b")
+    { // bit数
+      if (i + 1 < argc)
+      {
+        bits_per_variable = atoi(argv[i + 1]);
+        i++;
+      }
+    }
+    else if (arg == "-mut")
+    { // bit数
+      if (i + 1 < argc)
+      {
+        mutationrate = atoi(argv[i + 1]);
+        i++;
+      }
+    }
   }
   calcDerived();
   // echo();
@@ -198,6 +214,7 @@ void Parameter::echo()
 {
   printf("--- Parameter Settings ---\n");
   printf("Dimension : %d\n", dimension);
+  printf("bit       : %d\n", bits_per_variable);
   printf("Pop Size  : %d\n", pop_size);
   printf("Max Gen   : %d\n", max_gen);
   printf("Function  : %s\n", fn.c_str());
