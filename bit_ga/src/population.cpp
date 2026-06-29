@@ -24,11 +24,11 @@ void Population::initialize(int population_size, const Parameter &param, Random 
 
   for (int i = 0; i < population_size; i++)
   {
-    Individual individual(param.dimension, param.objectiveCount());
+    Individual individual(param.dimension, param.objectiveCount(), param.total_bits);
 
-    for (int j = 0; j < param.dimension; j++)
+    for (int j = 0; j < param.total_bits; j++)
     {
-      individual.x[j] = random.uniformReal(param.min_value[j], param.max_value[j]);
+      individual.bits[j] = random.uniformInt(0, 1);
     }
 
     individuals_.push_back(move(individual));

@@ -11,6 +11,9 @@ void Evaluator::evaluate(Individual &individual, const Parameter &param)
   // 評価処理
   evaluation_count_++;
 
+  // デコーダ
+  decoder_.decode(individual, param);
+
   if (contain(param.fn, "WFG") || contain(param.fn, "I"))
   {
     evaluateWFG(individual, param);

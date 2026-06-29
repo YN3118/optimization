@@ -130,9 +130,9 @@ void Parameter::calcDerived()
 
   total_bits = dimension * bits_per_variable;
 
-  if (mutation_rate < 0.0)
+  if (mutationrate < 0.0)
   {
-    mutation_rate = 1.0 / static_cast<double>(total_bits);
+    mutationrate = 1.0 / static_cast<double>(total_bits);
   }
 }
 

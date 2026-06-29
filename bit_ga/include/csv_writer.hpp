@@ -7,7 +7,6 @@
 #include "parameter.hpp"
 #include "population.hpp"
 #include "evaluator.hpp"
-#include "arex.hpp"
 
 class CsvWriter
 {
@@ -24,11 +23,7 @@ public:
 
     void writePopulation(const string &section_name, const Population &population);
 
-    void writeSummary(const Parameter &param, const Evaluator &evaluator, const AREX &arex, int generation_count);
-
     void writeGenerationLogHeader();
-
-    void writeGenerationLog(int generation, const AREX &arex, const Evaluator &evaluator, const Population &population);
 
 private:
     void writeIndividualHeader(const Population &population);

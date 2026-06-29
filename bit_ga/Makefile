@@ -11,9 +11,9 @@ SRC := \
     src/parameter.cpp \
     src/population.cpp \
     src/evaluator.cpp \
-    src/arex.cpp \
     src/nsga2.cpp \
-    src/csv_writer.cpp
+    src/csv_writer.cpp \
+    src/bit_ga.cpp
 
 
 WFG_SRC := $(wildcard third_party/WFG_Toolkit/*.cpp)

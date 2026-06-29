@@ -115,14 +115,6 @@ void CsvWriter::writeGenerationLogHeader()
     file_ << "\n";
 }
 
-void CsvWriter::writeGenerationLog(int generation,const AREX& arex,const Evaluator& evaluator,const Population& population)
-{
-    file_ << generation;
-    file_ << "," << arex.alpha();
-    file_ << "," << evaluator.evaluation_Count();
-    file_ << "," << population.size();
-    file_ << "\n";
-}
 
 void CsvWriter::writeIndividual(int index,const Individual& individual)
 {
@@ -142,32 +134,6 @@ void CsvWriter::writeIndividual(int index,const Individual& individual)
     file_ << "," << individual.crowding_distance;
     file_ << "," << individual.constraint_violation;
     file_ << "," << individual.evaluated;
-
-    file_ << "\n";
-}
-
-void CsvWriter::writeSummary(
-    const Parameter& param,
-    const Evaluator& evaluator,
-    const AREX& arex,
-    int generation_count
-)
-{
-    file_ << "summary,value\n";
-
-    file_ << "function," << param.fn << "\n";
-    file_ << "generation_count," << generation_count << "\n";
-    file_ << "evaluation_count," << evaluator.evaluation_Count() << "\n";
-    file_ << "final_alpha," << arex.alpha() << "\n";
-    file_ << "population_size," << param.pop_size << "\n";
-    file_ << "dimension," << param.dimension << "\n";
-
-    if (contain(param.fn,"WFG"))
-    {
-        file_ << "M," << param.M << "\n";
-        file_ << "k," << param.k << "\n";
-        file_ << "l," << param.l << "\n";
-    }
 
     file_ << "\n";
 }

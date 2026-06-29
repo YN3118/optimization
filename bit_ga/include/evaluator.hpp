@@ -3,15 +3,17 @@
 
 #include "individual.hpp"
 #include "parameter.hpp"
+#include "decoder.hpp"
 
 class Evaluator
 {
 private:
-  int evaluation_count_; //評価回数
+  int evaluation_count_; // 評価回数
+  Decoder decoder_;      // デコーダ
 
 public:
   // デフォルトコンストラクタ
-  Evaluator():evaluation_count_(0){}
+  Evaluator() : evaluation_count_(0) {}
 
   // 評価関数
   void evaluate(Individual &individual, const Parameter &param);
@@ -26,7 +28,7 @@ public:
   void evaluateZDT4(Individual &individual);
   void evaluateZDT6(Individual &individual);
 
-  //評価回数表示
+  // 評価回数表示
   int evaluation_Count() const;
 };
 #endif

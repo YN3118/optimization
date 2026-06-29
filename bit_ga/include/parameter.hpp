@@ -25,6 +25,7 @@ public:
     vector<double> max_value;
     double learning_rate; // 学習率
 
+    //bit_GAに関するパラメータ
     int bits_per_variable;
     int total_bits;
     double crossover_rate;
