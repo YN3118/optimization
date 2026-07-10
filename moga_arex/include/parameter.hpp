@@ -24,6 +24,7 @@ public:
     vector<double> min_value;
     vector<double> max_value;
     double learning_rate; // 学習率
+    int snapshot_interval;//スナップショットのインターバル
 
     // WFGに関するパラメータ
     int M; // WFGの目的関数の数

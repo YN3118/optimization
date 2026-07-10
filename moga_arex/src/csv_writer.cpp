@@ -1,9 +1,12 @@
 #include "csv_writer.hpp"
 #include "config.hpp"
 
+#include<filesystem>
 #include <iostream>
 #include <stdexcept>
 #include <iomanip>
+
+namespace fs = filesystem;
 
 CsvWriter::CsvWriter(const string& filename)
 {
@@ -170,4 +173,49 @@ void CsvWriter::writeSummary(
     }
 
     file_ << "\n";
+}
+
+
+string CsvWriter::makeResultDirectory(
+    const Parameter& param
+)
+{
+    return "results/" + param.fn;
+}
+
+
+string CsvWriter::makeSnapshotFilename(
+    const Parameter& param,
+    int generation
+)
+{
+    ostringstream oss;
+
+    oss << makeResultDirectory(param)
+        << "/snapshot_gen"
+        << setw(4)
+        << setfill('0')
+        << generation
+        << ".csv";
+
+    return oss.str();
+}
+
+
+string CsvWriter::makeFinalFilename(
+    const Parameter& param
+)
+{
+    return makeResultDirectory(param) + "/final.csv";
+}
+
+
+void CsvWriter::ensureDirectory(
+    const string& directory
+)
+{
+    if (!fs::exists(directory))
+    {
+        fs::create_directories(directory);
+    }
 }

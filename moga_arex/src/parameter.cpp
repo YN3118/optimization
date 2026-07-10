@@ -16,7 +16,8 @@ Parameter::Parameter()
       l(20),
       fn("WFG1"),
       min_value(dimension, 0.0),
-      max_value(dimension, 0.0)
+      max_value(dimension, 0.0),
+      snapshot_interval(100)
 {
   // calcDerived();
 }
@@ -101,6 +102,14 @@ void Parameter::load(int argc, char **argv)
       fn = argv[i + 1];
       i++;
       toUpper(fn);
+    }
+    else if (arg == "-snap")
+    {
+      if (i + 1 < argc)
+      {
+        snapshot_interval = std::atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-h" || arg == "--help")
     { // ヘルプ表示
@@ -211,6 +220,7 @@ void Parameter::showHelp()
   printf("  -g  <int>    Set max generation (default: 2000)\n");
   printf("  -o  <name>   Set output filename (default: result.csv)\n");
   printf("  -c  <int>    Set constraint (0: off, 1: on)\n");
+  printf("  -snap<int>   Set snapshot_interval\n");
   printf("  -fn <string> Set function \n");
   printf("               ZDT1, ZDT2, ZDT3, ZDT4, ZDT6\n");
   printf("               WFG1~WFG9\n");

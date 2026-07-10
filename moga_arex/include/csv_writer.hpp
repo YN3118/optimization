@@ -30,6 +30,14 @@ public:
 
     void writeGenerationLog(int generation, const AREX &arex, const Evaluator &evaluator, const Population &population);
 
+    static string makeResultDirectory(const Parameter &param);
+
+    static string makeSnapshotFilename(const Parameter &param, int generation);
+
+    static string makeFinalFilename(const Parameter &param);
+
+    static void ensureDirectory(const std::string &directory);
+
 private:
     void writeIndividualHeader(const Population &population);
 

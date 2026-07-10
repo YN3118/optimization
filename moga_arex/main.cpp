@@ -9,7 +9,7 @@
 #include "nsga2.hpp"
 #include "csv_writer.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     Parameter param;
     param.load(argc, argv);
@@ -37,8 +37,7 @@ int main(int argc, char* argv[])
 
     population = nsga2.environmentalSelection(
         population,
-        param.pop_size
-    );
+        param.pop_size);
 
     Population initial_population = population;
 
@@ -51,8 +50,7 @@ int main(int argc, char* argv[])
         0,
         arex,
         evaluator,
-        population
-    );
+        population);
 
     int generation_count = 0;
 
@@ -62,18 +60,15 @@ int main(int argc, char* argv[])
             population,
             param,
             random,
-            evaluator
-        );
+            evaluator);
 
         Population combined = mergePopulation(
             population,
-            offspring
-        );
+            offspring);
 
         population = nsga2.environmentalSelection(
             combined,
-            param.pop_size
-        );
+            param.pop_size);
 
         generation_count = gen + 1;
 
@@ -81,13 +76,25 @@ int main(int argc, char* argv[])
             generation_count,
             arex,
             evaluator,
-            population
-        );
+            population);
 
         cout << "generation: " << generation_count
-                  << " alpha: " << arex.alpha()
-                  << " evaluations: " << evaluator.evaluation_Count()
-                  << endl;
+             << " alpha: " << arex.alpha()
+             << " evaluations: " << evaluator.evaluation_Count()
+             << endl;
+
+        // スナップショットを記録
+        if (param.snapshot_interval > 0 &&
+            generation_count % param.snapshot_interval == 0)
+        {
+            CsvWriter snapshot_writer(
+                CsvWriter::makeSnapshotFilename(param, generation_count));
+
+            snapshot_writer.writeParameter(param, seed);
+            snapshot_writer.writePopulation(
+                "snapshot_generation_" + std::to_string(generation_count),
+                population);
+        }
     }
 
     CsvWriter result_writer(param.filename);
