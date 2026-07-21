@@ -81,7 +81,7 @@ vector<Individual> AREX::extractParents(const Population &population, const vect
   return parents;
 }
 
-//重心計算
+// 重心計算
 vector<double> AREX::computeCentroid(const vector<Individual> &parents, int dimension) const
 {
   vector<double> centroid(dimension, 0.0);
@@ -99,8 +99,8 @@ vector<double> AREX::computeCentroid(const vector<Individual> &parents, int dime
   return centroid;
 }
 
-//交叉中心降下
-vector<double> AREX::computeDescentCenter(vector<Individual> parents,int dimension) const
+// 交叉中心降下
+vector<double> AREX::computeDescentCenter(vector<Individual> parents, int dimension) const
 {
   sort(parents.begin(), parents.end());
   vector<double> descent_center(dimension, 0.0);
@@ -117,7 +117,7 @@ vector<double> AREX::computeDescentCenter(vector<Individual> parents,int dimensi
   return descent_center;
 }
 
-//重心との差を計算
+// 重心との差を計算
 vector<vector<double>> AREX::computeDeviationVectors(const vector<Individual> &parents, const vector<double> &centroid, int dimension) const
 {
   vector<vector<double>> deviations;
@@ -134,7 +134,7 @@ vector<vector<double>> AREX::computeDeviationVectors(const vector<Individual> &p
   return deviations;
 }
 
-//子個体生成
+// 子個体生成
 Individual AREX::generateChild(const vector<double> &descent_center, const vector<vector<double>> &deviations, const Parameter &param, Random &random) const
 {
   Individual child(param.dimension, param.objectiveCount());
@@ -158,7 +158,7 @@ Individual AREX::generateChild(const vector<double> &descent_center, const vecto
   return child;
 }
 
-//解を範囲内に修正
+// 解を範囲内に修正
 void AREX::repairBounds(Individual &child, const Parameter &param) const
 {
   for (int d = 0; d < param.dimension; d++)
@@ -174,7 +174,7 @@ void AREX::repairBounds(Individual &child, const Parameter &param) const
   }
 }
 
-//拡張率更新
+// 拡張率更新
 void AREX::updateAlpha(const Population &offspring, const Parameter &param)
 {
   if (offspring.size() < parent_count_)
@@ -207,6 +207,11 @@ void AREX::updateAlpha(const Population &offspring, const Parameter &param)
   {
     alpha_ = 1.0;
   }
+  // // alphaに上限値を追加
+  // else if (next_alpha > 3.0)
+  // {
+  //   alpha_ = 2.0;
+  // }
   else
   {
     alpha_ = next_alpha;
