@@ -217,7 +217,7 @@ void Parameter::showHelp()
   printf("Options:\n");
   printf("  -d  <int>    Set dimension (default: 5)\n");
   printf("  -p  <int>    Set population size (default: 100)\n");
-  printf("  -g  <int>    Set max generation (default: 2000)\n");
+  printf("  -g  <int>    Set max generation (default: 1)\n");
   printf("  -o  <name>   Set output filename (default: result.csv)\n");
   printf("  -c  <int>    Set constraint (0: off, 1: on)\n");
   printf("  -snap<int>   Set snapshot_interval\n");
