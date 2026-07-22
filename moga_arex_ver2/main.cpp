@@ -1,0 +1,108 @@
+#include <ctime>
+#include <iostream>
+#include <vector>
+
+#include "parameter.hpp"
+#include "random.hpp"
+#include "population.hpp"
+#include "evaluator.hpp"
+#include "arex.hpp"
+#include "nsga2.hpp"
+#include "csv_writer.hpp"
+
+int main(int argc, char *argv[])
+{
+  try
+  {
+    Parameter param;
+    param.load(argc, argv);
+    param.echo();
+
+    const unsigned int seed =
+        (param.seed == -1)
+            ? static_cast<unsigned int>(std::time(nullptr))
+            : static_cast<unsigned int>(param.seed);
+
+    Random random(seed);
+    Evaluator evaluator;
+    NSGA2 nsga2;
+    AREX arex(param);
+
+    Population population;
+    population.initialize(param.pop_size, param, random);
+
+    // 同じEvaluatorを使い、初期集団も評価回数へ含める。
+    population.evaluateAll(param, evaluator);
+    population = nsga2.environmentalSelection(
+        population, param.pop_size);
+
+    const Population initial_population = population;
+
+    const std::string alpha_filename =
+        makeAlphaFilename(param.filename);
+    CsvWriter alpha_writer(alpha_filename);
+    alpha_writer.writeGenerationLogHeader();
+    alpha_writer.writeGenerationLog(
+        0, arex, evaluator, population);
+
+    int generation_count = 0;
+
+    for (int gen = 0; gen < param.max_gen; ++gen)
+    {
+      Population offspring = arex.generateOffspring(
+          population, param, random, evaluator);
+
+      // A1: 子集団を順位付けしてからalphaを更新する。
+      const std::vector<std::vector<int>> offspring_fronts =
+          nsga2.fastNonDominatedSort(offspring);
+      for (const std::vector<int> &front : offspring_fronts)
+      {
+        nsga2.assignCrowdingDistance(offspring, front);
+      }
+      arex.updateAlpha(offspring, param);
+
+      Population combined = mergePopulation(
+          population, offspring);
+      population = nsga2.environmentalSelection(
+          combined, param.pop_size);
+
+      generation_count = gen + 1;
+      alpha_writer.writeGenerationLog(
+          generation_count, arex, evaluator, population);
+
+      std::cout << "generation: " << generation_count
+                << " alpha: " << arex.alpha()
+                << " evaluations: " << evaluator.evaluation_Count()
+                << std::endl;
+
+      if (param.snapshot_interval > 0 &&
+          generation_count % param.snapshot_interval == 0)
+      {
+        CsvWriter snapshot_writer(
+            CsvWriter::makeSnapshotFilename(
+                param, generation_count));
+        snapshot_writer.writeParameter(param, seed);
+        snapshot_writer.writePopulation(
+            "snapshot_generation_" +
+                std::to_string(generation_count),
+            population);
+      }
+    }
+
+    CsvWriter result_writer(param.filename);
+    result_writer.writeParameter(param, seed);
+    result_writer.writePopulation(
+        "initial_population", initial_population);
+    result_writer.writePopulation(
+        "final_population", population);
+    result_writer.writeSummary(
+        param, evaluator, arex, generation_count);
+
+    return 0;
+  }
+  catch (const std::exception &e)
+  {
+    std::cerr << "error: " << e.what() << std::endl;
+    return 1;
+  }
+}
