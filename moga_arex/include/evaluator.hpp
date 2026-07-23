@@ -26,6 +26,9 @@ public:
   void evaluateZDT4(Individual &individual);
   void evaluateZDT6(Individual &individual);
 
+  // KURの評価関数
+  void evaluateKUR(Individual &individual);
+
   //評価回数表示
   int evaluation_Count() const;
 };

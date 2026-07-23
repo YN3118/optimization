@@ -54,6 +54,15 @@ int main(int argc, char *argv[])
 
     int generation_count = 0;
 
+    // 初期集団も記録
+    CsvWriter snapshot_writer(
+        CsvWriter::makeSnapshotFilename(param, generation_count));
+
+    snapshot_writer.writeParameter(param, seed);
+    snapshot_writer.writePopulation(
+        "snapshot_generation_" + std::to_string(generation_count),
+        population);
+
     for (int gen = 0; gen < param.max_gen; ++gen)
     {
         Population offspring = arex.generateOffspring(

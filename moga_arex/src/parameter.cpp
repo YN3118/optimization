@@ -169,6 +169,15 @@ void Parameter::setBounds()
       max_value[i] = 1.0;
     }
   }
+  // KUR
+  else if (fn == "KUR")
+  {
+    for (int i = 0; i < dimension; i++)
+    {
+      min_value[i] = -5.0;
+      max_value[i] = 5.0;
+    }
+  }
   else
   {
     cout << "This function is not defined: " << fn << endl;
