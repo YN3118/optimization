@@ -47,6 +47,12 @@ void Evaluator::evaluate(Individual &individual, const Parameter &param)
     return;
   }
 
+  if (param.fn == "KUR")
+  {
+    evaluateKUR(individual);
+    return;
+  }
+
   throw invalid_argument(
       "Evaluator::evaluate: unsupported function " + param.fn);
 }
@@ -160,6 +166,27 @@ void Evaluator::evaluateZDT6(Individual &individual)
 
   individual.f[0] = f1;
   individual.f[1] = g * h;
+
+  individual.constraint_violation = 0.0;
+  individual.evaluated = true;
+}
+
+// KUR
+void Evaluator::evaluateKUR(Individual &individual)
+{
+  const int n = individual.dimension();
+  double f1 = 0.0;
+  double f2 = 0.0;
+  for (int i = 0; i < n - 1; i++)
+  {
+    f1 += -10 * exp(-0.2 * sqrt(pow(individual.x[i], 2) + pow(individual.x[i + 1], 2)));
+  }
+  for (int i = 0; i < n; i++)
+  {
+    f2 += pow(abs(individual.x[i]), 0.8) + 5 * sin(pow(individual.x[i], 3));
+  }
+  individual.f[0] = f1;
+  individual.f[1] = f2;
 
   individual.constraint_violation = 0.0;
   individual.evaluated = true;

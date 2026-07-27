@@ -1,6 +1,5 @@
 #include <ctime>
 #include <iostream>
-#include <vector>
 
 #include "parameter.hpp"
 #include "random.hpp"
@@ -12,16 +11,20 @@
 
 int main(int argc, char *argv[])
 {
-  try
-  {
     Parameter param;
     param.load(argc, argv);
     param.echo();
 
-    const unsigned int seed =
-        (param.seed == -1)
-            ? static_cast<unsigned int>(std::time(nullptr))
-            : static_cast<unsigned int>(param.seed);
+    unsigned int seed;
+
+    if (param.seed == -1)
+    {
+        seed = static_cast<unsigned int>(time(nullptr));
+    }
+    else
+    {
+        seed = static_cast<unsigned int>(param.seed);
+    }
 
     Random random(seed);
     Evaluator evaluator;
@@ -30,79 +33,86 @@ int main(int argc, char *argv[])
 
     Population population;
     population.initialize(param.pop_size, param, random);
+    population.evaluateAll(param);
 
-    // 同じEvaluatorを使い、初期集団も評価回数へ含める。
-    population.evaluateAll(param, evaluator);
     population = nsga2.environmentalSelection(
-        population, param.pop_size);
+        population,
+        param.pop_size);
 
-    const Population initial_population = population;
+    Population initial_population = population;
 
-    const std::string alpha_filename =
-        makeAlphaFilename(param.filename);
+    string alpha_filename = makeAlphaFilename(param.filename);
     CsvWriter alpha_writer(alpha_filename);
+
     alpha_writer.writeGenerationLogHeader();
+
     alpha_writer.writeGenerationLog(
-        0, arex, evaluator, population);
+        0,
+        arex,
+        evaluator,
+        population);
 
     int generation_count = 0;
 
+    // 初期集団も記録
+    CsvWriter snapshot_writer(
+        CsvWriter::makeSnapshotFilename(param, generation_count));
+
+    snapshot_writer.writeParameter(param, seed);
+    snapshot_writer.writePopulation(
+        "snapshot_generation_" + std::to_string(generation_count),
+        population);
+
     for (int gen = 0; gen < param.max_gen; ++gen)
     {
-      Population offspring = arex.generateOffspring(
-          population, param, random, evaluator);
+        Population offspring = arex.generateOffspring(
+            population,
+            param,
+            random,
+            evaluator,
+            nsga2);
 
-      // A1: 子集団を順位付けしてからalphaを更新する。
-      const std::vector<std::vector<int>> offspring_fronts =
-          nsga2.fastNonDominatedSort(offspring);
-      for (const std::vector<int> &front : offspring_fronts)
-      {
-        nsga2.assignCrowdingDistance(offspring, front);
-      }
-      arex.updateAlpha(offspring, param);
+        Population combined = mergePopulation(
+            population,
+            offspring);
 
-      Population combined = mergePopulation(
-          population, offspring);
-      population = nsga2.environmentalSelection(
-          combined, param.pop_size);
+        population = nsga2.environmentalSelection(
+            combined,
+            param.pop_size);
 
-      generation_count = gen + 1;
-      alpha_writer.writeGenerationLog(
-          generation_count, arex, evaluator, population);
+        generation_count = gen + 1;
 
-      std::cout << "generation: " << generation_count
-                << " alpha: " << arex.alpha()
-                << " evaluations: " << evaluator.evaluation_Count()
-                << std::endl;
-
-      if (param.snapshot_interval > 0 &&
-          generation_count % param.snapshot_interval == 0)
-      {
-        CsvWriter snapshot_writer(
-            CsvWriter::makeSnapshotFilename(
-                param, generation_count));
-        snapshot_writer.writeParameter(param, seed);
-        snapshot_writer.writePopulation(
-            "snapshot_generation_" +
-                std::to_string(generation_count),
+        alpha_writer.writeGenerationLog(
+            generation_count,
+            arex,
+            evaluator,
             population);
-      }
+
+        cout << "generation: " << generation_count
+             << " alpha: " << arex.alpha()
+             << " evaluations: " << evaluator.evaluation_Count()
+             << endl;
+
+        // スナップショットを記録
+        if (param.snapshot_interval > 0 &&
+            generation_count % param.snapshot_interval == 0)
+        {
+            CsvWriter snapshot_writer(
+                CsvWriter::makeSnapshotFilename(param, generation_count));
+
+            snapshot_writer.writeParameter(param, seed);
+            snapshot_writer.writePopulation(
+                "snapshot_generation_" + std::to_string(generation_count),
+                population);
+        }
     }
 
     CsvWriter result_writer(param.filename);
+
     result_writer.writeParameter(param, seed);
-    result_writer.writePopulation(
-        "initial_population", initial_population);
-    result_writer.writePopulation(
-        "final_population", population);
-    result_writer.writeSummary(
-        param, evaluator, arex, generation_count);
+    result_writer.writePopulation("initial_population", initial_population);
+    result_writer.writePopulation("final_population", population);
+    result_writer.writeSummary(param, evaluator, arex, generation_count);
 
     return 0;
-  }
-  catch (const std::exception &e)
-  {
-    std::cerr << "error: " << e.what() << std::endl;
-    return 1;
-  }
 }

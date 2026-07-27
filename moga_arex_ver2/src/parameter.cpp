@@ -1,232 +1,240 @@
 #ifndef _PARAMETER_CPP_
 #define _PARAMETER_CPP_
-
 #include "parameter.hpp"
 
+// コンストラクタ
 Parameter::Parameter()
     : dimension(10),
       pop_size(120),
-      max_gen(2000),
-      p_size(0),
-      c_size(0),
+      max_gen(1),
+      mutationrate(0),
       seed(-1),
       orconstraint(0),
       filename("result.csv"),
-      fn("WFG1"),
-      mutationrate(-1.0),
-      min_value(dimension, 0.0),
-      max_value(dimension, 0.0),
-      learning_rate(0.0),
-      snapshot_interval(100),
       M(2),
       k(4),
-      l(20)
+      l(20),
+      fn("WFG1"),
+      min_value(dimension, 0.0),
+      max_value(dimension, 0.0),
+      snapshot_interval(100)
 {
+  // calcDerived();
 }
 
+// 変数読み込み
 void Parameter::load(int argc, char **argv)
 {
-  for (int i = 1; i < argc; ++i)
+  for (int i = 1; i < argc; i++)
   {
-    const std::string arg = argv[i];
-
-    auto requireValue = [&](const std::string &option)
-    {
-      if (i + 1 >= argc)
-      {
-        throw std::invalid_argument("Missing value for option " + option);
-      }
-    };
-
+    string arg = argv[i];
     if (arg == "-d")
-    {
-      requireValue(arg);
-      dimension = std::atoi(argv[++i]);
+    { // 次元数
+      if (i + 1 < argc)
+      {
+        dimension = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-p")
-    {
-      requireValue(arg);
-      pop_size = std::atoi(argv[++i]);
+    { // 親の数
+      if (i + 1 < argc)
+      {
+        pop_size = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-g")
-    {
-      requireValue(arg);
-      max_gen = std::atoi(argv[++i]);
+    { // 終了世代
+      if (i + 1 < argc)
+      {
+        max_gen = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-o")
-    {
-      requireValue(arg);
-      filename = argv[++i];
+    { // 出力ファイル名
+      filename = argv[i + 1];
+      i++;
     }
     else if (arg == "-s")
-    {
-      requireValue(arg);
-      seed = std::atoi(argv[++i]);
+    { // シード値
+      if (i + 1 < argc)
+      {
+        seed = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-c")
-    {
-      requireValue(arg);
-      orconstraint = std::atoi(argv[++i]);
+    { // 制約の有無
+      if (i + 1 < argc)
+      {
+        orconstraint = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-M")
-    {
-      requireValue(arg);
-      M = std::atoi(argv[++i]);
+    { // WFGの目的関数の数
+      if (i + 1 < argc)
+      {
+        M = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-k")
-    {
-      requireValue(arg);
-      k = std::atoi(argv[++i]);
+    { // WFGのk
+      if (i + 1 < argc)
+      {
+        k = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-l")
-    {
-      requireValue(arg);
-      l = std::atoi(argv[++i]);
+    { // WFGのl
+      if (i + 1 < argc)
+      {
+        l = atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-fn")
-    {
-      requireValue(arg);
-      fn = argv[++i];
+    { // 関数の種類
+      fn = argv[i + 1];
+      i++;
       toUpper(fn);
-    }
-    else if (arg == "-mr")
-    {
-      requireValue(arg);
-      mutationrate = std::atof(argv[++i]);
     }
     else if (arg == "-snap")
     {
-      requireValue(arg);
-      snapshot_interval = std::atoi(argv[++i]);
+      if (i + 1 < argc)
+      {
+        snapshot_interval = std::atoi(argv[i + 1]);
+        i++;
+      }
     }
     else if (arg == "-h" || arg == "--help")
-    {
+    { // ヘルプ表示
       showHelp();
-      std::exit(0);
-    }
-    else
-    {
-      throw std::invalid_argument("Unknown option: " + arg);
+      exit(0);
     }
   }
-
   calcDerived();
+  // echo();
 }
 
 void Parameter::calcDerived()
 {
+  // WFG関数のときは設計変数の数がkとlで決まる
   if (contain(fn, "WFG"))
   {
     dimension = k + l;
   }
-
-  if (dimension <= 0)
-  {
-    throw std::invalid_argument("dimension must be positive.");
-  }
-  if (pop_size <= 0)
-  {
-    throw std::invalid_argument("population size must be positive.");
-  }
-  if (max_gen <= 0)
-  {
-    throw std::invalid_argument("max generation must be positive.");
-  }
-
   p_size = dimension + 1;
   c_size = pop_size - p_size;
-
-  if (c_size < p_size)
-  {
-    throw std::invalid_argument(
-        "population size must satisfy pop_size >= 2 * (dimension + 1). ");
-  }
-
-  // 未指定時は遺伝子ごとに1/dimension。
-  if (mutationrate < 0.0)
-  {
-    mutationrate = 1.0 / static_cast<double>(dimension);
-  }
-  if (mutationrate < 0.0 || mutationrate > 1.0)
-  {
-    throw std::invalid_argument("mutation rate must be in [0, 1].");
-  }
-
   min_value.resize(dimension);
   max_value.resize(dimension);
-  learning_rate = 1.0 / (20.0 * static_cast<double>(dimension));
+  learning_rate = 1.0 / (20 * dimension);
   setBounds();
 }
 
+// 定義域決定
 void Parameter::setBounds()
 {
+  // WFGの定義域（WFG内でスケーリングされているので，この定義域になる．）
   if (contain(fn, "WFG"))
   {
-    for (int i = 0; i < dimension; ++i)
+
+    for (int i = 0; i < dimension; i++)
     {
       min_value[i] = 0.0;
-      max_value[i] = 2.0 * static_cast<double>(i + 1);
+      max_value[i] = 2.0 * (i + 1);
     }
   }
+  // ZDT4
   else if (fn == "ZDT4")
   {
     min_value[0] = 0.0;
     max_value[0] = 1.0;
-    for (int i = 1; i < dimension; ++i)
+    for (int i = 1; i < dimension; i++)
     {
       min_value[i] = -5.0;
       max_value[i] = 5.0;
     }
   }
-  else if (fn == "ZDT1" || fn == "ZDT2" ||
-           fn == "ZDT3" || fn == "ZDT6")
+  // ZDT1, ZDT2, ZDT3, ZDT6
+  else if (fn == "ZDT1" || fn == "ZDT2" || fn == "ZDT3" || fn == "ZDT6")
   {
-    for (int i = 0; i < dimension; ++i)
+    for (int i = 0; i < dimension; i++)
     {
       min_value[i] = 0.0;
       max_value[i] = 1.0;
     }
   }
+  // KUR
+  else if (fn == "KUR")
+  {
+    for (int i = 0; i < dimension; i++)
+    {
+      min_value[i] = -5.0;
+      max_value[i] = 5.0;
+    }
+  }
   else
   {
-    throw std::invalid_argument("Unsupported function: " + fn);
+    cout << "This function is not defined: " << fn << endl;
+    exit(1);
   }
 }
 
+// 目的関数の数を返す
 int Parameter::objectiveCount() const
 {
-  return contain(fn, "WFG") ? M : 2;
+  if (contain(fn, "WFG"))
+  {
+    return M;
+  }
+
+  // ZDT系なら基本2目的
+  if (contain(fn, "ZDT"))
+  {
+    return 2;
+  }
+
+  return 2;
 }
 
+// パラメータ表示
 void Parameter::echo()
 {
-  std::printf("--- Parameter Settings ---\n");
-  std::printf("Dimension : %d\n", dimension);
-  std::printf("Pop Size  : %d\n", pop_size);
-  std::printf("Max Gen   : %d\n", max_gen);
-  std::printf("Function  : %s\n", fn.c_str());
-  std::printf("p_size    : %d\n", p_size);
-  std::printf("c_size    : %d\n", c_size);
-  std::printf("mut_rate  : %f\n", mutationrate);
-  std::printf("seed      : %d\n", seed);
-  std::printf("constraint: %d\n", orconstraint);
-  std::printf("output filename: %s\n", filename.c_str());
-  std::printf("--------------------------\n");
+  printf("--- Parameter Settings ---\n");
+  printf("Dimension : %d\n", dimension);
+  printf("Pop Size  : %d\n", pop_size);
+  printf("Max Gen   : %d\n", max_gen);
+  printf("Function  : %s\n", fn.c_str());
+  printf("p_size    : %d\n", p_size);
+  printf("c_size    : %d\n", c_size);
+  printf("mut_rate  : %f\n", mutationrate);
+  printf("seed      : %d\n", seed);
+  printf("constraint: %d\n", orconstraint);
+  printf("output filename: %s\n", filename.c_str());
+  printf("--------------------------\n");
 }
 
+// ヘルプ表示
 void Parameter::showHelp()
 {
-  std::printf("Usage: ./main [options]\n");
-  std::printf("Options:\n");
-  std::printf("  -d <int>       Set dimension (default: 10)\n");
-  std::printf("  -p <int>       Set population size (default: 120)\n");
-  std::printf("  -g <int>       Set max generation (default: 2000)\n");
-  std::printf("  -o <name>      Set output filename (default: result.csv)\n");
-  std::printf("  -s <int>       Set random seed\n");
-  std::printf("  -mr <double>   Per-variable mutation rate (default: 1/dimension)\n");
-  std::printf("  -snap <int>    Set snapshot interval\n");
-  std::printf("  -fn <string>   ZDT1, ZDT2, ZDT3, ZDT4, ZDT6, WFG1-WFG9, I1-I5\n");
-  std::printf("  -h, --help     Show this help message\n");
+  printf("Usage: ./main [options]\n");
+  printf("Options:\n");
+  printf("  -d  <int>    Set dimension (default: 5)\n");
+  printf("  -p  <int>    Set population size (default: 100)\n");
+  printf("  -g  <int>    Set max generation (default: 1)\n");
+  printf("  -o  <name>   Set output filename (default: result.csv)\n");
+  printf("  -c  <int>    Set constraint (0: off, 1: on)\n");
+  printf("  -snap<int>   Set snapshot_interval\n");
+  printf("  -fn <string> Set function \n");
+  printf("               ZDT1, ZDT2, ZDT3, ZDT4, ZDT6\n");
+  printf("               WFG1~WFG9\n");
+  printf("               I1~I5\n");
+  printf("  -h         Show this help message\n");
 }
 
 #endif

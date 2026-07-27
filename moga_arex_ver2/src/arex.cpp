@@ -2,9 +2,9 @@
 
 #include <algorithm>
 #include <cmath>
-#include <limits>
 #include <stdexcept>
 
+// コンストラクタ
 AREX::AREX(const Parameter &param)
     : parent_count_(param.p_size),
       child_count_(param.c_size),
@@ -12,74 +12,64 @@ AREX::AREX(const Parameter &param)
 {
   if (parent_count_ <= 0)
   {
-    throw std::invalid_argument("AREX: parent_count must be positive.");
+    throw invalid_argument("AREX: parent_count must be positive.");
   }
+
   if (child_count_ <= 0)
   {
-    throw std::invalid_argument("AREX: child_count must be positive.");
-  }
-  if (child_count_ < parent_count_)
-  {
-    throw std::invalid_argument(
-        "AREX: child_count must be greater than or equal to parent_count.");
+    throw invalid_argument("AREX: child_count must be positive.");
   }
 }
 
+// 拡張率を返す
 double AREX::alpha() const
 {
   return alpha_;
 }
 
-Population AREX::generateOffspring(
-    const Population &population,
-    const Parameter &param,
-    Random &random,
-    Evaluator &evaluator)
+// 子集団生成
+Population AREX::generateOffspring(const Population &population, const Parameter &param, Random &random, Evaluator &evaluator, const NSGA2 &nsga2)
 {
   if (population.size() < parent_count_)
   {
-    throw std::invalid_argument(
+    throw invalid_argument(
         "AREX::generateOffspring: population size is smaller than parent_count.");
   }
 
-  const std::vector<int> parent_indices =
-      selectParentIndices(population.size(), random);
-  const std::vector<Individual> parents =
-      extractParents(population, parent_indices);
-  const std::vector<double> centroid =
-      computeCentroid(parents, param.dimension);
-  const std::vector<double> descent_center =
-      computeDescentCenter(parents, param.dimension);
-  const std::vector<std::vector<double>> deviations =
-      computeDeviationVectors(parents, centroid, param.dimension);
+  vector<int> parent_indices = selectParentIndices(population.size(), random);
+  vector<Individual> parents = extractParents(population, parent_indices);
+  vector<double> centroid = computeCentroid(parents, param.dimension);
+  vector<double> descent_center = computeDescentCenter(parents, param.dimension);
+
+  vector<vector<double>> deviations = computeDeviationVectors(parents, centroid, param.dimension);
 
   Population offspring;
   offspring.reserve(child_count_);
 
-  for (int i = 0; i < child_count_; ++i)
+  for (int i = 0; i < child_count_; i++)
   {
-    Individual child = generateChild(
-        descent_center, deviations, param, random);
-
-    // 偏差が縮退した方向にも探索成分を与える。
-    mutate(child, param, random);
+    Individual child = generateChild(descent_center, deviations, param, random);
     repairBounds(child, param);
     evaluator.evaluate(child, param);
-    offspring.push_Back(std::move(child));
+    offspring.push_Back(move(child));
   }
 
-  // alpha更新はここでは行わない。
-  // main側で子集団をNSGA-IIにより順位付けした後に行う。
+  // 生成した子個体にNSGA-Ⅱを適用してソート
+  vector<vector<int>> fronts = nsga2.fastNonDominatedSort(offspring);
+  for (const auto &front : fronts)
+  {
+    nsga2.assignCrowdingDistance(offspring, front);
+  }
+
+  updateAlpha(offspring, param);
   return offspring;
 }
 
-std::vector<int> AREX::selectParentIndices(
-    int population_size,
-    Random &random) const
+vector<int> AREX::selectParentIndices(int population_size, Random &random) const
 {
-  std::vector<int> indices;
+  vector<int> indices;
   indices.reserve(population_size);
-  for (int i = 0; i < population_size; ++i)
+  for (int i = 0; i < population_size; i++)
   {
     indices.push_back(i);
   }
@@ -88,11 +78,9 @@ std::vector<int> AREX::selectParentIndices(
   return indices;
 }
 
-std::vector<Individual> AREX::extractParents(
-    const Population &population,
-    const std::vector<int> &parent_indices) const
+vector<Individual> AREX::extractParents(const Population &population, const vector<int> &parent_indices) const
 {
-  std::vector<Individual> parents;
+  vector<Individual> parents;
   parents.reserve(parent_indices.size());
   for (int index : parent_indices)
   {
@@ -101,42 +89,35 @@ std::vector<Individual> AREX::extractParents(
   return parents;
 }
 
-std::vector<double> AREX::computeCentroid(
-    const std::vector<Individual> &parents,
-    int dimension) const
+// 重心計算
+vector<double> AREX::computeCentroid(const vector<Individual> &parents, int dimension) const
 {
-  std::vector<double> centroid(dimension, 0.0);
-  for (const Individual &parent : parents)
+  vector<double> centroid(dimension, 0.0);
+  for (const auto &parent : parents)
   {
-    for (int d = 0; d < dimension; ++d)
+    for (int d = 0; d < dimension; d++)
     {
       centroid[d] += parent.x[d];
     }
   }
-  for (int d = 0; d < dimension; ++d)
+  for (int d = 0; d < dimension; d++)
   {
     centroid[d] /= static_cast<double>(parents.size());
   }
   return centroid;
 }
 
-std::vector<double> AREX::computeDescentCenter(
-    std::vector<Individual> parents,
-    int dimension) const
+// 交叉中心降下
+vector<double> AREX::computeDescentCenter(vector<Individual> parents, int dimension) const
 {
-  std::sort(parents.begin(), parents.end());
-
-  std::vector<double> descent_center(dimension, 0.0);
-  const int mu = static_cast<int>(parents.size());
-
-  // parent_count == dimension + 1 以外でも重みの総和が1になる形。
-  for (int i = 0; i < mu; ++i)
+  sort(parents.begin(), parents.end());
+  vector<double> descent_center(dimension, 0.0);
+  for (int i = 0; i < static_cast<int>(parents.size()); i++)
   {
-    const double weight =
-        2.0 * static_cast<double>(mu - i) /
-        static_cast<double>(mu * (mu + 1));
+    double weight =
+        2.0 * (dimension + 1 - i) / static_cast<double>((dimension + 1) * (dimension + 2));
 
-    for (int d = 0; d < dimension; ++d)
+    for (int d = 0; d < dimension; d++)
     {
       descent_center[d] += weight * parents[i].x[d];
     }
@@ -144,217 +125,103 @@ std::vector<double> AREX::computeDescentCenter(
   return descent_center;
 }
 
-std::vector<std::vector<double>> AREX::computeDeviationVectors(
-    const std::vector<Individual> &parents,
-    const std::vector<double> &centroid,
-    int dimension) const
+// 重心との差を計算
+vector<vector<double>> AREX::computeDeviationVectors(const vector<Individual> &parents, const vector<double> &centroid, int dimension) const
 {
-  std::vector<std::vector<double>> deviations;
+  vector<vector<double>> deviations;
   deviations.reserve(parents.size());
-
-  for (const Individual &parent : parents)
+  for (const auto &parent : parents)
   {
-    std::vector<double> deviation(dimension, 0.0);
-    for (int d = 0; d < dimension; ++d)
+    vector<double> deviation(dimension, 0.0);
+    for (int d = 0; d < dimension; d++)
     {
       deviation[d] = parent.x[d] - centroid[d];
     }
-    deviations.push_back(std::move(deviation));
+    deviations.push_back(move(deviation));
   }
   return deviations;
 }
 
-Individual AREX::generateChild(
-    const std::vector<double> &descent_center,
-    const std::vector<std::vector<double>> &deviations,
-    const Parameter &param,
-    Random &random) const
+// 子個体生成
+Individual AREX::generateChild(const vector<double> &descent_center, const vector<vector<double>> &deviations, const Parameter &param, Random &random) const
 {
   Individual child(param.dimension, param.objectiveCount());
-  std::vector<double> eps(parent_count_, 0.0);
-
-  child.x = descent_center;
-
-  const double stddev =
-      std::sqrt(1.0 / static_cast<double>(param.dimension));
-
-  for (int j = 0; j < parent_count_; ++j)
+  vector<double> eps(parent_count_, 0.0);
+  for (int d = 0; d < param.dimension; d++)
+  {
+    child.x[d] = descent_center[d];
+  }
+  double stddev = sqrt(1.0 / static_cast<double>(param.dimension));
+  for (int j = 0; j < parent_count_; j++)
   {
     eps[j] = random.normal(0.0, stddev);
-    for (int d = 0; d < param.dimension; ++d)
+
+    for (int d = 0; d < param.dimension; d++)
     {
       child.x[d] += alpha_ * eps[j] * deviations[j][d];
     }
   }
-
-  // resetEvaluationInfoはepsを消さないが、順序を明確にするため先にリセットする。
+  child.eps = eps;
   child.resetEvaluationInfo();
-  child.eps = std::move(eps);
   return child;
 }
 
-void AREX::mutate(
-    Individual &child,
-    const Parameter &param,
-    Random &random) const
+// 解を範囲内に修正
+void AREX::repairBounds(Individual &child, const Parameter &param) const
 {
-  if (param.mutationrate <= 0.0)
+  for (int d = 0; d < param.dimension; d++)
   {
-    return;
-  }
-
-  // Debの多項式突然変異で一般的に使われる値。
-  constexpr double eta_m = 20.0;
-
-  for (int d = 0; d < param.dimension; ++d)
-  {
-    if (!random.bernoulli(param.mutationrate))
+    if (child.x[d] < param.min_value[d])
     {
-      continue;
+      child.x[d] = param.min_value[d];
     }
-
-    const double lower = param.min_value[d];
-    const double upper = param.max_value[d];
-    const double range = upper - lower;
-    if (range <= 0.0)
+    if (child.x[d] > param.max_value[d])
     {
-      continue;
-    }
-
-    const double x = std::clamp(child.x[d], lower, upper);
-    const double delta1 = (x - lower) / range;
-    const double delta2 = (upper - x) / range;
-    const double u = random.uniformReal(0.0, 1.0);
-    const double mut_pow = 1.0 / (eta_m + 1.0);
-
-    double delta_q = 0.0;
-    if (u <= 0.5)
-    {
-      const double xy = 1.0 - delta1;
-      const double value =
-          2.0 * u + (1.0 - 2.0 * u) *
-                        std::pow(xy, eta_m + 1.0);
-      delta_q = std::pow(value, mut_pow) - 1.0;
-    }
-    else
-    {
-      const double xy = 1.0 - delta2;
-      const double value =
-          2.0 * (1.0 - u) + 2.0 * (u - 0.5) *
-                                  std::pow(xy, eta_m + 1.0);
-      delta_q = 1.0 - std::pow(value, mut_pow);
-    }
-
-    child.x[d] = x + delta_q * range;
-  }
-}
-
-void AREX::repairBounds(
-    Individual &child,
-    const Parameter &param) const
-{
-  for (int d = 0; d < param.dimension; ++d)
-  {
-    const double lower = param.min_value[d];
-    const double upper = param.max_value[d];
-    const double range = upper - lower;
-
-    if (range <= 0.0)
-    {
-      throw std::invalid_argument(
-          "AREX::repairBounds: upper bound must be greater than lower bound.");
-    }
-
-    // 何度も領域を越える大きな変位にも対応する反射写像。
-    double shifted = std::fmod(child.x[d] - lower, 2.0 * range);
-    if (shifted < 0.0)
-    {
-      shifted += 2.0 * range;
-    }
-    if (shifted <= range)
-    {
-      child.x[d] = lower + shifted;
-    }
-    else
-    {
-      child.x[d] = upper - (shifted - range);
+      child.x[d] = param.max_value[d];
     }
   }
 }
 
-void AREX::updateAlpha(
-    const Population &offspring,
-    const Parameter &param)
+// 拡張率更新
+void AREX::updateAlpha(const Population &offspring, const Parameter &param)
 {
   if (offspring.size() < parent_count_)
   {
     return;
   }
-
-  for (int i = 0; i < offspring.size(); ++i)
-  {
-    if (offspring[i].rank < 0)
-    {
-      throw std::logic_error(
-          "AREX::updateAlpha: rank offspring with NSGA-II before updating alpha.");
-    }
-    if (static_cast<int>(offspring[i].eps.size()) != parent_count_)
-    {
-      throw std::logic_error(
-          "AREX::updateAlpha: invalid eps vector size.");
-    }
-  }
-
   Population sorted_offspring = offspring;
-  std::sort(
-      sorted_offspring.individuals().begin(),
-      sorted_offspring.individuals().end());
-
+  sort(sorted_offspring.individuals().begin(), sorted_offspring.individuals().end());
   double sum1 = 0.0;
   double sum2 = 0.0;
-
-  // parent_count_ == dimension + 1 が現在の既定条件。
-  const double selected_count = static_cast<double>(parent_count_);
-
-  for (int j = 0; j < parent_count_; ++j)
+  for (int j = 0; j < parent_count_; j++)
   {
     double e = 0.0;
-    for (int i = 0; i < parent_count_; ++i)
+
+    for (int i = 0; i < parent_count_; i++)
     {
-      e += sorted_offspring.at(i).eps[j] / selected_count;
+      e += sorted_offspring.at(i).eps[j] / static_cast<double>(param.dimension + 1);
     }
-    sum1 += e * e;
+    sum1 += pow(e, 2.0);
     sum2 += e;
   }
 
-  sum2 = (sum2 * sum2) / selected_count;
+  sum2 = pow(sum2, 2.0) / static_cast<double>(param.dimension + 1);
 
-  const double alpha2 = alpha_ * alpha_;
-  const double dimension = static_cast<double>(param.dimension);
-  const double L_cdp = alpha2 * dimension * (sum1 - sum2);
-  const double L_avg = alpha2 * dimension / selected_count;
-
-  if (!(L_avg > 0.0) || !std::isfinite(L_cdp))
+  double L_cdp = pow(alpha_, 2.0) * static_cast<double>(param.dimension) * (sum1 - sum2);
+  double L_avg = pow(alpha_, 2.0) * static_cast<double>(param.dimension) / static_cast<double>(param.dimension + 1);
+  double c = param.learning_rate;
+  double next_alpha = alpha_ * sqrt((1.0 - c) + c * L_cdp / L_avg);
+  if (next_alpha < 1.0)
   {
-    return;
+    alpha_ = 1.0;
   }
-
-  const double ratio = std::max(0.0, L_cdp / L_avg);
-  const double inside =
-      (1.0 - param.learning_rate) + param.learning_rate * ratio;
-
-  if (!(inside >= 0.0) || !std::isfinite(inside))
+  // // alphaに上限値を追加
+  // else if (next_alpha > 3.0)
+  // {
+  //   alpha_ = 2.0;
+  // }
+  else
   {
-    return;
+    alpha_ = next_alpha;
   }
-
-  const double next_alpha = alpha_ * std::sqrt(inside);
-  if (!std::isfinite(next_alpha))
-  {
-    return;
-  }
-
-  constexpr double alpha_min = 0.5;
-  constexpr double alpha_max = 3.0;
-  alpha_ = std::clamp(next_alpha, alpha_min, alpha_max);
 }
