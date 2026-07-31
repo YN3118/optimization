@@ -2,7 +2,7 @@ parameter,value
 function,WFG8
 dimension,24
 population_size,120
-max_generation,2000
+max_generation,20000
 parent_size,25
 child_size,95
 seed,1
