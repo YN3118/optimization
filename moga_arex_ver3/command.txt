@@ -1,0 +1,5 @@
+demo.cpp コンパイル demo.cpp以外もコンパイル対象なので，ワイルドカードを使ってコンパイル
+g++ -std=c++11 demo.cpp WFG_Toolkit/*.cpp -o demo.out
+
+ZDT4
+./main -d 10 -fn zdt4 -g 2000 -o results/ZDT4/zdt4.csv -s 1
