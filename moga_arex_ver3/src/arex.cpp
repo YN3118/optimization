@@ -92,7 +92,6 @@ vector<Individual> AREX::extractParents(const Population &population, const vect
   }
   else
   {
-
     for (int index : parent_indices)
     {
       parents.push_back(population.at(index));
