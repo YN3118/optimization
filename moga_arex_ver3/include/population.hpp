@@ -48,10 +48,16 @@ public:
 
   // 集団の個体をすべて表示
   void print(ostream &os = cout) const;
+
+
+
+
 };
 
 // 二つの集団をくっつける
 Population mergePopulation(const Population &a, const Population &b);
+
+
 
 // 関数の中身はcppファイルに書く
 #endif

@@ -37,6 +37,11 @@ public:
         evaluate();
     }
 
+    // ルーレット選択(最小化問題なので，値が小さいほど選ばれやすい)
+    vector<Indiv> Roulette(vector<Indiv> pop){
+        
+    }
+    // 選択
     void selection()
     {
         permutation.resize(param.pop_size);
@@ -165,7 +170,6 @@ public:
             sum2 += e;
         }
         sum2 = pow(sum2, 2) / (param.dimension + 1);
-
 
         L_cdp = pow(alpha, 2) * (param.dimension) * (sum1 - sum2);
         L_avg = pow(alpha, 2) * (param.dimension) / (param.dimension + 1);

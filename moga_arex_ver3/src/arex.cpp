@@ -87,7 +87,59 @@ vector<Individual> AREX::extractParents(const Population &population, const vect
   if (population[population.size() - 1].rank == 0)
   {
     parents.resize(param.p_size);
-    int target = random.uniformInt(0, 1);
+    // 端からランダム選択
+    // int target = random.uniformInt(0, 1);
+    // parents = findKNearestIndividuals(population, target, param.p_size);
+
+    // ルーレット選択
+    // 前処理(∞の次に大きい混雑距離を求める)
+    vector<double> temp_cd(population.size(), 0.0);
+    for (int i = 0; i < population.size(); i++)
+    {
+      if (population[i].crowding_distance == INFINITY)
+      {
+        temp_cd[i] = -1.0;
+      }
+      else
+      {
+        temp_cd[i] = population[i].crowding_distance;
+      }
+    }
+    auto temp_max = max_element(temp_cd.begin(), temp_cd.end()); // 無限大を除いた中の最大値を取得(これはイテレータ)
+
+    double sum_cd = 0.0;
+    double temp = 0.0;
+    int target = 0;
+    for (int i = 0; i < population.size(); i++)
+    {
+      // 混雑距離の和を計算
+      if (population[i].crowding_distance == INFINITY)
+      {
+        sum_cd += *temp_max; // イテレータの要素を加算
+      }
+      else
+      {
+        sum_cd += population[i].crowding_distance;
+      }
+    }
+    double roullete = random.uniformReal(0.0, sum_cd); // ルーレットの乱数を生成
+    for (int i = 0; i < population.size(); i++)
+    {
+      if (population[i].crowding_distance == INFINITY)
+      {
+        temp += *temp_max;
+      }
+      else
+      {
+        temp += population[i].crowding_distance;
+      }
+      if (roullete < temp)
+      {
+        target = i;
+        cout << "target = " << i << endl;
+        break;
+      }
+    }
     parents = findKNearestIndividuals(population, target, param.p_size);
   }
   else
