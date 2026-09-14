@@ -31,8 +31,8 @@ public:
 
     void execute()
     {
-        // selection();
-        roullete_selection();
+        selection();
+        // roullete_selection();
         crossover();
         // mutation();
         evaluate();
@@ -213,15 +213,15 @@ public:
             alpha = next_alpha;
 
         sort(children.begin(), children.end());
-        // for (int i = 0; i < param.p_size; i++)
-        // {
-        //     population[permutation[i]] = children[i];
-        // }
-
-        for (int i = 0; i < children.size(); i++)
+        for (int i = 0; i < param.p_size; i++)
         {
-            population.push_back(children[i]);
+            population[permutation[i]] = children[i];
         }
+
+        // for (int i = 0; i < children.size(); i++)
+        // {
+        //     population.push_back(children[i]);
+        // }
         sort(population.begin(), population.end());
 
         printf("best\n");
