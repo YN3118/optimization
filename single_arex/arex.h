@@ -31,16 +31,13 @@ public:
 
     void execute()
     {
-        selection();
+        // selection();
+        roullete_selection();
         crossover();
         // mutation();
         evaluate();
     }
 
-    // ルーレット選択(最小化問題なので，値が小さいほど選ばれやすい)
-    vector<Indiv> Roulette(vector<Indiv> pop){
-        
-    }
     // 選択
     void selection()
     {
@@ -65,6 +62,41 @@ public:
         for (int i = 0; i < param.p_size; i++)
         {
             parent[i] = population[permutation[i]];
+        }
+    }
+
+    // ルーレット選択
+    void roullete_selection()
+    {
+        // vector<Indiv> population_copy = population;
+        parent.resize(param.p_size);
+        double sum = 0.0;
+        double non_zero = 0.001; // 0除算を防ぐ
+        for (int i = 0; i < population.size(); i++)
+        {
+            sum += 1.0 / (population[i].f + non_zero);
+        }
+        for (int p = 0; p < param.p_size; p++)
+        {
+            double check = func::generateRandomDouble(0.0, sum);
+            // cout << "p: " << p << endl;
+            // cout << "check: " << check << endl;
+            // cout << "sum: " << sum << endl;
+            double temp = 0.0;
+            int i = 0;
+            while (1)
+            {
+                temp += 1.0 / (population[i].f + non_zero);
+                if (check < temp)
+                {
+                    parent[p] = population[i];
+                    sum -= 1.0 / (population[i].f + non_zero);
+                    population.erase(population.begin() + i);
+                    // parent[p].echo();
+                    break;
+                }
+                i++;
+            }
         }
     }
 
@@ -181,9 +213,14 @@ public:
             alpha = next_alpha;
 
         sort(children.begin(), children.end());
-        for (int i = 0; i < param.p_size; i++)
+        // for (int i = 0; i < param.p_size; i++)
+        // {
+        //     population[permutation[i]] = children[i];
+        // }
+
+        for (int i = 0; i < children.size(); i++)
         {
-            population[permutation[i]] = children[i];
+            population.push_back(children[i]);
         }
         sort(population.begin(), population.end());
 
