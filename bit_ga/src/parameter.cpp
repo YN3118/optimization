@@ -137,8 +137,8 @@ void Parameter::calcDerived()
   {
     dimension = k + l;
   }
-  p_size = dimension + 1;
-  c_size = pop_size - p_size;
+  p_size = 2;
+  c_size = pop_size;
   min_value.resize(dimension);
   max_value.resize(dimension);
   learning_rate = 1.0 / (20 * dimension);
@@ -237,6 +237,7 @@ void Parameter::showHelp()
   printf("  -g  <int>    Set max generation (default: 2000)\n");
   printf("  -o  <name>   Set output filename (default: result.csv)\n");
   printf("  -c  <int>    Set constraint (0: off, 1: on)\n");
+  printf("  -b  <int>    Set bits_per_variable\n");
   printf("  -fn <string> Set function \n");
   printf("               ZDT1, ZDT2, ZDT3, ZDT4, ZDT6\n");
   printf("               WFG1~WFG9\n");

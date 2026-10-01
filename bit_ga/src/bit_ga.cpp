@@ -55,6 +55,49 @@ void BitGA::onePointCrossover(
   child2.resetEvaluationInfo();
 }
 
+// 一様交叉
+void BitGA::UniformCrossover(
+    const Individual &parent1,
+    const Individual &parent2,
+    Individual &child1,
+    Individual &child2,
+    const Parameter &param,
+    Random &random) const
+{
+  const int n_bits = param.total_bits;
+
+  child1.bits = parent1.bits;
+  child2.bits = parent2.bits;
+
+  if (n_bits < 2)
+  {
+    return;
+  }
+
+  if (!random.bernoulli(param.crossover_rate))
+  {
+    return;
+  }
+
+  // マスク生成
+  vector<int> mask(n_bits, 0);
+  for (int i = 0; i < mask.size(); i++)
+  {
+    mask[i] = random.uniformInt(0, 1);
+  }
+
+  // maskが1ならば要素入れ替え
+  for (int i = 0; i < mask.size(); i++)
+  {
+    if (mask[i] == 1)
+    {
+      swap(child1.bits[i], child2.bits[i]);
+    }
+  }
+  child1.resetEvaluationInfo();
+  child2.resetEvaluationInfo();
+}
+
 void BitGA::mutate(
     Individual &individual,
     const Parameter &param,
@@ -98,8 +141,17 @@ Population BitGA::generateOffspring(
         param.dimension,
         param.objectiveCount(),
         param.total_bits);
+    // 一点交叉
+    // onePointCrossover(
+    //     parent1,
+    //     parent2,
+    //     child1,
+    //     child2,
+    //     param,
+    //     random);
 
-    onePointCrossover(
+    // 一様交叉
+    UniformCrossover(
         parent1,
         parent2,
         child1,
