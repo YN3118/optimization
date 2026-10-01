@@ -2,10 +2,10 @@ parameter,value
 function,WFG8
 dimension,24
 population_size,120
-max_generation,2000
+max_generation,15000
 seed,1
 constraint,0
-output_filename,results/WFG8
+output_filename,results/WFG8/wfg8.csv
 bits_per_variable,16
 total_bits,384
 crossover_rate,1
