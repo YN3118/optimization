@@ -6,6 +6,7 @@
 Parameter::Parameter()
     : dimension(10),
       pop_size(120),
+      c_size(pop_size),
       max_gen(1),
       mutationrate(0.01),
       seed(-1),
@@ -125,11 +126,14 @@ void Parameter::load(int argc, char **argv)
         i++;
       }
     }
-    else if(arg == "-child")
+    else if (arg == "-child")
     {
       // 子個体の数
-      c_size = atoi(argv[i + 1]);
-      i++;
+      if (i + 1 < argc)
+      {
+        c_size = atoi(argv[i + 1]);
+        i++;
+      }
     }
   }
   calcDerived();
