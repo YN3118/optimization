@@ -122,9 +122,9 @@ Population BitGA::generateOffspring(
     const NSGA2 &nsga2) const
 {
   Population offspring;
-  offspring.reserve(param.pop_size);
+  offspring.reserve(param.c_size);
 
-  while (offspring.size() < param.pop_size)
+  while (offspring.size() < param.c_size)
   {
     const Individual &parent1 =
         tournamentSelect(population, random, nsga2);

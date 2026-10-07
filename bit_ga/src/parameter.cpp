@@ -118,12 +118,18 @@ void Parameter::load(int argc, char **argv)
       }
     }
     else if (arg == "-mut")
-    { // bit数
+    { // 突然変異率
       if (i + 1 < argc)
       {
         mutationrate = atoi(argv[i + 1]);
         i++;
       }
+    }
+    else if(arg == "-child")
+    {
+      // 子個体の数
+      c_size = atoi(argv[i + 1]);
+      i++;
     }
   }
   calcDerived();

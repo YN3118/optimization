@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     if (param.seed == -1)
     {
-        seed = static_cast<unsigned int>(std::time(nullptr));
+        seed = static_cast<unsigned int>(time(nullptr));
     }
     else
     {
@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 
     int generation_count = 0;
 
+    // GAループ
     for (int gen = 0; gen < param.max_gen; ++gen)
     {
         Population offspring = bit_ga.generateOffspring(
@@ -103,19 +104,19 @@ int main(int argc, char *argv[])
 
             snapshot_writer.writeParameter(param, seed);
             snapshot_writer.writePopulation(
-                "snapshot_generation_" + std::to_string(generation_count),
+                "snapshot_generation_" + to_string(generation_count),
                 population);
 
-            std::cout << "snapshot saved: generation "
+            cout << "snapshot saved: generation "
                       << generation_count
-                      << std::endl;
+                      << endl;
         }
 
-        std::cout << "generation: "
+        cout << "generation: "
                   << generation_count
                   << " evaluations: "
                   << evaluator.evaluation_Count()
-                  << std::endl;
+                  << endl;
     }
 
     CsvWriter final_writer(
