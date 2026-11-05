@@ -1,0 +1,1 @@
+./main -fn WFG8 -g 8000 -s 1 -o results/WFG8/wfg8.csv
