@@ -30,6 +30,8 @@ private:
   vector<int> selectParentIndices(int population_size, Random &random) const;
   // 親が存在するか
   vector<Individual> extractParents(const Population &population, const vector<int> &parent_indices, Random &random, const Parameter &param) const;
+  // 親個体の設計変数を0~1に正規化
+  vector<Individual> normalize_Parents(const vector<Individual> &parents, const Parameter &param) const;
   // 重心計算
   vector<double> computeCentroid(const vector<Individual> &parents, int dimension) const;
   // 交叉中心降下

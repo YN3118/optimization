@@ -39,6 +39,7 @@ Population AREX::generateOffspring(const Population &population, const Parameter
 
   vector<int> parent_indices = selectParentIndices(population.size(), random);
   vector<Individual> parents = extractParents(population, parent_indices, random, param);
+  parents = normalize_Parents(parents, param);
   vector<double> centroid = computeCentroid(parents, param.dimension);
   vector<double> descent_center = computeDescentCenter(parents, param.dimension);
 
@@ -151,6 +152,23 @@ vector<Individual> AREX::extractParents(const Population &population, const vect
   }
 
   return parents;
+}
+
+// 親個体の設計変数を0~1に正規化
+vector<Individual> AREX::normalize_Parents(const vector<Individual> &parents, const Parameter &param) const
+{
+  vector<Individual> normalize_parents;
+  normalize_parents.reserve(parents.size());
+  normalize_parents = parents;
+
+  for (int i = 0; i < parents.size(); i++)
+  {
+    for (int d = 0; d < param.dimension; d++)
+    {
+      normalize_parents[i].x[d] = (parents[i].x[d] - param.min_value[d]) / (param.max_value[d] - param.min_value[d]);
+    }
+  }
+  return normalize_parents;
 }
 
 // 重心計算
