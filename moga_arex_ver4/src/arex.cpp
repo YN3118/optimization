@@ -140,7 +140,7 @@ vector<Individual> AREX::extractParents(const Population &population, const vect
         break;
       }
     }
-    parents = findKNearestIndividuals(population, target, param.p_size);
+    parents = findKNearestIndividuals(population, param, target, param.p_size);
   }
   else
   {

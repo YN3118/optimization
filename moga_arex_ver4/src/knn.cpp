@@ -11,7 +11,8 @@ namespace
     // xベクトル間のユークリッド距離の二乗
     double squaredEuclideanDistance(
         const std::vector<double> &x1,
-        const std::vector<double> &x2)
+        const std::vector<double> &x2,
+        const Parameter &param)
     {
         if (x1.size() != x2.size())
         {
@@ -24,7 +25,7 @@ namespace
 
         for (std::size_t d = 0; d < x1.size(); ++d)
         {
-            const double difference = x1[d] - x2[d];
+            const double difference = (x1[d]/param.max_value[d]) - (x2[d]/param.max_value[d]);
             squared_distance += difference * difference;
         }
 
@@ -90,6 +91,7 @@ namespace
 
 std::vector<Individual> findKNearestIndividuals(
     const Population &population,
+    const Parameter &param,
     int target_index,
     int k)
 {
@@ -136,7 +138,8 @@ std::vector<Individual> findKNearestIndividuals(
         const double squared_distance =
             squaredEuclideanDistance(
                 target.x,
-                candidate.x);
+                candidate.x,
+                param);
 
         candidates.push_back(
             {i,
@@ -151,6 +154,7 @@ std::vector<Individual> findKNearestIndividuals(
 
 std::vector<Individual> findKNearestIndividuals(
     const Population &population,
+    const Parameter &param,
     const Individual &target,
     int k)
 {
@@ -185,7 +189,8 @@ std::vector<Individual> findKNearestIndividuals(
         const double squared_distance =
             squaredEuclideanDistance(
                 target.x,
-                candidate.x);
+                candidate.x,
+            param);
 
         candidates.push_back(
             {i,
