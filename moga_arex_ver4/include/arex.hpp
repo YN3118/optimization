@@ -32,6 +32,8 @@ private:
   vector<Individual> extractParents(const Population &population, const vector<int> &parent_indices, Random &random, const Parameter &param) const;
   // 親個体の設計変数を0~1に正規化
   vector<Individual> normalize_Parents(const vector<Individual> &parents, const Parameter &param) const;
+  // 生成した子個体をもとの範囲に戻す
+  Individual revert_Child(const Individual &child, const Parameter &param) const;
   // 重心計算
   vector<double> computeCentroid(const vector<Individual> &parents, int dimension) const;
   // 交叉中心降下

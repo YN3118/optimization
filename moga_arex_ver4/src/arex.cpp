@@ -51,6 +51,7 @@ Population AREX::generateOffspring(const Population &population, const Parameter
   for (int i = 0; i < child_count_; i++)
   {
     Individual child = generateChild(descent_center, deviations, param, random);
+    revert_Child(child,param); // もとの範囲に戻す
     repairBounds(child, param);
     evaluator.evaluate(child, param);
     offspring.push_Back(move(child));
@@ -169,6 +170,17 @@ vector<Individual> AREX::normalize_Parents(const vector<Individual> &parents, co
     }
   }
   return normalize_parents;
+}
+
+// 生成した子個体をもとの範囲に戻す
+Individual AREX::revert_Child(const Individual &child, const Parameter &param) const
+{
+  Individual revert_child = child;
+  for (int d = 0; d < param.dimension; d++)
+  {
+    revert_child.x[d] = child.x[d] * (param.max_value[d] - param.min_value[d]) + param.min_value[d];
+  }
+  return revert_child;
 }
 
 // 重心計算

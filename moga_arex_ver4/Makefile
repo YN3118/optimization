@@ -34,7 +34,7 @@ $(TARGET): $(OBJS)
 >$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 run: $(TARGET)
->./$(TARGET) -fn WFG1 -M 2 -k 4 -l 20 -p 120 -g 1 -s 1 -o results/test.csv
+>./$(TARGET) -fn WFG8 -M 2 -k 4 -l 20 -p 120 -g 15000 -s 1 -o results/WFG8/wfg8.csv
 
 debug: CXXFLAGS := -std=c++17 -g -O0 -Wall -Wextra -pedantic -MMD -MP
 debug: clean $(TARGET)
