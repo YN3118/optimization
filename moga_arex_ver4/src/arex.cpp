@@ -64,7 +64,7 @@ Population AREX::generateOffspring(const Population &population, const Parameter
     nsga2.assignCrowdingDistance(offspring, front);
   }
 
-  updateAlpha(offspring, param);
+  // updateAlpha(offspring, param);
   return offspring;
 }
 
