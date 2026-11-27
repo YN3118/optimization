@@ -39,7 +39,7 @@ Population AREX::generateOffspring(const Population &population, const Parameter
 
   vector<int> parent_indices = selectParentIndices(population.size(), random);
   vector<Individual> parents = extractParents(population, parent_indices, random, param);
-  parents = normalize_Parents(parents, param);
+  // parents = normalize_Parents(parents, param);
   vector<double> centroid = computeCentroid(parents, param.dimension);
   vector<double> descent_center = computeDescentCenter(parents, param.dimension);
 
@@ -51,7 +51,7 @@ Population AREX::generateOffspring(const Population &population, const Parameter
   for (int i = 0; i < child_count_; i++)
   {
     Individual child = generateChild(descent_center, deviations, param, random);
-    revert_Child(child,param); // もとの範囲に戻す
+    // revert_Child(child, param); // もとの範囲に戻す
     repairBounds(child, param);
     evaluator.evaluate(child, param);
     offspring.push_Back(move(child));
@@ -268,10 +268,12 @@ void AREX::repairBounds(Individual &child, const Parameter &param) const
     if (child.x[d] < param.min_value[d])
     {
       child.x[d] = param.min_value[d];
+      // cout << d << "min_repair" << endl;
     }
     if (child.x[d] > param.max_value[d])
     {
       child.x[d] = param.max_value[d];
+      // cout << d << "max_repair" << endl;
     }
   }
 }

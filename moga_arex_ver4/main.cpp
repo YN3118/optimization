@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
 {
     Parameter param;
     param.load(argc, argv);
-    param.echo();
 
     unsigned int seed;
 
@@ -113,6 +112,8 @@ int main(int argc, char *argv[])
     result_writer.writePopulation("initial_population", initial_population);
     result_writer.writePopulation("final_population", population);
     result_writer.writeSummary(param, evaluator, arex, generation_count);
+
+    param.echo();
 
     return 0;
 }
